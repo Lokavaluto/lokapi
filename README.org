@@ -1,0 +1,188 @@
+# -*- ispell-local-dictionary: "english" -*-
+#+SETUPFILE: ~/.emacs.d/etc/setup/default.setup
+#+SETUPFILE: ~/.emacs.d/etc/setup/latex.setup
+#+SETUPFILE: ~/.emacs.d/etc/setup/html-readtheorg-local.setup
+
+#+TITLE: Lokavaluto's LokAPI
+#+LATEX: \pagebreak
+
+LokAPI is a javascript library intended to be used in mobile
+applications or web application to abstract all logics with
+lokavaluto's server.
+
+#+LATEX: \pagebreak
+#+LATEX: \pagebreak
+
+
+* Usage
+
+** Adding =lokapi= to your project
+
+From the root of your project:
+
+#+begin_src sh
+npm install --save lokapi
+#+end_src
+
+Or better, as =lokapi= is still in early release,
+
+#+begin_src sh
+npm install --save Lokavaluto/lokapi#master
+#+end_src
+
+To be sure to get the latest version, relaunch this last command whenever
+you want to update.
+
+** Using =lokapi=
+
+*** Instantiating main object
+
+Lokapi will require a way to make HTTP request. Depending on your
+platform or environment, you might have different way to implement
+these.
+
+On instantiation time, =LokAPI= class will require you to provide:
+
+  - host :: as a =string= (example: "lokavaluto.fr")
+
+  - database :: as a =string= (example: "myodoodb")
+
+  - mixin :: as a simple =Object= containing two keys:
+
+      - httpRequest :: an implementation of =IHTTPRequest=
+      - base64encode :: a function to encode a string to base64
+
+**** Example for node
+
+
+Using node's core =https= as HTTP requestion implementation:
+
+
+#+begin_src typescript
+
+import https from "https"
+
+import { LokAPI, e as LokAPIExc, t as LokAPIType } from "lokapi"
+
+
+let coreHttpRequest: LokAPIType.IHttpRequest = {
+    request: (opts: LokAPIType.coreHttpOpts) => {
+        const httpsOpts: LokAPIType.coreHttpOpts = {
+            host: opts.host,
+            path: opts.path,
+            method: opts.method,
+            headers: opts.headers,
+        }
+        return new Promise((resolve, reject) => {
+
+            let req = https.request(httpsOpts, (res) => {
+                const { statusCode } = res
+
+                let rawData = ''
+
+                res.on('data', (chunk) => { rawData += chunk })
+                res.on('end', () => {
+                    if (!statusCode || statusCode.toString().slice(0, 1) !== '2') {
+                        res.resume();
+                        reject(new LokAPIExc.HttpError(statusCode, res.statusMessage, "", res))
+                        return
+                    } else {
+                        resolve(rawData)
+                    }
+                });
+            })
+
+            if (opts.data) req.write(JSON.stringify(opts.data))
+
+            req.end();
+            req.on('error', (err) => {
+                console.error(`Encountered an error trying to make a request: ${err.message}`);
+                reject(new LokAPIExc.RequestFailed(err.message))
+            });
+        })
+
+    },
+}
+
+
+if (!process.env.VUE_APP_LOKAPI_HOST) {
+    throw new Error("Please specify VUE_APP_LOKAPI_HOST in '.env'")
+}
+
+
+if (!process.env.VUE_APP_LOKAPI_DB) {
+    throw new Error("Please specify VUE_APP_LOKAPI_DB in '.env'")
+}
+
+
+var lokAPI = new LokAPI(
+    process.env.VUE_APP_LOKAPI_HOST,
+    process.env.VUE_APP_LOKAPI_DB,
+    {
+        httpRequest: coreHttpRequest,
+        base64encode: (s: string) => Buffer.from(s).toString('base64'),
+    }
+)
+#+end_src
+
+
+**** Example for =nativescript=
+
+Using =@nativescript-community/https= as HTTP request implementation:
+
+
+#+begin_src typescript
+  import * as https from '@nativescript-community/https';
+
+  import { LokAPI, e as LokAPIExc, t as LokAPIType } from "lokapi"
+
+
+  let nativeHttpRequest: LokAPIType.IHttpRequest = {
+      request: async (opts: LokAPIType.coreHttpOpts) => {
+          const nativeRequestOpts = {
+              url: "https://" + opts.host + opts.path,
+              method: opts.method,
+              headers: opts.headers,
+              body: opts.data,
+              useLegacy: true,
+          }
+          let response
+          try {
+              response = await https.request(nativeRequestOpts)
+          } catch (err) {
+              console.error(
+                  `Encountered an error trying to make a request: ${err.message}`);
+              reject(new LokAPIExc.RequestFailed(err.message))
+          }
+
+          const statusCode = response.statusCode;
+          let rawData = await response.content.toStringAsync();
+
+          if (!statusCode || statusCode.toString().slice(0, 1) !== '2') {
+              throw new LokAPIExc.HttpError(statusCode, response.reason, "", response)
+          }
+
+          let outputJSON
+          try {
+              outputJSON = JSON.parse(rawData)
+          } catch (err) {
+              outputJSON = null
+          }
+          // console.log('HTTP Response status:', statusCode, response.reason)
+          // console.log('== HEADERS:', response.headers)
+          // if (!outputJSON) {
+          //     console.log('== BODY (ascii):', rawData);
+          // } else {
+          //     console.log('== BODY (json):', outputJSON);
+          // }
+          return rawData
+      },
+  }
+
+
+  var lokAPI = new LokAPI(APP_HOST, APP_DB, {
+      httpRequest: nativeHttpRequest,
+      base64encode: base64Encode
+  })
+#+end_src
+

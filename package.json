@@ -1,0 +1,18 @@
+{
+    "name": "lokapi",
+    "version": "0.0.1",
+    "description": "Lokavaluto API",
+    "main": "build/index.js",
+    "types": "build/index.d.ts",
+    "scripts": {
+      "prepare": "tsc",
+      "test": "echo \"Error: no test specified\" && exit 1"
+    },
+    "author": "Valentin LAB",
+    "license": "MIT",
+    "devDependencies": {
+        "@types/node": "^15.12.2",
+        "tslint": "^6.1.3",
+        "typescript": "^4.3.2"
+    }
+}
