@@ -26,6 +26,16 @@
             "*": ["src/types/*"]
         }
     },
+    "typedocOptions": {
+        "name": "LokAPI",
+        "includeVersion": true,
+        "readme": "./README.md",
+        "entryPoints": ["./src"],
+        "excludePrivate": true,
+        "excludeProtected": true,
+        "hideGenerator": true,
+        "out": "docs"
+    },
     "include": ["src/**/*", "references.d.ts"],
     "exclude": ["node_modules", "platforms", "**/angular"]
 }

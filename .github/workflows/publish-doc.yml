@@ -1,0 +1,42 @@
+name: Publish to GitHub Pages
+
+on:
+  push:
+    branches:
+      - master
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out
+        uses: actions/checkout@v1
+
+      - name: Setup Node
+        uses: actions/setup-node@v1
+        with:
+          node-version: '14.x'
+
+      - name: Setup code
+        run: npm install
+
+      - name: Set up Ruby 2.6
+        uses: actions/setup-ruby@v1
+        with:
+          ruby-version: 2.6
+
+      - name: Install org-ruby
+        run: gem install org-ruby
+
+      - name: Generate README.md
+        run: org-ruby --translate markdown README.org > README.md
+
+      - name: Generate doc
+        run: npx typedoc
+
+      - name: Publish generated content to GitHub Pages
+        uses: tsunematsu21/actions-publish-gh-pages@v1.0.1
+        with:
+          dir: docs
+          branch: gh-pages
+          token: ${{ secrets.ACCESS_TOKEN }}
