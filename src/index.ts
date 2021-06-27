@@ -22,6 +22,8 @@ class LokAPI {
     }
     userProfile: any
 
+    accounts: any
+
     // Constants
 
     COMMON_HEADERS = {
@@ -93,6 +95,9 @@ class LokAPI {
                     throw new e.APIRequestFailed(`Could not obtain token: ${response.error} `)
             }
             this.apiToken = response.api_token;
+            if (response.monujo_accounts) {
+                this.accounts = response.monujo_accounts
+            }
             this.userData = {
                 login: login,
                 partner_id: response.partner_id,
