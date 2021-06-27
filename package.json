@@ -1,12 +1,12 @@
 {
     "name": "lokapi",
-    "version": "0.0.1",
+    "version": "0.0.2",
     "description": "Lokavaluto API",
     "main": "build/index.js",
     "types": "build/index.d.ts",
     "scripts": {
-      "prepare": "tsc",
-      "test": "echo \"Error: no test specified\" && exit 1"
+        "prepare": "tsc",
+        "test": "echo \"Error: no test specified\" && exit 1"
     },
     "author": "Valentin LAB",
     "license": "MIT",

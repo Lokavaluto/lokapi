@@ -30,8 +30,8 @@ Or better, as =lokapi= is still in early release,
 npm install --save Lokavaluto/lokapi#master
 #+end_src
 
-To be sure to get the latest version, relaunch this last command whenever
-you want to update.
+To be sure to get the latest version, relaunch this last command
+whenever you want to update.
 
 ** Using =lokapi=
 
@@ -185,4 +185,34 @@ Using =@nativescript-community/https= as HTTP request implementation:
       base64encode: base64Encode
   })
 #+end_src
+
+
+*** Login
+
+You must log in to the server with an existing Odoo Lokavaluto
+account:
+
+#+begin_src typescript
+await lokApi.login("myuser", "mypassword")
+#+end_src
+
+*** Accessing accounts
+
+We assume that you've instanciated =LokAPI= as stated in the previous
+section, and you have logged in.
+
+#+begin_src typescript
+let accounts = await lokApi.backends[0].accounts
+console.log(`balance in first account: ${accounts[0].balance} ${accounts[0].symbol}`)
+#+end_src
+
+- =lokAPI.backends= is the list of backends connections that are managed
+by the current account. For now, don't expect more than one element inside.
+
+- =backend.accounts= is the list of accounts in that connection (warning, this
+  is a promise).
+
+- =account.balance= is the balance of the account
+
+- =account.symbol= is the currency symbol for the account
 
