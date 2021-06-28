@@ -58,19 +58,9 @@
 	<div class="row">
 		<div class="col-8 col-content">
 			<div class="tsd-panel tsd-typography">
-				<hr>
-				<p>setupfile: &#39;~/.emacs.d/etc/setup/html-readtheorg-local.setup&#39;
-				title: &#39;Lokavaluto&#39;&#39;s LokAPI&#39;</p>
-				<hr>
-				<pre><code class="language-{=latex}">\pagebreak
-</code></pre>
 				<p>LokAPI is a javascript library intended to be used in mobile
 					applications or web application to abstract all logics with
 				lokavaluto&#39;s server.</p>
-				<pre><code class="language-{=latex}">\pagebreak
-</code></pre>
-				<pre><code class="language-{=latex}">\pagebreak
-</code></pre>
 				<a href="#usage" id="usage" style="color: inherit; text-decoration: none;">
 					<h1>Usage</h1>
 				</a>
@@ -78,10 +68,10 @@
 					<h2>Adding <code>lokapi</code> to your project</h2>
 				</a>
 				<p>From the root of your project:</p>
-				<pre><code class="language-{.bash">npm install --save lokapi
+				<pre><code class="language-sh"><span style="color: #000000">npm install --save lokapi</span>
 </code></pre>
 				<p>Or better, as <code>lokapi</code> is still in early release,</p>
-				<pre><code class="language-{.bash">npm install --save Lokavaluto/lokapi#master
+				<pre><code class="language-sh"><span style="color: #000000">npm install --save Lokavaluto/lokapi#master</span>
 </code></pre>
 				<p>To be sure to get the latest version, relaunch this last command
 				whenever you want to update.</p>
@@ -95,27 +85,21 @@
 					platform or environment, you might have different way to implement
 				these.</p>
 				<p>On instantiation time, <code>LokAPI</code> class will require you to provide:</p>
-				<p>host</p>
-				<p>:   as a <code>string</code> (example: &quot;lokavaluto.fr&quot;)</p>
-				<p>database</p>
-				<p>:   as a <code>string</code> (example: &quot;myodoodb&quot;)</p>
-				<p>mixin</p>
-				<p>:   as a simple <code>Object</code> containing two keys:</p>
-				<pre><code><span style="color: #001080">httpRequest</span>
-<span style="color: #000000">:   </span><span style="color: #001080">an</span><span style="color: #000000"> </span><span style="color: #001080">implementation</span><span style="color: #000000"> </span><span style="color: #0000FF">of</span><span style="color: #000000"> </span><span style="color: #A31515">`IHTTPRequest`</span>
+				<p>host :: as a <code>string</code> (example: &quot;lokavaluto.fr&quot;)</p>
+				<p>database :: as a <code>string</code> (example: &quot;myodoodb&quot;)</p>
+				<p>mixin :: as a simple <code>Object</code> containing two keys:</p>
+				<p>httpRequest :: an implementation of <code>IHTTPRequest</code>
+				base64encode :: a function to encode a string to base64</p>
+				<a href="#example-for-node" id="example-for-node" style="color: inherit; text-decoration: none;">
+					<h4>Example for node</h4>
+				</a>
+				<p>Using node&#39;s core <code>https</code> as HTTP requestion implementation:</p>
+				<pre><code class="language-typescript"><span style="color: #AF00DB">import</span><span style="color: #000000"> </span><span style="color: #001080">https</span><span style="color: #000000"> </span><span style="color: #AF00DB">from</span><span style="color: #000000"> </span><span style="color: #A31515">&quot;https&quot;</span>
 
-<span style="color: #001080">base64encode</span>
-<span style="color: #000000">:   </span><span style="color: #001080">a</span><span style="color: #000000"> </span><span style="color: #0000FF">function</span><span style="color: #000000"> </span><span style="color: #795E26">to</span><span style="color: #000000"> </span><span style="color: #795E26">encode</span><span style="color: #000000"> </span><span style="color: #795E26">a</span><span style="color: #000000"> </span><span style="color: #795E26">string</span><span style="color: #000000"> </span><span style="color: #795E26">to</span><span style="color: #000000"> </span><span style="color: #795E26">base64</span>
-</code></pre>
-				<ol>
-					<li><p>Example for node</p>
-						<p> Using node&#39;s core <code>https</code> as HTTP requestion implementation:</p>
-						<p> ``` {.typescript}
-						import https from &quot;https&quot;</p>
-						<p> import { LokAPI, e as LokAPIExc, t as LokAPIType } from &quot;lokapi&quot;</p>
-					</li>
-				</ol>
-				<pre><code><span style="color: #0000FF">let</span><span style="color: #000000"> </span><span style="color: #001080">coreHttpRequest</span><span style="color: #000000">: </span><span style="color: #267F99">LokAPIType</span><span style="color: #000000">.</span><span style="color: #267F99">IHttpRequest</span><span style="color: #000000"> = {</span>
+<span style="color: #AF00DB">import</span><span style="color: #000000"> { </span><span style="color: #001080">LokAPI</span><span style="color: #000000">, </span><span style="color: #001080">e</span><span style="color: #000000"> </span><span style="color: #AF00DB">as</span><span style="color: #000000"> </span><span style="color: #001080">LokAPIExc</span><span style="color: #000000">, </span><span style="color: #001080">t</span><span style="color: #000000"> </span><span style="color: #AF00DB">as</span><span style="color: #000000"> </span><span style="color: #001080">LokAPIType</span><span style="color: #000000"> } </span><span style="color: #AF00DB">from</span><span style="color: #000000"> </span><span style="color: #A31515">&quot;lokapi&quot;</span>
+
+
+<span style="color: #0000FF">let</span><span style="color: #000000"> </span><span style="color: #001080">coreHttpRequest</span><span style="color: #000000">: </span><span style="color: #267F99">LokAPIType</span><span style="color: #000000">.</span><span style="color: #267F99">IHttpRequest</span><span style="color: #000000"> = {</span>
 <span style="color: #000000">    </span><span style="color: #795E26">request</span><span style="color: #001080">:</span><span style="color: #000000"> (</span><span style="color: #001080">opts</span><span style="color: #000000">: </span><span style="color: #267F99">LokAPIType</span><span style="color: #000000">.</span><span style="color: #267F99">coreHttpOpts</span><span style="color: #000000">) </span><span style="color: #0000FF">=&gt;</span><span style="color: #000000"> {</span>
 <span style="color: #000000">        </span><span style="color: #0000FF">const</span><span style="color: #000000"> </span><span style="color: #0070C1">httpsOpts</span><span style="color: #000000">: </span><span style="color: #267F99">LokAPIType</span><span style="color: #000000">.</span><span style="color: #267F99">coreHttpOpts</span><span style="color: #000000"> = {</span>
 <span style="color: #000000">            </span><span style="color: #001080">host:</span><span style="color: #000000"> </span><span style="color: #001080">opts</span><span style="color: #000000">.</span><span style="color: #001080">host</span><span style="color: #000000">,</span>
@@ -173,93 +157,89 @@
 <span style="color: #000000">        </span><span style="color: #795E26">base64encode</span><span style="color: #001080">:</span><span style="color: #000000"> (</span><span style="color: #001080">s</span><span style="color: #000000">: </span><span style="color: #267F99">string</span><span style="color: #000000">) </span><span style="color: #0000FF">=&gt;</span><span style="color: #000000"> </span><span style="color: #001080">Buffer</span><span style="color: #000000">.</span><span style="color: #795E26">from</span><span style="color: #000000">(</span><span style="color: #001080">s</span><span style="color: #000000">).</span><span style="color: #795E26">toString</span><span style="color: #000000">(</span><span style="color: #A31515">&#039;base64&#039;</span><span style="color: #000000">),</span>
 <span style="color: #000000">    }</span>
 <span style="color: #000000">)</span>
-<span style="color: #A31515">```</span>
 </code></pre>
-				<ol start="2">
-					<li><p>Example for <code>nativescript</code></p>
-						<p> Using <code>@nativescript-community/https</code> as HTTP request
-						implementation:</p>
-						<p> ``` {.typescript}
-						import * as https from &#39;@nativescript-community/https&#39;;</p>
-						<p> import { LokAPI, e as LokAPIExc, t as LokAPIType } from &quot;lokapi&quot;</p>
-					</li>
-				</ol>
-				<pre><code><span style="color: #0000FF">let</span><span style="color: #000000"> </span><span style="color: #001080">nativeHttpRequest</span><span style="color: #000000">: </span><span style="color: #267F99">LokAPIType</span><span style="color: #000000">.</span><span style="color: #267F99">IHttpRequest</span><span style="color: #000000"> = {</span>
-<span style="color: #000000">    </span><span style="color: #795E26">request</span><span style="color: #001080">:</span><span style="color: #000000"> </span><span style="color: #0000FF">async</span><span style="color: #000000"> (</span><span style="color: #001080">opts</span><span style="color: #000000">: </span><span style="color: #267F99">LokAPIType</span><span style="color: #000000">.</span><span style="color: #267F99">coreHttpOpts</span><span style="color: #000000">) </span><span style="color: #0000FF">=&gt;</span><span style="color: #000000"> {</span>
-<span style="color: #000000">        </span><span style="color: #0000FF">const</span><span style="color: #000000"> </span><span style="color: #0070C1">nativeRequestOpts</span><span style="color: #000000"> = {</span>
-<span style="color: #000000">            </span><span style="color: #001080">url:</span><span style="color: #000000"> </span><span style="color: #A31515">&quot;https://&quot;</span><span style="color: #000000"> + </span><span style="color: #001080">opts</span><span style="color: #000000">.</span><span style="color: #001080">host</span><span style="color: #000000"> + </span><span style="color: #001080">opts</span><span style="color: #000000">.</span><span style="color: #001080">path</span><span style="color: #000000">,</span>
-<span style="color: #000000">            </span><span style="color: #001080">method:</span><span style="color: #000000"> </span><span style="color: #001080">opts</span><span style="color: #000000">.</span><span style="color: #001080">method</span><span style="color: #000000">,</span>
-<span style="color: #000000">            </span><span style="color: #001080">headers:</span><span style="color: #000000"> </span><span style="color: #001080">opts</span><span style="color: #000000">.</span><span style="color: #001080">headers</span><span style="color: #000000">,</span>
-<span style="color: #000000">            </span><span style="color: #001080">body:</span><span style="color: #000000"> </span><span style="color: #001080">opts</span><span style="color: #000000">.</span><span style="color: #001080">data</span><span style="color: #000000">,</span>
-<span style="color: #000000">            </span><span style="color: #001080">useLegacy:</span><span style="color: #000000"> </span><span style="color: #0000FF">true</span><span style="color: #000000">,</span>
-<span style="color: #000000">        }</span>
-<span style="color: #000000">        </span><span style="color: #0000FF">let</span><span style="color: #000000"> </span><span style="color: #001080">response</span>
-<span style="color: #000000">        </span><span style="color: #AF00DB">try</span><span style="color: #000000"> {</span>
-<span style="color: #000000">            </span><span style="color: #001080">response</span><span style="color: #000000"> = </span><span style="color: #AF00DB">await</span><span style="color: #000000"> </span><span style="color: #001080">https</span><span style="color: #000000">.</span><span style="color: #795E26">request</span><span style="color: #000000">(</span><span style="color: #001080">nativeRequestOpts</span><span style="color: #000000">)</span>
-<span style="color: #000000">        } </span><span style="color: #AF00DB">catch</span><span style="color: #000000"> (</span><span style="color: #001080">err</span><span style="color: #000000">) {</span>
-<span style="color: #000000">            </span><span style="color: #001080">console</span><span style="color: #000000">.</span><span style="color: #795E26">error</span><span style="color: #000000">(</span>
-<span style="color: #000000">                </span><span style="color: #A31515">`Encountered an error trying to make a request: </span><span style="color: #0000FF">${</span><span style="color: #001080">err</span><span style="color: #000000FF">.</span><span style="color: #001080">message</span><span style="color: #0000FF">}</span><span style="color: #A31515">`</span><span style="color: #000000">);</span>
-<span style="color: #000000">            </span><span style="color: #795E26">reject</span><span style="color: #000000">(</span><span style="color: #0000FF">new</span><span style="color: #000000"> </span><span style="color: #001080">LokAPIExc</span><span style="color: #000000">.</span><span style="color: #795E26">RequestFailed</span><span style="color: #000000">(</span><span style="color: #001080">err</span><span style="color: #000000">.</span><span style="color: #001080">message</span><span style="color: #000000">))</span>
-<span style="color: #000000">        }</span>
+				<a href="#example-for-nativescript" id="example-for-nativescript" style="color: inherit; text-decoration: none;">
+					<h4>Example for <code>nativescript</code></h4>
+				</a>
+				<p>Using <code>@nativescript-community/https</code> as HTTP request implementation:</p>
+				<pre><code class="language-typescript"><span style="color: #000000">  </span><span style="color: #AF00DB">import</span><span style="color: #000000"> </span><span style="color: #0000FF">*</span><span style="color: #000000"> </span><span style="color: #AF00DB">as</span><span style="color: #000000"> </span><span style="color: #001080">https</span><span style="color: #000000"> </span><span style="color: #AF00DB">from</span><span style="color: #000000"> </span><span style="color: #A31515">&#039;@nativescript-community/https&#039;</span><span style="color: #000000">;</span>
 
-<span style="color: #000000">        </span><span style="color: #0000FF">const</span><span style="color: #000000"> </span><span style="color: #0070C1">statusCode</span><span style="color: #000000"> = </span><span style="color: #001080">response</span><span style="color: #000000">.</span><span style="color: #001080">statusCode</span><span style="color: #000000">;</span>
-<span style="color: #000000">        </span><span style="color: #0000FF">let</span><span style="color: #000000"> </span><span style="color: #001080">rawData</span><span style="color: #000000"> = </span><span style="color: #AF00DB">await</span><span style="color: #000000"> </span><span style="color: #001080">response</span><span style="color: #000000">.</span><span style="color: #001080">content</span><span style="color: #000000">.</span><span style="color: #795E26">toStringAsync</span><span style="color: #000000">();</span>
-
-<span style="color: #000000">        </span><span style="color: #AF00DB">if</span><span style="color: #000000"> (!</span><span style="color: #001080">statusCode</span><span style="color: #000000"> || </span><span style="color: #001080">statusCode</span><span style="color: #000000">.</span><span style="color: #795E26">toString</span><span style="color: #000000">().</span><span style="color: #795E26">slice</span><span style="color: #000000">(</span><span style="color: #098658">0</span><span style="color: #000000">, </span><span style="color: #098658">1</span><span style="color: #000000">) !== </span><span style="color: #A31515">&#039;2&#039;</span><span style="color: #000000">) {</span>
-<span style="color: #000000">            </span><span style="color: #AF00DB">throw</span><span style="color: #000000"> </span><span style="color: #0000FF">new</span><span style="color: #000000"> </span><span style="color: #001080">LokAPIExc</span><span style="color: #000000">.</span><span style="color: #795E26">HttpError</span><span style="color: #000000">(</span><span style="color: #001080">statusCode</span><span style="color: #000000">, </span><span style="color: #001080">response</span><span style="color: #000000">.</span><span style="color: #001080">reason</span><span style="color: #000000">, </span><span style="color: #A31515">&quot;&quot;</span><span style="color: #000000">, </span><span style="color: #001080">response</span><span style="color: #000000">)</span>
-<span style="color: #000000">        }</span>
-
-<span style="color: #000000">        </span><span style="color: #0000FF">let</span><span style="color: #000000"> </span><span style="color: #001080">outputJSON</span>
-<span style="color: #000000">        </span><span style="color: #AF00DB">try</span><span style="color: #000000"> {</span>
-<span style="color: #000000">            </span><span style="color: #001080">outputJSON</span><span style="color: #000000"> = </span><span style="color: #267F99">JSON</span><span style="color: #000000">.</span><span style="color: #795E26">parse</span><span style="color: #000000">(</span><span style="color: #001080">rawData</span><span style="color: #000000">)</span>
-<span style="color: #000000">        } </span><span style="color: #AF00DB">catch</span><span style="color: #000000"> (</span><span style="color: #001080">err</span><span style="color: #000000">) {</span>
-<span style="color: #000000">            </span><span style="color: #001080">outputJSON</span><span style="color: #000000"> = </span><span style="color: #0000FF">null</span>
-<span style="color: #000000">        }</span>
-<span style="color: #000000">        </span><span style="color: #008000">// console.log(&#039;HTTP Response status:&#039;, statusCode, response.reason)</span>
-<span style="color: #000000">        </span><span style="color: #008000">// console.log(&#039;== HEADERS:&#039;, response.headers)</span>
-<span style="color: #000000">        </span><span style="color: #008000">// if (!outputJSON) {</span>
-<span style="color: #000000">        </span><span style="color: #008000">//     console.log(&#039;== BODY (ascii):&#039;, rawData);</span>
-<span style="color: #000000">        </span><span style="color: #008000">// } else {</span>
-<span style="color: #000000">        </span><span style="color: #008000">//     console.log(&#039;== BODY (json):&#039;, outputJSON);</span>
-<span style="color: #000000">        </span><span style="color: #008000">// }</span>
-<span style="color: #000000">        </span><span style="color: #AF00DB">return</span><span style="color: #000000"> </span><span style="color: #001080">rawData</span>
-<span style="color: #000000">    },</span>
-<span style="color: #000000">}</span>
+<span style="color: #000000">  </span><span style="color: #AF00DB">import</span><span style="color: #000000"> { </span><span style="color: #001080">LokAPI</span><span style="color: #000000">, </span><span style="color: #001080">e</span><span style="color: #000000"> </span><span style="color: #AF00DB">as</span><span style="color: #000000"> </span><span style="color: #001080">LokAPIExc</span><span style="color: #000000">, </span><span style="color: #001080">t</span><span style="color: #000000"> </span><span style="color: #AF00DB">as</span><span style="color: #000000"> </span><span style="color: #001080">LokAPIType</span><span style="color: #000000"> } </span><span style="color: #AF00DB">from</span><span style="color: #000000"> </span><span style="color: #A31515">&quot;lokapi&quot;</span>
 
 
-<span style="color: #0000FF">var</span><span style="color: #000000"> </span><span style="color: #001080">lokAPI</span><span style="color: #000000"> = </span><span style="color: #0000FF">new</span><span style="color: #000000"> </span><span style="color: #795E26">LokAPI</span><span style="color: #000000">(</span><span style="color: #0070C1">APP_HOST</span><span style="color: #000000">, </span><span style="color: #0070C1">APP_DB</span><span style="color: #000000">, {</span>
-<span style="color: #000000">    </span><span style="color: #001080">httpRequest:</span><span style="color: #000000"> </span><span style="color: #001080">nativeHttpRequest</span><span style="color: #000000">,</span>
-<span style="color: #000000">    </span><span style="color: #001080">base64encode:</span><span style="color: #000000"> </span><span style="color: #001080">base64Encode</span>
-<span style="color: #000000">})</span>
-<span style="color: #A31515">```</span>
+<span style="color: #000000">  </span><span style="color: #0000FF">let</span><span style="color: #000000"> </span><span style="color: #001080">nativeHttpRequest</span><span style="color: #000000">: </span><span style="color: #267F99">LokAPIType</span><span style="color: #000000">.</span><span style="color: #267F99">IHttpRequest</span><span style="color: #000000"> = {</span>
+<span style="color: #000000">      </span><span style="color: #795E26">request</span><span style="color: #001080">:</span><span style="color: #000000"> </span><span style="color: #0000FF">async</span><span style="color: #000000"> (</span><span style="color: #001080">opts</span><span style="color: #000000">: </span><span style="color: #267F99">LokAPIType</span><span style="color: #000000">.</span><span style="color: #267F99">coreHttpOpts</span><span style="color: #000000">) </span><span style="color: #0000FF">=&gt;</span><span style="color: #000000"> {</span>
+<span style="color: #000000">          </span><span style="color: #0000FF">const</span><span style="color: #000000"> </span><span style="color: #0070C1">nativeRequestOpts</span><span style="color: #000000"> = {</span>
+<span style="color: #000000">              </span><span style="color: #001080">url:</span><span style="color: #000000"> </span><span style="color: #A31515">&quot;https://&quot;</span><span style="color: #000000"> + </span><span style="color: #001080">opts</span><span style="color: #000000">.</span><span style="color: #001080">host</span><span style="color: #000000"> + </span><span style="color: #001080">opts</span><span style="color: #000000">.</span><span style="color: #001080">path</span><span style="color: #000000">,</span>
+<span style="color: #000000">              </span><span style="color: #001080">method:</span><span style="color: #000000"> </span><span style="color: #001080">opts</span><span style="color: #000000">.</span><span style="color: #001080">method</span><span style="color: #000000">,</span>
+<span style="color: #000000">              </span><span style="color: #001080">headers:</span><span style="color: #000000"> </span><span style="color: #001080">opts</span><span style="color: #000000">.</span><span style="color: #001080">headers</span><span style="color: #000000">,</span>
+<span style="color: #000000">              </span><span style="color: #001080">body:</span><span style="color: #000000"> </span><span style="color: #001080">opts</span><span style="color: #000000">.</span><span style="color: #001080">data</span><span style="color: #000000">,</span>
+<span style="color: #000000">              </span><span style="color: #001080">useLegacy:</span><span style="color: #000000"> </span><span style="color: #0000FF">true</span><span style="color: #000000">,</span>
+<span style="color: #000000">          }</span>
+<span style="color: #000000">          </span><span style="color: #0000FF">let</span><span style="color: #000000"> </span><span style="color: #001080">response</span>
+<span style="color: #000000">          </span><span style="color: #AF00DB">try</span><span style="color: #000000"> {</span>
+<span style="color: #000000">              </span><span style="color: #001080">response</span><span style="color: #000000"> = </span><span style="color: #AF00DB">await</span><span style="color: #000000"> </span><span style="color: #001080">https</span><span style="color: #000000">.</span><span style="color: #795E26">request</span><span style="color: #000000">(</span><span style="color: #001080">nativeRequestOpts</span><span style="color: #000000">)</span>
+<span style="color: #000000">          } </span><span style="color: #AF00DB">catch</span><span style="color: #000000"> (</span><span style="color: #001080">err</span><span style="color: #000000">) {</span>
+<span style="color: #000000">              </span><span style="color: #001080">console</span><span style="color: #000000">.</span><span style="color: #795E26">error</span><span style="color: #000000">(</span>
+<span style="color: #000000">                  </span><span style="color: #A31515">`Encountered an error trying to make a request: </span><span style="color: #0000FF">${</span><span style="color: #001080">err</span><span style="color: #000000FF">.</span><span style="color: #001080">message</span><span style="color: #0000FF">}</span><span style="color: #A31515">`</span><span style="color: #000000">);</span>
+<span style="color: #000000">              </span><span style="color: #795E26">reject</span><span style="color: #000000">(</span><span style="color: #0000FF">new</span><span style="color: #000000"> </span><span style="color: #001080">LokAPIExc</span><span style="color: #000000">.</span><span style="color: #795E26">RequestFailed</span><span style="color: #000000">(</span><span style="color: #001080">err</span><span style="color: #000000">.</span><span style="color: #001080">message</span><span style="color: #000000">))</span>
+<span style="color: #000000">          }</span>
+
+<span style="color: #000000">          </span><span style="color: #0000FF">const</span><span style="color: #000000"> </span><span style="color: #0070C1">statusCode</span><span style="color: #000000"> = </span><span style="color: #001080">response</span><span style="color: #000000">.</span><span style="color: #001080">statusCode</span><span style="color: #000000">;</span>
+<span style="color: #000000">          </span><span style="color: #0000FF">let</span><span style="color: #000000"> </span><span style="color: #001080">rawData</span><span style="color: #000000"> = </span><span style="color: #AF00DB">await</span><span style="color: #000000"> </span><span style="color: #001080">response</span><span style="color: #000000">.</span><span style="color: #001080">content</span><span style="color: #000000">.</span><span style="color: #795E26">toStringAsync</span><span style="color: #000000">();</span>
+
+<span style="color: #000000">          </span><span style="color: #AF00DB">if</span><span style="color: #000000"> (!</span><span style="color: #001080">statusCode</span><span style="color: #000000"> || </span><span style="color: #001080">statusCode</span><span style="color: #000000">.</span><span style="color: #795E26">toString</span><span style="color: #000000">().</span><span style="color: #795E26">slice</span><span style="color: #000000">(</span><span style="color: #098658">0</span><span style="color: #000000">, </span><span style="color: #098658">1</span><span style="color: #000000">) !== </span><span style="color: #A31515">&#039;2&#039;</span><span style="color: #000000">) {</span>
+<span style="color: #000000">              </span><span style="color: #AF00DB">throw</span><span style="color: #000000"> </span><span style="color: #0000FF">new</span><span style="color: #000000"> </span><span style="color: #001080">LokAPIExc</span><span style="color: #000000">.</span><span style="color: #795E26">HttpError</span><span style="color: #000000">(</span><span style="color: #001080">statusCode</span><span style="color: #000000">, </span><span style="color: #001080">response</span><span style="color: #000000">.</span><span style="color: #001080">reason</span><span style="color: #000000">, </span><span style="color: #A31515">&quot;&quot;</span><span style="color: #000000">, </span><span style="color: #001080">response</span><span style="color: #000000">)</span>
+<span style="color: #000000">          }</span>
+
+<span style="color: #000000">          </span><span style="color: #0000FF">let</span><span style="color: #000000"> </span><span style="color: #001080">outputJSON</span>
+<span style="color: #000000">          </span><span style="color: #AF00DB">try</span><span style="color: #000000"> {</span>
+<span style="color: #000000">              </span><span style="color: #001080">outputJSON</span><span style="color: #000000"> = </span><span style="color: #267F99">JSON</span><span style="color: #000000">.</span><span style="color: #795E26">parse</span><span style="color: #000000">(</span><span style="color: #001080">rawData</span><span style="color: #000000">)</span>
+<span style="color: #000000">          } </span><span style="color: #AF00DB">catch</span><span style="color: #000000"> (</span><span style="color: #001080">err</span><span style="color: #000000">) {</span>
+<span style="color: #000000">              </span><span style="color: #001080">outputJSON</span><span style="color: #000000"> = </span><span style="color: #0000FF">null</span>
+<span style="color: #000000">          }</span>
+<span style="color: #000000">          </span><span style="color: #008000">// console.log(&#039;HTTP Response status:&#039;, statusCode, response.reason)</span>
+<span style="color: #000000">          </span><span style="color: #008000">// console.log(&#039;== HEADERS:&#039;, response.headers)</span>
+<span style="color: #000000">          </span><span style="color: #008000">// if (!outputJSON) {</span>
+<span style="color: #000000">          </span><span style="color: #008000">//     console.log(&#039;== BODY (ascii):&#039;, rawData);</span>
+<span style="color: #000000">          </span><span style="color: #008000">// } else {</span>
+<span style="color: #000000">          </span><span style="color: #008000">//     console.log(&#039;== BODY (json):&#039;, outputJSON);</span>
+<span style="color: #000000">          </span><span style="color: #008000">// }</span>
+<span style="color: #000000">          </span><span style="color: #AF00DB">return</span><span style="color: #000000"> </span><span style="color: #001080">rawData</span>
+<span style="color: #000000">      },</span>
+<span style="color: #000000">  }</span>
+
+
+<span style="color: #000000">  </span><span style="color: #0000FF">var</span><span style="color: #000000"> </span><span style="color: #001080">lokAPI</span><span style="color: #000000"> = </span><span style="color: #0000FF">new</span><span style="color: #000000"> </span><span style="color: #795E26">LokAPI</span><span style="color: #000000">(</span><span style="color: #0070C1">APP_HOST</span><span style="color: #000000">, </span><span style="color: #0070C1">APP_DB</span><span style="color: #000000">, {</span>
+<span style="color: #000000">      </span><span style="color: #001080">httpRequest:</span><span style="color: #000000"> </span><span style="color: #001080">nativeHttpRequest</span><span style="color: #000000">,</span>
+<span style="color: #000000">      </span><span style="color: #001080">base64encode:</span><span style="color: #000000"> </span><span style="color: #001080">base64Encode</span>
+<span style="color: #000000">  })</span>
 </code></pre>
 				<a href="#login" id="login" style="color: inherit; text-decoration: none;">
 					<h3>Login</h3>
 				</a>
-				<p>You must log in to the server with an existing Odoo Lokavaluto account:</p>
-				<pre><code class="language-{.typescript}">await lokApi.login(&quot;myuser&quot;, &quot;mypassword&quot;)
+				<p>You must log in to the server with an existing Odoo Lokavaluto
+				account:</p>
+				<pre><code class="language-typescript"><span style="color: #AF00DB">await</span><span style="color: #000000"> </span><span style="color: #001080">lokApi</span><span style="color: #000000">.</span><span style="color: #795E26">login</span><span style="color: #000000">(</span><span style="color: #A31515">&quot;myuser&quot;</span><span style="color: #000000">, </span><span style="color: #A31515">&quot;mypassword&quot;</span><span style="color: #000000">)</span>
 </code></pre>
 				<a href="#accessing-accounts" id="accessing-accounts" style="color: inherit; text-decoration: none;">
 					<h3>Accessing accounts</h3>
 				</a>
 				<p>We assume that you&#39;ve instanciated <code>LokAPI</code> as stated in the previous
 				section, and you have logged in.</p>
-				<pre><code class="language-{.typescript}">let accounts = await lokApi.backends[0].accounts
-console.log(`balance in first account: ${accounts[0].balance} ${accounts[0].symbol}`)
+				<pre><code class="language-typescript"><span style="color: #0000FF">let</span><span style="color: #000000"> </span><span style="color: #001080">accounts</span><span style="color: #000000"> = </span><span style="color: #AF00DB">await</span><span style="color: #000000"> </span><span style="color: #001080">lokApi</span><span style="color: #000000">.</span><span style="color: #001080">backends</span><span style="color: #000000">[</span><span style="color: #098658">0</span><span style="color: #000000">].</span><span style="color: #001080">accounts</span>
+<span style="color: #001080">console</span><span style="color: #000000">.</span><span style="color: #795E26">log</span><span style="color: #000000">(</span><span style="color: #A31515">`balance in first account: </span><span style="color: #0000FF">${</span><span style="color: #001080">accounts</span><span style="color: #000000FF">[</span><span style="color: #098658">0</span><span style="color: #000000FF">].</span><span style="color: #001080">balance</span><span style="color: #0000FF">}</span><span style="color: #A31515"> </span><span style="color: #0000FF">${</span><span style="color: #001080">accounts</span><span style="color: #000000FF">[</span><span style="color: #098658">0</span><span style="color: #000000FF">].</span><span style="color: #001080">symbol</span><span style="color: #0000FF">}</span><span style="color: #A31515">`</span><span style="color: #000000">)</span>
 </code></pre>
 				<ul>
-					<li><code>lokAPI.backends</code> is the list of backends connections that are
-					managed</li>
-				</ul>
-				<p>by the current account. For now, don&#39;t expect more than one element
-				inside.</p>
-				<ul>
-					<li><p><code>backend.accounts</code> is the list of accounts in that connection
-						(warning, this is a promise).</p>
+					<li><p><code>lokAPI.backends</code> is the list of backends connections that are managed
+						by the current account. For now, don&#39;t expect more than one element inside.</p>
 					</li>
-					<li><p>  <code>account.balance</code> is the balance of the account</p>
+					<li><p><code>backend.accounts</code> is the list of accounts in that connection (warning, this
+						is a promise).</p>
 					</li>
-					<li><p>  <code>account.symbol</code> is the currency symbol for the account</p>
+					<li><p><code>account.balance</code> is the balance of the account</p>
+					</li>
+					<li><p><code>account.symbol</code> is the currency symbol for the account</p>
 					</li>
 				</ul>
 			</div>
@@ -306,7 +286,7 @@ console.log(`balance in first account: ${accounts[0].balance} ${accounts[0].symb
 		</div>
 	</div>
 </div>
-<footer class="with-border-bottom">
+<footer>
 	<div class="container">
 		<h2>Legend</h2>
 		<div class="tsd-legend-group">
@@ -323,9 +303,6 @@ console.log(`balance in first account: ${accounts[0].balance} ${accounts[0].symb
 		</div>
 	</div>
 </footer>
-<div class="container tsd-generator">
-	<p>Generated using <a href="https://typedoc.org/" target="_blank">TypeDoc</a></p>
-</div>
 <div class="overlay"></div>
 <script src="assets/js/main.js"></script>
 </body>
