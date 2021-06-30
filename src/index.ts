@@ -62,10 +62,14 @@ class LokAPI {
         let userData = await this.odoo.login(login, password)
         let mixin = this.mixin
         let backends = []
-        userData.backends.forEach(accountData => {
-            backends.push(new BackendFactories[accountData.type](accountData, mixin))
-        })
-        this.backends = backends
+        if (userData.backends) {
+            userData.backends.forEach(accountData => {
+                backends.push(new BackendFactories[accountData.type](accountData, mixin))
+            })
+            this.backends = backends
+        } else {
+            this.backends = []
+        }
         return true
     }
 
