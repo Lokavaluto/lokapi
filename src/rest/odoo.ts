@@ -25,13 +25,14 @@ export class OdooREST extends JsonRESTClient {
 
     async authenticate(login: string, password: string): Promise<any> {
         try {
-            let { response } = await this._req(
+            let response = await this._req(
                 '/lokavaluto_api/public/auth/authenticate', {
                 method: "POST",
                 headers: {
                     Authorization: `Basic ${this.base64encode(`${login}:${password}`)}`,
                 },
                 data: {
+                    api_version: 1,
                     db: this.dbName,
                     params: ['lcc_app']
                 }

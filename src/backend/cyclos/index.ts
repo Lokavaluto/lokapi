@@ -13,7 +13,7 @@ export class CyclosBackend extends JsonRESTClient {
     mixin: any
 
     constructor(accountData, mixin) {
-        super(accountData.host || "cyclos.dev.lokavaluto.fr", mixin)
+        super(accountData.server_url, mixin)
         this.authHeaders = { "Session-token": accountData.cyclos_token }
         this.owner_id = accountData.cyclos_id
     }
