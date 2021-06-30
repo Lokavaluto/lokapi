@@ -6,6 +6,8 @@ import { JsonRESTClient } from "."
 
 export class OdooREST extends JsonRESTClient {
 
+    API_VERSION = 1
+
     dbName: string
     apiToken: string
 
@@ -32,7 +34,7 @@ export class OdooREST extends JsonRESTClient {
                     Authorization: `Basic ${this.base64encode(`${login}:${password}`)}`,
                 },
                 data: {
-                    api_version: 1,
+                    api_version: this.API_VERSION,
                     db: this.dbName,
                     params: ['lcc_app']
                 }
@@ -43,6 +45,11 @@ export class OdooREST extends JsonRESTClient {
                 else
                     throw new e.APIRequestFailed(`Could not obtain token: ${response.error} `)
             }
+            if (response.api_version !== this.API_VERSION) {
+                console.log("Warning: API Version Mimatch " +
+                    `between client (${this.API_VERSION}) ` +
+                    `and server (${response.api_version})`)
+            }
             this.authHeaders = {
                 "API-KEY": response.api_token,
             }
@@ -50,7 +57,8 @@ export class OdooREST extends JsonRESTClient {
                 login: login,
                 partner_id: response.partner_id,
                 uid: response.uid,
-                backends: response.monujo_accounts
+                backends: response.monujo_accounts,
+                api_version: response.api_version
             }
         } catch (err) {
             console.log('getToken failed: ', err.message)
