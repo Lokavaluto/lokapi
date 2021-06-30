@@ -53,6 +53,7 @@ export class OdooREST extends JsonRESTClient {
             this.authHeaders = {
                 "API-KEY": response.api_token,
             }
+            this.apiToken = response.api_token
             return {
                 login: login,
                 partner_id: response.partner_id,
