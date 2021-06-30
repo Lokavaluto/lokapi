@@ -35,8 +35,6 @@ class LokAPI {
         uid: number
     }
 
-    public userProfile: any
-
     public backends: any
 
     constructor(host: string, dbName: string, mixin: any) {
