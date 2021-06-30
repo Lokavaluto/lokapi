@@ -78,10 +78,6 @@ export class OdooREST extends JsonRESTClient {
     }
 
 
-    // apiUrl = {
-    //     getUserProfile: {
-    //         url`/lokavaluto_api/private/partner/${userId}`
-
     /**
      * get given user's profile
      *
