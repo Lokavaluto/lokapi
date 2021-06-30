@@ -2,11 +2,11 @@
 
 export interface IHttpRequest {
     request(opts): Object
-
 }
 
 
 export type coreHttpOpts = {
+    protocol: string
     host: string
     path: string
     method: "GET" | "POST"

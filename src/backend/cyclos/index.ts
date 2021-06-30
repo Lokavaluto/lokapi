@@ -21,7 +21,7 @@ export class CyclosBackend extends JsonRESTClient {
 
     get accounts() {
         return (async () => {
-            let jsonAccounts = await this._authReq(`/api/${this.owner_id}/accounts`, {
+            let jsonAccounts = await this._authReq(`/${this.owner_id}/accounts`, {
                 method: "GET",
             })
 
