@@ -17,7 +17,7 @@ class LokAPI {
 
     // In charge with all odoo requests
 
-    private odoo: OdooREST
+    public odoo: OdooREST
 
     // These are kind of exchangeable libraries
 
