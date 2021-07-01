@@ -46,7 +46,6 @@ export abstract class JsonRESTClientAbstract {
             (typeof this.host === undefined) ||
             (!/^[a-zA-Z0-9][a-zA-Z0-9-]{1,61}[a-zA-Z0-9](?:\.[a-zA-Z]{2,})+$/.test(this.host))
         ) {
-            console.log("InvalidHost: You might want to check APP_HOST environment variable.")
             return new e.InvalidConnectionDetails(`Invalid value for host: ${this.host}`)
         }
         try {
