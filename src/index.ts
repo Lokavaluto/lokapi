@@ -70,6 +70,10 @@ abstract class LokAPIAbstract {
         if (userData.backends) {
             userData.backends.forEach(accountData => {
                 let BackendClassAbstract = BackendFactories[accountData.type]
+                if (!BackendClassAbstract) {
+                    console.log(`Data received for unknown backend ${accountData.type}`)
+                    return;
+                }
                 class Backend extends BackendClassAbstract {
                     request = request
                     base64encode = base64encode
