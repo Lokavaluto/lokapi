@@ -1,10 +1,5 @@
 
 
-export interface IHttpRequest {
-    request(opts): Object
-}
-
-
 export type coreHttpOpts = {
     protocol: string
     host: string
@@ -13,6 +8,9 @@ export type coreHttpOpts = {
     headers?: {}
     data?: {}
 }
+
+
+export type HttpRequest = (opts: coreHttpOpts) => Object
 
 
 export type HttpOpts = {

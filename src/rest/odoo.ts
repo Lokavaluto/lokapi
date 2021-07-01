@@ -1,10 +1,10 @@
 import * as e from "./exception"
 
 
-import { JsonRESTClient } from "."
+import { JsonRESTClientAbstract } from "."
 
 
-export class OdooREST extends JsonRESTClient {
+export abstract class OdooRESTAbstract extends JsonRESTClientAbstract {
 
     API_VERSION = 1
 
@@ -19,8 +19,8 @@ export class OdooREST extends JsonRESTClient {
     userProfile: any
 
 
-    constructor(host: string, dbName: string, mixin: any) {
-        super(host, mixin)
+    constructor(host: string, dbName: string) {
+        super(host)
         this.dbName = dbName
     }
 
@@ -46,7 +46,7 @@ export class OdooREST extends JsonRESTClient {
                     throw new e.APIRequestFailed(`Could not obtain token: ${response.error} `)
             }
             if (response.api_version !== this.API_VERSION) {
-                console.log("Warning: API Version Mimatch " +
+                console.log("Warning: API Version Mismatch " +
                     `between client (${this.API_VERSION}) ` +
                     `and server (${response.api_version})`)
             }

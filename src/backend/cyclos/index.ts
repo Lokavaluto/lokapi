@@ -1,19 +1,17 @@
 
-import { JsonRESTClient } from "../../rest"
+import { JsonRESTClientAbstract } from "../../rest"
 
 import { CyclosAccount } from "./account"
 
 import { BackendFactories } from ".."
 
 
-export class CyclosBackend extends JsonRESTClient {
+export abstract class CyclosBackendAbstract extends JsonRESTClientAbstract {
 
     owner_id: string
 
-    mixin: any
-
-    constructor(accountData, mixin) {
-        super(accountData.server_url, mixin)
+    constructor(accountData) {
+        super(accountData.server_url)
         this.authHeaders = { "Session-token": accountData.token }
         this.owner_id = accountData.owner_id
     }
@@ -37,4 +35,4 @@ export class CyclosBackend extends JsonRESTClient {
 }
 
 
-BackendFactories['cyclos'] = CyclosBackend
+BackendFactories['cyclos'] = CyclosBackendAbstract

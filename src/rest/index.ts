@@ -2,14 +2,14 @@ import * as e from "./exception"
 import * as t from "../type"
 
 
-export class JsonRESTClient {
+export abstract class JsonRESTClientAbstract {
 
     protocol: string
     host: string
     path: string
 
-    httpRequest: t.IHttpRequest
-    base64encode: t.Base64Encode
+    abstract request: t.HttpRequest
+    abstract base64encode: t.Base64Encode
 
     // Constants
 
@@ -22,7 +22,7 @@ export class JsonRESTClient {
     authHeaders: any
 
 
-    constructor(host_or_url: string, mixin: any) {
+    constructor(host_or_url: string) {
         if (host_or_url.includes("://")) {
             [this.protocol, host_or_url] = host_or_url.split("://")
         } else {
@@ -36,8 +36,6 @@ export class JsonRESTClient {
             this.path = ""
             this.host = host_or_url
         }
-        this.httpRequest = mixin.httpRequest
-        this.base64encode = mixin.base64encode
         this.authHeaders = {}
     }
 
@@ -52,7 +50,7 @@ export class JsonRESTClient {
             return new e.InvalidConnectionDetails(`Invalid value for host: ${this.host}`)
         }
         try {
-            rawData = await this.httpRequest.request({
+            rawData = await this.request({
                 protocol: this.protocol,
                 host: this.host,
                 path: `${this.path}/${path.replace(/^\//, '')}`,

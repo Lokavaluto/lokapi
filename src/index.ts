@@ -1,5 +1,5 @@
 
-import { OdooREST } from "./rest/odoo"
+import { OdooRESTAbstract } from "./rest/odoo"
 
 import * as e from "./rest/exception"
 import * as t from "./type"
@@ -13,37 +13,44 @@ import "./backend/cyclos"
 
 
 
-class LokAPI {
+abstract class LokAPIAbstract {
 
-    // In charge with all odoo requests
+    // These are kind of exchangeable libraries, you must provide
+    // an implementation of these.
 
-    public odoo: OdooREST
-
-    // These are kind of exchangeable libraries
-
-    private mixin: {
-        httpRequest: t.IHttpRequest,
-        base64encode: t.Base64Encode,
-        backendFactory: any
-    }
+    abstract request: t.HttpRequest
+    abstract base64encode: t.Base64Encode
 
     // User data
 
-    public userData: {
-        login: string
-        partner_id: number
-        uid: number
-    }
-
     public backends: any
 
-    constructor(host: string, dbName: string, mixin: any) {
-        this.odoo = new OdooREST(host, dbName, mixin)
-
-        // Keeping them to forward to account REST access
-        this.mixin = mixin
+    constructor(host: string, dbName: string) {
+        // We'll lazy load the subclassing of OdooRESTAbstract
+        // as we can't access in this constructor to this.request
+        // this.base64encode to transfer them.
+        this._dbName = dbName
+        this._host = host
     }
 
+
+    // In charge with all odoo requests
+
+    private _dbName: string
+    private _host: string
+    private _odoo: OdooRESTAbstract
+
+    public get odoo() {
+        if (!this._odoo) {
+            let { request, base64encode } = this
+            class OdooREST extends OdooRESTAbstract {
+                request = request
+                base64encode = base64encode
+            }
+            this._odoo = new OdooREST(this._host, this._dbName)
+        }
+        return this._odoo
+    }
 
     /**
      * Log in to Lokavaluto Odoo server target API.
@@ -58,11 +65,20 @@ class LokAPI {
      */
     public async login(login: string, password: string): Promise<any> {
         let userData = await this.odoo.login(login, password)
-        let mixin = this.mixin
         let backends = []
+        let { request, base64encode } = this
         if (userData.backends) {
             userData.backends.forEach(accountData => {
-                backends.push(new BackendFactories[accountData.type](accountData, mixin))
+                let BackendClassAbstract = BackendFactories[accountData.type]
+                class Backend extends BackendClassAbstract {
+                    request = request
+                    base64encode = base64encode
+
+                    // This function declaration seems necessary for typescript
+                    // to avoid having issues with this dynamic abstract class
+                    constructor(...args) { super(...args) }
+                }
+                backends.push(new Backend(accountData))
             })
             this.backends = backends
         } else {
@@ -74,4 +90,4 @@ class LokAPI {
 }
 
 
-export { LokAPI, e, t }
+export { LokAPIAbstract, e, t }

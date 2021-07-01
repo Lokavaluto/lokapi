@@ -35,11 +35,19 @@ whenever you want to update.
 
 ** Using =lokapi=
 
-*** Instantiating main object
+*** Subclassing main LokAPIAbstract
 
-Lokapi will require a way to make HTTP request. Depending on your
-platform or environment, you might have different way to implement
-these.
+Lokapi will require a way to make HTTP request, access to a permanent
+store, or various other tasks. Depending on your platform or
+environment, you might have different way to implement these.
+
+To inject these exchangeable dependency, you are invited to subclass
+LokAPIAbstract and define these objects:
+
+- httpRequest :: an implementation of =HTTPRequest=
+- base64encode :: a function to encode a string to base64
+
+*** Instanciating lokapi
 
 On instantiation time, =LokAPI= class will require you to provide:
 
@@ -47,10 +55,6 @@ On instantiation time, =LokAPI= class will require you to provide:
 
   - database :: as a =string= (example: "myodoodb")
 
-  - mixin :: as a simple =Object= containing two keys:
-
-      - httpRequest :: an implementation of =IHTTPRequest=
-      - base64encode :: a function to encode a string to base64
 
 **** Example for node
 
@@ -62,11 +66,11 @@ Using node's core =https= as HTTP requestion implementation:
 
 import https from "https"
 
-import { LokAPI, e as LokAPIExc, t as LokAPIType } from "lokapi"
+import { LokAPIAbstract, e as LokAPIExc, t as LokAPIType } from "lokapi"
 
+class NodeLokAPI extends LokApiAbstract {
 
-let coreHttpRequest: LokAPIType.IHttpRequest = {
-    request: (opts: LokAPIType.coreHttpOpts) => {
+    request = (opts: LokAPIType.coreHttpOpts) => {
         if (opts.protocol !== 'https') {
             throw new Error(`Protocol ${opts.protocol} unsupported by this implementation`)
         }
@@ -104,7 +108,10 @@ let coreHttpRequest: LokAPIType.IHttpRequest = {
             });
         })
 
-    },
+    }
+
+    base64encode = (s: string) => Buffer.from(s).toString('base64')
+
 }
 
 
@@ -121,10 +128,6 @@ if (!process.env.VUE_APP_LOKAPI_DB) {
 var lokAPI = new LokAPI(
     process.env.VUE_APP_LOKAPI_HOST,
     process.env.VUE_APP_LOKAPI_DB,
-    {
-        httpRequest: coreHttpRequest,
-        base64encode: (s: string) => Buffer.from(s).toString('base64'),
-    }
 )
 #+end_src
 
@@ -137,11 +140,12 @@ Using =@nativescript-community/https= as HTTP request implementation:
 #+begin_src typescript
   import * as https from '@nativescript-community/https';
 
-  import { LokAPI, e as LokAPIExc, t as LokAPIType } from "lokapi"
+  import { LokAPIAbstract, e as LokAPIExc, t as LokAPIType } from "lokapi"
 
 
-  let nativeHttpRequest: LokAPIType.IHttpRequest = {
-      request: async (opts: LokAPIType.coreHttpOpts) => {
+  class NativeLokAPI extends LokAPIAbstract {
+
+      request = async (opts: LokAPIType.coreHttpOpts) => {
           const nativeRequestOpts = {
               url: opts.protocol + "://" + opts.host + opts.path,
               method: opts.method,
@@ -165,28 +169,15 @@ Using =@nativescript-community/https= as HTTP request implementation:
               throw new LokAPIExc.HttpError(statusCode, response.reason, "", response)
           }
 
-          let outputJSON
-          try {
-              outputJSON = JSON.parse(rawData)
-          } catch (err) {
-              outputJSON = null
-          }
-          // console.log('HTTP Response status:', statusCode, response.reason)
-          // console.log('== HEADERS:', response.headers)
-          // if (!outputJSON) {
-          //     console.log('== BODY (ascii):', rawData);
-          // } else {
-          //     console.log('== BODY (json):', outputJSON);
-          // }
           return rawData
-      },
+      }
+
+      base64encode = base64Encode
   }
 
 
-  var lokAPI = new LokAPI(APP_HOST, APP_DB, {
-      httpRequest: nativeHttpRequest,
-      base64encode: base64Encode
-  })
+  var lokAPI = new NativeLokAPI(APP_HOST, APP_DB)
+
 #+end_src
 
 
