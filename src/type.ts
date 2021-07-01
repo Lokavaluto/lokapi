@@ -4,7 +4,7 @@ export type coreHttpOpts = {
     protocol: string
     host: string
     path: string
-    method: "GET" | "POST"
+    method: string
     headers?: {}
     data?: {}
 }
@@ -14,7 +14,7 @@ export type HttpRequest = (opts: coreHttpOpts) => Object
 
 
 export type HttpOpts = {
-    method: "GET" | "POST"
+    method: string
     headers?: {}
     data?: {}
 }

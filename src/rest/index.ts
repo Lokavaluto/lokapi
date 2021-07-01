@@ -8,8 +8,8 @@ export abstract class JsonRESTClientAbstract {
     host: string
     path: string
 
-    abstract request: t.HttpRequest
-    abstract base64encode: t.Base64Encode
+    protected abstract httpRequest: t.HttpRequest
+    protected abstract base64Encode: t.Base64Encode
 
     // Constants
 
@@ -39,7 +39,7 @@ export abstract class JsonRESTClientAbstract {
         this.authHeaders = {}
     }
 
-    async _req(path: string, opts: t.HttpOpts): Promise<any> {
+    public async request(path: string, opts: t.HttpOpts): Promise<any> {
         let headers = Object.assign({}, this.COMMON_HEADERS, opts.headers)
         let rawData: any
         if (
@@ -49,7 +49,7 @@ export abstract class JsonRESTClientAbstract {
             return new e.InvalidConnectionDetails(`Invalid value for host: ${this.host}`)
         }
         try {
-            rawData = await this.request({
+            rawData = await this.httpRequest({
                 protocol: this.protocol,
                 host: this.host,
                 path: `${this.path}/${path.replace(/^\//, '')}`,
@@ -71,12 +71,49 @@ export abstract class JsonRESTClientAbstract {
         return parsedData
     }
 
-    async _authReq(path: string, opts: t.HttpOpts): Promise<any> {
+    public async authRequest(path: string, opts: t.HttpOpts): Promise<any> {
         if (this.authHeaders.length == 0) {
             throw new e.AuthenticationRequired("Authentication required")
         }
         opts.headers = Object.assign({}, this.authHeaders, opts.headers)
-        return await this._req(path, opts)
+        return this.request(path, opts)
     }
+
+    // Make typescript happy
+
+    get: (path: string, data?: any, headers?: any) => any;
+    post: (path: string, data?: any, headers?: any) => any;
+    delete: (path: string, data?: any, headers?: any) => any;
+    put: (path: string, data?: any, headers?: any) => any;
+
+    $get: (path: string, data?: any, headers?: any) => any;
+    $post: (path: string, data?: any, headers?: any) => any;
+    $delete: (path: string, data?: any, headers?: any) => any;
+    $put: (path: string, data?: any, headers?: any) => any;
+
 }
 
+
+let METHODS = "get post put delete"
+
+METHODS.split(" ").forEach(method => {
+    JsonRESTClientAbstract.prototype[method] = async function(
+        path: string, data?: any, headers?: any) {
+        let opts: t.HttpOpts = {
+            method: method.toUpperCase(),
+            headers: headers || {},
+            data: data || {},
+        }
+        return this.request(path, opts)
+    }
+
+    JsonRESTClientAbstract.prototype["$" + method] = async function(
+        path: string, data?: any, headers?: any) {
+        if (this.authHeaders.length == 0) {
+            throw new e.AuthenticationRequired("Authentication required")
+        }
+        return this[method](
+            path, data,
+            Object.assign({}, this.authHeaders, headers || {}))
+    }
+})

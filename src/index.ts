@@ -44,8 +44,8 @@ abstract class LokAPIAbstract {
         if (!this._odoo) {
             let { request, base64encode } = this
             class OdooREST extends OdooRESTAbstract {
-                request = request
-                base64encode = base64encode
+                protected httpRequest = request
+                protected base64Encode = base64encode
             }
             this._odoo = new OdooREST(this._host, this._dbName)
         }
@@ -75,8 +75,8 @@ abstract class LokAPIAbstract {
                     return;
                 }
                 class Backend extends BackendClassAbstract {
-                    request = request
-                    base64encode = base64encode
+                    httpRequest = request
+                    base64Encode = base64encode
 
                     // This function declaration seems necessary for typescript
                     // to avoid having issues with this dynamic abstract class

@@ -19,9 +19,7 @@ export abstract class CyclosBackendAbstract extends JsonRESTClientAbstract {
 
     get accounts() {
         return (async () => {
-            let jsonAccounts = await this._authReq(`/${this.owner_id}/accounts`, {
-                method: "GET",
-            })
+            let jsonAccounts = await this.$get(`/${this.owner_id}/accounts`)
 
             let accounts = []
 

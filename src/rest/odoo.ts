@@ -27,18 +27,17 @@ export abstract class OdooRESTAbstract extends JsonRESTClientAbstract {
 
     async authenticate(login: string, password: string): Promise<any> {
         try {
-            let response = await this._req(
-                '/lokavaluto_api/public/auth/authenticate', {
-                method: "POST",
-                headers: {
-                    Authorization: `Basic ${this.base64encode(`${login}:${password}`)}`,
-                },
-                data: {
+            let response = await this.post(
+                '/lokavaluto_api/public/auth/authenticate',
+                {
                     api_version: this.API_VERSION,
                     db: this.dbName,
                     params: ['lcc_app']
+                },
+                {
+                    Authorization: `Basic ${this.base64Encode(`${login}:${password}`)}`,
                 }
-            });
+            );
             if (response.status == "Error") {
                 if (response.message == "access denied")
                     throw new e.InvalidCredentials("Access denied")
@@ -95,9 +94,7 @@ export abstract class OdooRESTAbstract extends JsonRESTClientAbstract {
      * @returns Object
      */
     async getUserProfile(userId: number) {
-        const profile = await this._authReq(`/lokavaluto_api/private/partner/${userId}`, {
-            method: "GET"
-        })
+        const profile = await this.$get(`/lokavaluto_api/private/partner/${userId}`)
         return profile || null
     }
 
