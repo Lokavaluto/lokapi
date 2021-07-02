@@ -42,7 +42,7 @@ export abstract class OdooRESTAbstract extends JsonRESTClientAbstract {
                 if (response.message == "access denied")
                     throw new e.InvalidCredentials("Access denied")
                 else
-                    throw new e.APIRequestFailed(`Could not obtain token: ${response.error} `)
+                    throw new e.APIRequestFailed(`Could not obtain token: ${response.error}`)
             }
             if (response.api_version !== this.API_VERSION) {
                 console.log("Warning: API Version Mismatch " +
@@ -66,6 +66,7 @@ export abstract class OdooRESTAbstract extends JsonRESTClientAbstract {
             throw err
         }
     }
+
 
     /**
      * Log in to lokavaluto server target API. It actually will probe
