@@ -9,7 +9,6 @@ export abstract class OdooRESTAbstract extends JsonRESTClientAbstract {
     API_VERSION = 1
 
     dbName: string
-    apiToken: string
 
     userData: {
         login: string
@@ -22,6 +21,23 @@ export abstract class OdooRESTAbstract extends JsonRESTClientAbstract {
     constructor(host: string, dbName: string) {
         super(host)
         this.dbName = dbName
+        this.authHeaders = {}
+    }
+
+    _apiToken: string
+
+    set apiToken(apiToken: string) {
+        if (apiToken) {
+            this.authHeaders["API-KEY"] = apiToken
+        } else {
+            delete this.authHeaders["API-KEY"]
+        }
+        this._apiToken = apiToken
+    }
+
+
+    get apiToken(): string {
+        return this._apiToken
     }
 
 
@@ -48,9 +64,6 @@ export abstract class OdooRESTAbstract extends JsonRESTClientAbstract {
                 console.log("Warning: API Version Mismatch " +
                     `between client (${this.API_VERSION}) ` +
                     `and server (${response.api_version})`)
-            }
-            this.authHeaders = {
-                "API-KEY": response.api_token,
             }
             this.apiToken = response.api_token
             return {
@@ -88,7 +101,19 @@ export abstract class OdooRESTAbstract extends JsonRESTClientAbstract {
 
 
     /**
-     * get given user's profile
+     * Log out from lokavaluto server
+     *
+     * @returns null
+     *
+     * @throws {RequestFailed, APIRequestFailed, InvalidCredentials, InvalidJson}
+     */
+    async logout(): Promise<void> {
+        this.apiToken = null
+    }
+
+
+    /**
+     * Get given user's profile
      *
      * @throws {RequestFailed, APIRequestFailed, InvalidCredentials, InvalidJson}
      *
