@@ -4,9 +4,9 @@ import * as t from "../type"
 
 export abstract class JsonRESTClientAbstract {
 
-    protocol: string
-    host: string
-    path: string
+    protocol: string = ""
+    host: string = ""
+    path: string = ""
 
     protected abstract httpRequest: t.HttpRequest
     protected abstract base64Encode: t.Base64Encode
@@ -79,17 +79,18 @@ export abstract class JsonRESTClientAbstract {
         return this.request(path, opts)
     }
 
+
     // Make typescript happy
 
-    get: (path: string, data?: any, headers?: any) => any;
-    post: (path: string, data?: any, headers?: any) => any;
-    delete: (path: string, data?: any, headers?: any) => any;
-    put: (path: string, data?: any, headers?: any) => any;
+    get: t.restMethod
+    post: t.restMethod
+    delete: t.restMethod
+    put: t.restMethod
 
-    $get: (path: string, data?: any, headers?: any) => any;
-    $post: (path: string, data?: any, headers?: any) => any;
-    $delete: (path: string, data?: any, headers?: any) => any;
-    $put: (path: string, data?: any, headers?: any) => any;
+    $get: t.restMethod
+    $post: t.restMethod
+    $delete: t.restMethod
+    $put: t.restMethod
 
 }
 
