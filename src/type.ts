@@ -4,7 +4,7 @@ export type coreHttpOpts = {
     protocol: string
     host: string
     path: string
-    method: string
+    method: "GET" | "POST" | "PUT" | "DELETE" | "PATCH" | "HEAD"
     headers?: {}
     data?: {}
 }
