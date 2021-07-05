@@ -4,9 +4,9 @@ import * as t from "../type"
 
 export abstract class JsonRESTClientAbstract {
 
-    protocol: string
-    host: string
-    path: string
+    protocol: string = ""
+    host: string = ""
+    path: string = ""
 
     protected abstract httpRequest: t.HttpRequest
     protected abstract base64Encode: t.Base64Encode

@@ -228,6 +228,21 @@ the =get=, =post=, =put=, =delete= methods and their authenticated
 counterparts, =$get=, =$post=, =$put=, =$delete=.
 
 #+begin_src typescript
+
+// All 8 methods have this signature:
+// type restMethod = (path: string, data?: any, headers?: any) => any
+
+// Notice that the next call is an example, but you don't need to
+// use this endpoint as it is used by the lokAPI.login() and
+// manages token for you.
+lokAPI.post('/auth/authenticate', {
+  api_version: this.API_VERSION,
+  db: 'mydb',
+  params: ['lcc_app']
+}, {
+  'Authorization': '',
+})
+
 lokAPI.$post(`/partner/${userId}`)
 lokAPI.$post(`/partner/favorite`)
 lokAPI.$post(`/partner/${userId}/toggle_favorite`)
