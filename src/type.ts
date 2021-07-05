@@ -1,10 +1,21 @@
 
+export const httpMethods = [
+    "GET",
+    "POST",
+    "PUT",
+    "DELETE",
+    "PATCH",
+    "HEAD"
+] as const
+
+export type httpMethod = typeof httpMethods[number]
+
 
 export type coreHttpOpts = {
     protocol: string
     host: string
     path: string
-    method: string
+    method: httpMethod
     headers?: {}
     port?: number
     data?: {}
@@ -18,7 +29,7 @@ export type restMethod = (path: string, data?: any, headers?: any) => any
 
 
 export type HttpOpts = {
-    method: string
+    method: httpMethod
     headers?: {}
     data?: {}
 }

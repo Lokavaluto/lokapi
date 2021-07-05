@@ -149,19 +149,17 @@ export abstract class OdooRESTAbstract extends JsonRESTPersistentClientAbstract 
 }
 
 
-
-let METHODS = "get post put delete"
-
-METHODS.split(" ").forEach(method => {
-    OdooRESTAbstract.prototype[method] = function(
+t.httpMethods.forEach((method) => {
+    let methodLc = method.toLowerCase()
+    OdooRESTAbstract.prototype[methodLc] = function(
         path: string, data?: any, headers?: any) {
-        return JsonRESTPersistentClientAbstract.prototype[method].apply(this,
+        return JsonRESTPersistentClientAbstract.prototype[methodLc].apply(this,
             [`/lokavaluto_api/public${path}`, data, headers])
     }
 
-    OdooRESTAbstract.prototype["$" + method] = function(
+    OdooRESTAbstract.prototype["$" + methodLc] = function(
         path: string, data?: any, headers?: any) {
-        return JsonRESTPersistentClientAbstract.prototype['$' + method].apply(this,
+        return JsonRESTPersistentClientAbstract.prototype['$' + methodLc].apply(this,
             [`/lokavaluto_api/private${path}`, data, headers])
     }
 })

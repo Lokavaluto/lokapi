@@ -136,23 +136,21 @@ export abstract class JsonRESTClientAbstract {
 }
 
 
-let METHODS = "get post put delete"
-
-METHODS.split(" ").forEach(method => {
-    JsonRESTClientAbstract.prototype[method] = async function(
+t.httpMethods.forEach(method => {
+    JsonRESTClientAbstract.prototype[method.toLowerCase()] = async function(
         path: string, data?: any, headers?: any) {
         let opts: t.HttpOpts = {
-            method: method.toUpperCase(),
+            method: method,
             headers: headers || {},
             data: data || {},
         }
         return this.request(path, opts)
     }
 
-    JsonRESTClientAbstract.prototype["$" + method] = async function(
+    JsonRESTClientAbstract.prototype["$" + method.toLowerCase()] = async function(
         path: string, data?: any, headers?: any) {
         let opts: t.HttpOpts = {
-            method: method.toUpperCase(),
+            method: method,
             headers: headers || {},
             data: data || {},
         }
