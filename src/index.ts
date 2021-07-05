@@ -12,45 +12,12 @@ import { BackendFactories } from "./backend"
 import "./backend/cyclos"
 
 
-
-abstract class LokAPIAbstract {
-
-    // These are kind of exchangeable libraries, you must provide
-    // an implementation of these.
-
-    abstract request: t.HttpRequest
-    abstract base64encode: t.Base64Encode
+abstract class LokAPIAbstract extends OdooRESTAbstract {
 
     // User data
 
     public backends: any
 
-    constructor(host: string, dbName: string) {
-        // We'll lazy load the subclassing of OdooRESTAbstract
-        // as we can't access in this constructor to this.request
-        // this.base64encode to transfer them.
-        this._dbName = dbName
-        this._host = host
-    }
-
-
-    // In charge with all odoo requests
-
-    private _dbName: string
-    private _host: string
-    private _odoo: OdooRESTAbstract
-
-    public get odoo() {
-        if (!this._odoo) {
-            let { request, base64encode } = this
-            class OdooREST extends OdooRESTAbstract {
-                protected httpRequest = request
-                protected base64Encode = base64encode
-            }
-            this._odoo = new OdooREST(this._host, this._dbName)
-        }
-        return this._odoo
-    }
 
     /**
      * Log in to Lokavaluto Odoo server target API.
@@ -64,9 +31,9 @@ abstract class LokAPIAbstract {
      * @throws {RequestFailed, APIRequestFailed, InvalidCredentials, InvalidJson}
      */
     public async login(login: string, password: string): Promise<any> {
-        let userData = await this.odoo.login(login, password)
+        let userData = await super.login(login, password)
         let backends = []
-        let { request, base64encode } = this
+        let { httpRequest, base64Encode } = this
         if (userData.backends) {
             userData.backends.forEach(accountData => {
                 let BackendClassAbstract = BackendFactories[accountData.type]
@@ -75,8 +42,8 @@ abstract class LokAPIAbstract {
                     return;
                 }
                 class Backend extends BackendClassAbstract {
-                    httpRequest = request
-                    base64Encode = base64encode
+                    httpRequest = httpRequest
+                    base64Encode = base64Encode
 
                     // This function declaration seems necessary for typescript
                     // to avoid having issues with this dynamic abstract class

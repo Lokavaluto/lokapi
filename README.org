@@ -45,7 +45,7 @@ To inject these exchangeable dependency, you are invited to subclass
 LokAPIAbstract and define these objects:
 
 - httpRequest :: an implementation of =HTTPRequest=
-- base64encode :: a function to encode a string to base64
+- base64Encode :: a function to encode a string to base64
 
 *** Instanciating lokapi
 
@@ -70,7 +70,7 @@ import { LokAPIAbstract, e as LokAPIExc, t as LokAPIType } from "lokapi"
 
 class NodeLokAPI extends LokApiAbstract {
 
-    request = (opts: LokAPIType.coreHttpOpts) => {
+    httpRequest = (opts: LokAPIType.coreHttpOpts) => {
         if (opts.protocol !== 'https') {
             throw new Error(`Protocol ${opts.protocol} unsupported by this implementation`)
         }
@@ -110,7 +110,7 @@ class NodeLokAPI extends LokApiAbstract {
 
     }
 
-    base64encode = (s: string) => Buffer.from(s).toString('base64')
+    base64Encode = (s: string) => Buffer.from(s).toString('base64')
 
 }
 
@@ -145,7 +145,7 @@ Using =@nativescript-community/https= as HTTP request implementation:
 
   class NativeLokAPI extends LokAPIAbstract {
 
-      request = async (opts: LokAPIType.coreHttpOpts) => {
+      httpRequest = async (opts: LokAPIType.coreHttpOpts) => {
           const nativeRequestOpts = {
               url: opts.protocol + "://" + opts.host + opts.path,
               method: opts.method,
@@ -172,7 +172,7 @@ Using =@nativescript-community/https= as HTTP request implementation:
           return rawData
       }
 
-      base64encode = base64Encode
+      base64Encode = base64Encode
   }
 
 
