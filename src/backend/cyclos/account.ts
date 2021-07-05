@@ -3,11 +3,11 @@ import { BridgeObject } from ".."
 
 export class CyclosAccount extends BridgeObject {
 
-    get balance() {
+    async getBalance() {
         return this.jsonData.status.balance
     }
 
-    get symbol() {
+    async getSymbol() {
         return this.jsonData.currency.symbol
     }
 }

@@ -199,20 +199,25 @@ We assume that you've instanciated =LokAPI= as stated in the previous
 section, and you have logged in.
 
 #+begin_src typescript
-let accounts = await lokApi.backends[0].accounts
-console.log(`balance in first account: ${accounts[0].balance} ${accounts[0].symbol}`)
+let backends = await lokAPI.getBackends()
+let accounts = await backends[0].getAccounts()
+
+let balance = await accounts.getBalance()
+let symbol= await accounts.getSymbol()
+
+console.log(`balance in first account: ${balance} ${symbol}`)
 #+end_src
 
-- =lokAPI.backends= is the list of backends connections that are
+- =lokAPI.getBackends()= is the list of backends connections that are
   managed by the current account. For now, don't expect more than one
   element inside.
 
-- =backend.accounts= is the list of accounts in that connection
+- =backend.getAccounts()= is the list of accounts in that connection
   (warning, this is a promise).
 
-- =account.balance= is the balance of the account
+- =account.getBalance()= is the balance of the account
 
-- =account.symbol= is the currency symbol for the account
+- =account.getSymbol()= is the currency symbol for the account
 
 
 ** Direct request to odoo api
