@@ -112,8 +112,8 @@ METHODS.split(" ").forEach(method => {
         if (this.authHeaders.length == 0) {
             throw new e.AuthenticationRequired("Authentication required")
         }
-        return this[method](
-            path, data,
-            Object.assign({}, this.authHeaders, headers || {}))
+        return JsonRESTClientAbstract.prototype[method].apply(
+            this,
+            [path, data, Object.assign({}, this.authHeaders, headers || {})])
     }
 })

@@ -44,7 +44,7 @@ export abstract class OdooRESTAbstract extends JsonRESTClientAbstract {
     async authenticate(login: string, password: string): Promise<any> {
         try {
             let response = await this.post(
-                '/lokavaluto_api/public/auth/authenticate',
+                '/auth/authenticate',
                 {
                     api_version: this.API_VERSION,
                     db: this.dbName,
@@ -120,9 +120,27 @@ export abstract class OdooRESTAbstract extends JsonRESTClientAbstract {
      * @returns Object
      */
     async getUserProfile(userId: number) {
-        const profile = await this.$get(`/lokavaluto_api/private/partner/${userId}`)
+        const profile = await this.$get(`/partner/${userId}`)
         return profile || null
     }
 
 }
 
+
+
+let METHODS = "get post put delete"
+
+METHODS.split(" ").forEach(method => {
+    OdooRESTAbstract.prototype[method] = function(
+        path: string, data?: any, headers?: any) {
+        return JsonRESTClientAbstract.prototype[method].apply(this,
+            [`/lokavaluto_api/public${path}`, data, headers])
+    }
+
+    OdooRESTAbstract.prototype["$" + method] = function(
+        path: string, data?: any, headers?: any) {
+        console.log(`Odoo private ${method}:`, path)
+        return JsonRESTClientAbstract.prototype['$' + method].apply(this,
+            [`/lokavaluto_api/private${path}`, data, headers])
+    }
+})

@@ -211,3 +211,16 @@ console.log(`balance in first account: ${accounts[0].balance} ${accounts[0].symb
 
 - =account.symbol= is the currency symbol for the account
 
+
+** Direct request to odoo api
+
+
+You can use =lokapi= instance to query directly the odoo api trough
+the =get=, =post=, =put=, =delete= methods and their authenticated
+counterparts, =$get=, =$post=, =$put=, =$delete=.
+
+#+begin_src typescript
+lokAPI.$post(`/partner/${userId}`)
+lokAPI.$post(`/partner/favorite`)
+lokAPI.$post(`/partner/${userId}/toggle_favorite`)
+#+end_src
