@@ -58,6 +58,13 @@ abstract class LokAPIAbstract extends OdooRESTAbstract {
         return true
     }
 
+    get accounts() {
+        return this.backends.map(b=>b.accounts).then(r=>r.flat())
+
+    }
+    getAccounts() {
+        return Promise.all(this.backends.map(b=>b.getAccounts())).then(r=>r.flat())
+    }
 }
 
 

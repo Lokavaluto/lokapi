@@ -16,8 +16,8 @@ export abstract class CyclosBackendAbstract extends JsonRESTClientAbstract {
         this.owner_id = accountData.owner_id
     }
 
-
-    get accounts() {
+    accounts: CyclosAccount[]
+    getAccounts() {
         return (async () => {
             let jsonAccounts = await this.$get(`/${this.owner_id}/accounts`)
 
@@ -26,6 +26,7 @@ export abstract class CyclosBackendAbstract extends JsonRESTClientAbstract {
             jsonAccounts.forEach(jsonAccountData => {
                 accounts.push(new CyclosAccount(this, jsonAccountData))
             })
+            this.accounts = accounts
             return accounts
         })()
     }
