@@ -76,6 +76,7 @@
 								<li class="tsd-kind-type-alias tsd-parent-kind-module"><a href="type.html#httpopts" class="tsd-kind-icon">Http<wbr>Opts</a></li>
 								<li class="tsd-kind-type-alias tsd-parent-kind-module"><a href="type.html#httprequest" class="tsd-kind-icon">Http<wbr>Request</a></li>
 								<li class="tsd-kind-type-alias tsd-parent-kind-module"><a href="type.html#corehttpopts" class="tsd-kind-icon">core<wbr>Http<wbr>Opts</a></li>
+								<li class="tsd-kind-type-alias tsd-parent-kind-module"><a href="type.html#restmethod" class="tsd-kind-icon">rest<wbr>Method</a></li>
 							</ul>
 						</section>
 					</div>
@@ -89,7 +90,7 @@
 					<div class="tsd-signature tsd-kind-icon">Base64<wbr>Encode<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-symbol">(</span>s<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol"> =&gt; </span><span class="tsd-signature-type">string</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/Lokavaluto/lokapi/blob/6972425/src/type.ts#L23">src/type.ts:23</a></li>
+							<li>Defined in <a href="https://github.com/Lokavaluto/lokapi/blob/c952999/src/type.ts#L26">src/type.ts:26</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-type-declaration">
@@ -120,7 +121,7 @@
 					<div class="tsd-signature tsd-kind-icon">Http<wbr>Opts<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-symbol">{ </span>data<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-symbol">{}</span><span class="tsd-signature-symbol">; </span>headers<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-symbol">{}</span><span class="tsd-signature-symbol">; </span>method<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol"> }</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/Lokavaluto/lokapi/blob/6972425/src/type.ts#L16">src/type.ts:16</a></li>
+							<li>Defined in <a href="https://github.com/Lokavaluto/lokapi/blob/c952999/src/type.ts#L19">src/type.ts:19</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-type-declaration">
@@ -148,7 +149,7 @@
 					<div class="tsd-signature tsd-kind-icon">Http<wbr>Request<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-symbol">(</span>opts<span class="tsd-signature-symbol">: </span><a href="type.html#corehttpopts" class="tsd-signature-type" data-tsd-kind="Type alias">coreHttpOpts</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol"> =&gt; </span><span class="tsd-signature-type">Object</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/Lokavaluto/lokapi/blob/6972425/src/type.ts#L13">src/type.ts:13</a></li>
+							<li>Defined in <a href="https://github.com/Lokavaluto/lokapi/blob/c952999/src/type.ts#L13">src/type.ts:13</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-type-declaration">
@@ -179,7 +180,7 @@
 					<div class="tsd-signature tsd-kind-icon">core<wbr>Http<wbr>Opts<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-symbol">{ </span>data<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-symbol">{}</span><span class="tsd-signature-symbol">; </span>headers<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-symbol">{}</span><span class="tsd-signature-symbol">; </span>host<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">; </span>method<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">; </span>path<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">; </span>protocol<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol"> }</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/Lokavaluto/lokapi/blob/6972425/src/type.ts#L3">src/type.ts:3</a></li>
+							<li>Defined in <a href="https://github.com/Lokavaluto/lokapi/blob/c952999/src/type.ts#L3">src/type.ts:3</a></li>
 						</ul>
 					</aside>
 					<div class="tsd-type-declaration">
@@ -206,6 +207,43 @@
 							</li>
 							<li class="tsd-parameter">
 								<h5>protocol<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span></h5>
+							</li>
+						</ul>
+					</div>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-type-alias tsd-parent-kind-module">
+					<a name="restmethod" class="tsd-anchor"></a>
+					<h3>rest<wbr>Method</h3>
+					<div class="tsd-signature tsd-kind-icon">rest<wbr>Method<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-symbol">(</span>path<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span>, data<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">any</span>, headers<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol"> =&gt; </span><span class="tsd-signature-type">any</span></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in <a href="https://github.com/Lokavaluto/lokapi/blob/c952999/src/type.ts#L16">src/type.ts:16</a></li>
+						</ul>
+					</aside>
+					<div class="tsd-type-declaration">
+						<h4>Type declaration</h4>
+						<ul class="tsd-parameters">
+							<li class="tsd-parameter-signature">
+								<ul class="tsd-signatures tsd-kind-type-literal tsd-parent-kind-type-alias">
+									<li class="tsd-signature tsd-kind-icon"><span class="tsd-signature-symbol">(</span>path<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span>, data<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">any</span>, headers<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span></li>
+								</ul>
+								<ul class="tsd-descriptions">
+									<li class="tsd-description">
+										<h4 class="tsd-parameters-title">Parameters</h4>
+										<ul class="tsd-parameters">
+											<li>
+												<h5>path: <span class="tsd-signature-type">string</span></h5>
+											</li>
+											<li>
+												<h5><span class="tsd-flag ts-flagOptional">Optional</span> data: <span class="tsd-signature-type">any</span></h5>
+											</li>
+											<li>
+												<h5><span class="tsd-flag ts-flagOptional">Optional</span> headers: <span class="tsd-signature-type">any</span></h5>
+											</li>
+										</ul>
+										<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">any</span></h4>
+									</li>
+								</ul>
 							</li>
 						</ul>
 					</div>
@@ -260,6 +298,9 @@
 					</li>
 					<li class=" tsd-kind-type-alias tsd-parent-kind-module">
 						<a href="type.html#corehttpopts" class="tsd-kind-icon">core<wbr>Http<wbr>Opts</a>
+					</li>
+					<li class=" tsd-kind-type-alias tsd-parent-kind-module">
+						<a href="type.html#restmethod" class="tsd-kind-icon">rest<wbr>Method</a>
 					</li>
 				</ul>
 			</nav>

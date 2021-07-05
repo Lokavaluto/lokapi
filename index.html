@@ -221,20 +221,25 @@
 				</a>
 				<p>We assume that you&#39;ve instanciated <code>LokAPI</code> as stated in the previous
 				section, and you have logged in.</p>
-				<pre><code class="language-typescript"><span style="color: #0000FF">let</span><span style="color: #000000"> </span><span style="color: #001080">accounts</span><span style="color: #000000"> = </span><span style="color: #AF00DB">await</span><span style="color: #000000"> </span><span style="color: #001080">lokApi</span><span style="color: #000000">.</span><span style="color: #001080">backends</span><span style="color: #000000">[</span><span style="color: #098658">0</span><span style="color: #000000">].</span><span style="color: #001080">accounts</span>
-<span style="color: #001080">console</span><span style="color: #000000">.</span><span style="color: #795E26">log</span><span style="color: #000000">(</span><span style="color: #A31515">`balance in first account: </span><span style="color: #0000FF">${</span><span style="color: #001080">accounts</span><span style="color: #000000FF">[</span><span style="color: #098658">0</span><span style="color: #000000FF">].</span><span style="color: #001080">balance</span><span style="color: #0000FF">}</span><span style="color: #A31515"> </span><span style="color: #0000FF">${</span><span style="color: #001080">accounts</span><span style="color: #000000FF">[</span><span style="color: #098658">0</span><span style="color: #000000FF">].</span><span style="color: #001080">symbol</span><span style="color: #0000FF">}</span><span style="color: #A31515">`</span><span style="color: #000000">)</span>
+				<pre><code class="language-typescript"><span style="color: #0000FF">let</span><span style="color: #000000"> </span><span style="color: #001080">backends</span><span style="color: #000000"> = </span><span style="color: #AF00DB">await</span><span style="color: #000000"> </span><span style="color: #001080">lokAPI</span><span style="color: #000000">.</span><span style="color: #795E26">getBackends</span><span style="color: #000000">()</span>
+<span style="color: #0000FF">let</span><span style="color: #000000"> </span><span style="color: #001080">accounts</span><span style="color: #000000"> = </span><span style="color: #AF00DB">await</span><span style="color: #000000"> </span><span style="color: #001080">backends</span><span style="color: #000000">[</span><span style="color: #098658">0</span><span style="color: #000000">].</span><span style="color: #795E26">getAccounts</span><span style="color: #000000">()</span>
+
+<span style="color: #0000FF">let</span><span style="color: #000000"> </span><span style="color: #001080">balance</span><span style="color: #000000"> = </span><span style="color: #AF00DB">await</span><span style="color: #000000"> </span><span style="color: #001080">accounts</span><span style="color: #000000">.</span><span style="color: #795E26">getBalance</span><span style="color: #000000">()</span>
+<span style="color: #0000FF">let</span><span style="color: #000000"> </span><span style="color: #001080">symbol</span><span style="color: #000000">= </span><span style="color: #AF00DB">await</span><span style="color: #000000"> </span><span style="color: #001080">accounts</span><span style="color: #000000">.</span><span style="color: #795E26">getSymbol</span><span style="color: #000000">()</span>
+
+<span style="color: #001080">console</span><span style="color: #000000">.</span><span style="color: #795E26">log</span><span style="color: #000000">(</span><span style="color: #A31515">`balance in first account: </span><span style="color: #0000FF">${</span><span style="color: #001080">balance</span><span style="color: #0000FF">}</span><span style="color: #A31515"> </span><span style="color: #0000FF">${</span><span style="color: #001080">symbol</span><span style="color: #0000FF">}</span><span style="color: #A31515">`</span><span style="color: #000000">)</span>
 </code></pre>
 				<ul>
-					<li><p><code>lokAPI.backends</code> is the list of backends connections that are
+					<li><p><code>lokAPI.getBackends()</code> is the list of backends connections that are
 							managed by the current account. For now, don&#39;t expect more than one
 						element inside.</p>
 					</li>
-					<li><p><code>backend.accounts</code> is the list of accounts in that connection
+					<li><p><code>backend.getAccounts()</code> is the list of accounts in that connection
 						(warning, this is a promise).</p>
 					</li>
-					<li><p><code>account.balance</code> is the balance of the account</p>
+					<li><p><code>account.getBalance()</code> is the balance of the account</p>
 					</li>
-					<li><p><code>account.symbol</code> is the currency symbol for the account</p>
+					<li><p><code>account.getSymbol()</code> is the currency symbol for the account</p>
 					</li>
 				</ul>
 				<a href="#direct-request-to-odoo-api" id="direct-request-to-odoo-api" style="color: inherit; text-decoration: none;">
@@ -243,7 +248,21 @@
 				<p>You can use <code>lokapi</code> instance to query directly the odoo api trough
 					the <code>get</code>, <code>post</code>, <code>put</code>, <code>delete</code> methods and their authenticated
 				counterparts, <code>$get</code>, <code>$post</code>, <code>$put</code>, <code>$delete</code>.</p>
-				<pre><code class="language-typescript"><span style="color: #001080">lokAPI</span><span style="color: #000000">.</span><span style="color: #795E26">$post</span><span style="color: #000000">(</span><span style="color: #A31515">`/partner/</span><span style="color: #0000FF">${</span><span style="color: #001080">userId</span><span style="color: #0000FF">}</span><span style="color: #A31515">`</span><span style="color: #000000">)</span>
+				<pre><code class="language-typescript"><span style="color: #008000">// All 8 methods have this signature:</span>
+<span style="color: #008000">// type restMethod = (path: string, data?: any, headers?: any) =&gt; any</span>
+
+<span style="color: #008000">// Notice that the next call is an example, but you don&#039;t need to</span>
+<span style="color: #008000">// use this endpoint as it is used by thte lokAPI.login() and</span>
+<span style="color: #008000">// manages token for you.</span>
+<span style="color: #001080">lokAPI</span><span style="color: #000000">.</span><span style="color: #795E26">post</span><span style="color: #000000">(</span><span style="color: #A31515">&#039;/auth/authenticate&#039;</span><span style="color: #000000">, {</span>
+<span style="color: #000000">  </span><span style="color: #001080">api_version:</span><span style="color: #000000"> </span><span style="color: #0000FF">this</span><span style="color: #000000">.</span><span style="color: #0070C1">API_VERSION</span><span style="color: #000000">,</span>
+<span style="color: #000000">  </span><span style="color: #001080">db:</span><span style="color: #000000"> </span><span style="color: #A31515">&#039;mydb&#039;</span><span style="color: #000000">,</span>
+<span style="color: #000000">  </span><span style="color: #001080">params:</span><span style="color: #000000"> [</span><span style="color: #A31515">&#039;lcc_app&#039;</span><span style="color: #000000">]</span>
+<span style="color: #000000">}, {</span>
+<span style="color: #000000">  </span><span style="color: #A31515">&#039;Authorization&#039;</span><span style="color: #001080">:</span><span style="color: #000000"> </span><span style="color: #A31515">&#039;&#039;</span><span style="color: #000000">,</span>
+<span style="color: #000000">})</span>
+
+<span style="color: #001080">lokAPI</span><span style="color: #000000">.</span><span style="color: #795E26">$post</span><span style="color: #000000">(</span><span style="color: #A31515">`/partner/</span><span style="color: #0000FF">${</span><span style="color: #001080">userId</span><span style="color: #0000FF">}</span><span style="color: #A31515">`</span><span style="color: #000000">)</span>
 <span style="color: #001080">lokAPI</span><span style="color: #000000">.</span><span style="color: #795E26">$post</span><span style="color: #000000">(</span><span style="color: #A31515">`/partner/favorite`</span><span style="color: #000000">)</span>
 <span style="color: #001080">lokAPI</span><span style="color: #000000">.</span><span style="color: #795E26">$post</span><span style="color: #000000">(</span><span style="color: #A31515">`/partner/</span><span style="color: #0000FF">${</span><span style="color: #001080">userId</span><span style="color: #0000FF">}</span><span style="color: #A31515">/toggle_favorite`</span><span style="color: #000000">)</span>
 </code></pre>
