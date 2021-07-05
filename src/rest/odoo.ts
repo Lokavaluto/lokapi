@@ -139,7 +139,6 @@ METHODS.split(" ").forEach(method => {
 
     OdooRESTAbstract.prototype["$" + method] = function(
         path: string, data?: any, headers?: any) {
-        console.log(`Odoo private ${method}:`, path)
         return JsonRESTClientAbstract.prototype['$' + method].apply(this,
             [`/lokavaluto_api/private${path}`, data, headers])
     }
