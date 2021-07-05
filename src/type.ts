@@ -13,6 +13,9 @@ export type coreHttpOpts = {
 export type HttpRequest = (opts: coreHttpOpts) => Object
 
 
+export type restMethod = (path: string, data?: any, headers?: any) => any
+
+
 export type HttpOpts = {
     method: string
     headers?: {}
