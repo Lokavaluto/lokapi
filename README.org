@@ -14,9 +14,9 @@ lokavaluto's server.
 #+LATEX: \pagebreak
 
 
-* Usage
 
-** Adding =lokapi= to your project
+
+* Adding =lokapi= to your project
 
 From the root of your project:
 
@@ -33,9 +33,9 @@ npm install --save Lokavaluto/lokapi#master
 To be sure to get the latest version, relaunch this last command
 whenever you want to update.
 
-** Using =lokapi=
+* Setting up =lokapi=
 
-*** Subclassing main LokAPIAbstract
+** Subclassing main LokAPIAbstract
 
 Lokapi will require a way to make HTTP request, access to a permanent
 store, or various other tasks. Depending on your platform or
@@ -47,7 +47,7 @@ LokAPIAbstract and define these objects:
 - httpRequest :: an implementation of =HTTPRequest=
 - base64Encode :: a function to encode a string to base64
 
-*** Instanciating lokapi
+** Instanciating lokapi
 
 On instantiation time, =LokAPI= class will require you to provide:
 
@@ -56,7 +56,7 @@ On instantiation time, =LokAPI= class will require you to provide:
   - database :: as a =string= (example: "myodoodb")
 
 
-**** Example for node
+*** Example for node
 
 
 Using node's core =https= as HTTP requestion implementation:
@@ -132,7 +132,7 @@ var lokAPI = new LokAPI(
 #+end_src
 
 
-**** Example for =nativescript=
+*** Example for =nativescript=
 
 Using =@nativescript-community/https= as HTTP request implementation:
 
@@ -181,7 +181,9 @@ Using =@nativescript-community/https= as HTTP request implementation:
 #+end_src
 
 
-*** Login
+* Usage
+
+** Login
 
 You must log in to the server with an existing Odoo Lokavaluto
 account:
@@ -190,7 +192,8 @@ account:
 await lokApi.login("myuser", "mypassword")
 #+end_src
 
-*** Accessing accounts
+
+** Accessing accounts
 
 We assume that you've instanciated =LokAPI= as stated in the previous
 section, and you have logged in.
