@@ -94,10 +94,15 @@ export abstract class JsonRESTClientAbstract {
         return parsedData
     }
 
-    public async authRequest(path: string, opts: t.HttpOpts): Promise<any> {
+
+    protected requireAuth(): void {
         if (Object.keys(this.authHeaders).length == 0) {
             throw new e.AuthenticationRequired("Authentication required")
         }
+    }
+
+    public async authRequest(path: string, opts: t.HttpOpts): Promise<any> {
+        this.requireAuth()
         opts.headers = Object.assign({}, this.authHeaders, opts.headers)
         return this.request(path, opts)
     }
@@ -133,24 +138,21 @@ METHODS.split(" ").forEach(method => {
 
     JsonRESTClientAbstract.prototype["$" + method] = async function(
         path: string, data?: any, headers?: any) {
-        if (Object.keys(this.authHeaders).length == 0) {
-            throw new e.AuthenticationRequired(`Authentication required for ${method.toUpperCase()} on ${path}`)
+        let opts: t.HttpOpts = {
+            method: method.toUpperCase(),
+            headers: headers || {},
+            data: data || {},
         }
-        return JsonRESTClientAbstract.prototype[method].apply(
-            this,
-            [path, data, Object.assign({}, this.authHeaders, headers || {})])
+        return this.authRequest(path, opts)
     }
 })
-
-
-
 
 
 export abstract class JsonRESTSessionClientAbstract extends JsonRESTClientAbstract {
 
     abstract AUTH_HEADER: string
 
-    _apiToken: string
+    private _apiToken: string
     get apiToken(): string {
         return this._apiToken
     }
@@ -171,5 +173,92 @@ export abstract class JsonRESTSessionClientAbstract extends JsonRESTClientAbstra
         this.setAuthHeader(this.AUTH_HEADER, apiToken)
     }
 
+
+    // Abstract classes implementation do not allow to play well with
+    // implemented properties. We need this to avoid having issues when
+    // setting token in constructors.
+    protected lazySetApiToken(value) {
+        this._apiToken = value
+    }
+
+    protected requireAuth(): void {
+        if (Object.keys(this.authHeaders).length == 0) {
+            let apiToken = this.apiToken
+            if (apiToken) {
+                this.onSetToken(apiToken)
+            } else {
+                throw new e.AuthenticationRequired("Authentication required: No token set")
+            }
+        }
+    }
+
+}
+
+
+export abstract class JsonRESTPersistentClientAbstract extends JsonRESTSessionClientAbstract {
+
+    protected abstract internalId: string
+    protected abstract persistentStore: t.IPersistentStore
+    protected abstract requestLogin(): void
+
+
+    /**
+     * Provide an id for the client that can be used in URL without
+     * any character that needs encoding. Used in IPersistentStore
+     * to lower down constraints on these stores.
+     */
+    private get simpleId(): string {
+        return this.base64Encode(this.internalId).replace(/=/g, "")
+    }
+
+    /**
+     * Provides an overriding mechanism to subclass to eventually
+     * change, or add behavior upon receiving new token
+     *
+     * @param apiToken  The new token string that was set.
+     */
+    protected onSetToken(apiToken: string) {
+        super.onSetToken(apiToken)
+        if (!!apiToken) {
+            this.persistentStore.set(`token_${this.simpleId}`, apiToken)
+        } else {
+            this.persistentStore.del(`token_${this.simpleId}`)
+        }
+    }
+
+    protected requireAuth(): void {
+        if (!this.apiToken) {
+            let persistentToken = this.persistentStore.get(`token_${this.simpleId}`, null)
+            if (persistentToken) {
+                super.apiToken = persistentToken
+            }
+        }
+        super.requireAuth()
+    }
+
+
+    public async authRequest(path: string, opts: t.HttpOpts): Promise<any> {
+        try {
+            return await super.authRequest(path, opts)
+        } catch (err) {
+            if (err instanceof e.AuthenticationRequired) {
+                this.apiToken = null
+                if (!!this.requestLogin) {
+                    this.requestLogin()
+                }
+            }
+            throw err
+        }
+    }
+
+    /**
+     * Log out from server. Keep it async in case we have requests to do.
+     *
+     * @returns void
+     *
+     */
+    async logout(): Promise<void> {
+        this.apiToken = null
+    }
 
 }

@@ -1,14 +1,16 @@
+import * as t from "../type"
 import * as e from "./exception"
 
 
-import { JsonRESTSessionClientAbstract } from "."
+import { JsonRESTPersistentClientAbstract } from "."
 
 
-export abstract class OdooRESTAbstract extends JsonRESTSessionClientAbstract {
+export abstract class OdooRESTAbstract extends JsonRESTPersistentClientAbstract {
 
     API_VERSION = 1
 
     AUTH_HEADER = "API-KEY"
+    internalId = "odoo"
 
     dbName: string
 
@@ -86,18 +88,6 @@ export abstract class OdooRESTAbstract extends JsonRESTSessionClientAbstract {
 
 
     /**
-     * Log out from lokavaluto server
-     *
-     * @returns null
-     *
-     * @throws {RequestFailed, APIRequestFailed, InvalidCredentials, InvalidJson}
-     */
-    async logout(): Promise<void> {
-        this.apiToken = null
-    }
-
-
-    /**
      * Get given user's profile
      *
      * @throws {RequestFailed, APIRequestFailed, InvalidCredentials, InvalidJson}
@@ -118,13 +108,13 @@ let METHODS = "get post put delete"
 METHODS.split(" ").forEach(method => {
     OdooRESTAbstract.prototype[method] = function(
         path: string, data?: any, headers?: any) {
-        return JsonRESTSessionClientAbstract.prototype[method].apply(this,
+        return JsonRESTPersistentClientAbstract.prototype[method].apply(this,
             [`/lokavaluto_api/public${path}`, data, headers])
     }
 
     OdooRESTAbstract.prototype["$" + method] = function(
         path: string, data?: any, headers?: any) {
-        return JsonRESTSessionClientAbstract.prototype['$' + method].apply(this,
+        return JsonRESTPersistentClientAbstract.prototype['$' + method].apply(this,
             [`/lokavaluto_api/private${path}`, data, headers])
     }
 })

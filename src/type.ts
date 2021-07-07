@@ -22,5 +22,11 @@ export type HttpOpts = {
     data?: {}
 }
 
+export interface IPersistentStore {
+    get(key: string, defaultValue?: string): string
+    set(key: string, value: string): void
+    del(key: string): void
+}
+
 
 export type Base64Encode = (s: string) => string

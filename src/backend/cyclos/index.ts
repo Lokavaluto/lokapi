@@ -1,12 +1,12 @@
 
-import { JsonRESTSessionClientAbstract } from "../../rest"
+import { JsonRESTPersistentClientAbstract } from "../../rest"
 
 import { CyclosAccount } from "./account"
 
 import { BackendFactories } from ".."
 
 
-export abstract class CyclosBackendAbstract extends JsonRESTSessionClientAbstract {
+export abstract class CyclosBackendAbstract extends JsonRESTPersistentClientAbstract {
 
     AUTH_HEADER = "Session-token"
 
@@ -15,7 +15,7 @@ export abstract class CyclosBackendAbstract extends JsonRESTSessionClientAbstrac
 
     constructor(jsonData) {
         super(jsonData.server_url)
-        this.apiToken = jsonData.token
+        this.lazySetApiToken(jsonData.token)
         this.owner_id = jsonData.owner_id
     }
 
@@ -29,6 +29,10 @@ export abstract class CyclosBackendAbstract extends JsonRESTSessionClientAbstrac
             accounts.push(new CyclosAccount(this, jsonAccountData))
         })
         return accounts
+    }
+
+    get internalId() {
+        return `cyclos:${this.owner_id}@${this.host}`
     }
 
 }
