@@ -48,14 +48,19 @@ export abstract class JsonRESTClientAbstract {
         ) {
             return new e.InvalidConnectionDetails(`Invalid value for host: ${this.host}`)
         }
+
+        let qs = ""
+        if (opts.method === "GET" && Object.keys(opts.data).length != 0) {
+            qs = (new URLSearchParams(opts.data)).toString()
+        }
         try {
             rawData = await this.httpRequest({
                 protocol: this.protocol,
                 host: this.host,
-                path: `${this.path}/${path.replace(/^\//, '')}`,
+                path: `${this.path}/${path.replace(/^\//, '')}` + (qs ? `?${qs}` : ""),
                 headers: headers,
                 method: opts.method,
-                data: opts.data,
+                data: qs ? null : opts.data,
             })
         } catch (err) {
             console.log(`Failed ${opts.method} request to ${path} (Host: ${this.host})`)
