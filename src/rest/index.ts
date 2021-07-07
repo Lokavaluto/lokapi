@@ -95,7 +95,7 @@ export abstract class JsonRESTClientAbstract {
     }
 
     public async authRequest(path: string, opts: t.HttpOpts): Promise<any> {
-        if (this.authHeaders.length == 0) {
+        if (Object.keys(this.authHeaders).length == 0) {
             throw new e.AuthenticationRequired("Authentication required")
         }
         opts.headers = Object.assign({}, this.authHeaders, opts.headers)
@@ -133,8 +133,8 @@ METHODS.split(" ").forEach(method => {
 
     JsonRESTClientAbstract.prototype["$" + method] = async function(
         path: string, data?: any, headers?: any) {
-        if (this.authHeaders.length == 0) {
-            throw new e.AuthenticationRequired("Authentication required")
+        if (Object.keys(this.authHeaders).length == 0) {
+            throw new e.AuthenticationRequired(`Authentication required for ${method.toUpperCase()} on ${path}`)
         }
         return JsonRESTClientAbstract.prototype[method].apply(
             this,
