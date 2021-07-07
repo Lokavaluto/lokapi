@@ -1,12 +1,14 @@
 import * as e from "./exception"
 
 
-import { JsonRESTClientAbstract } from "."
+import { JsonRESTSessionClientAbstract } from "."
 
 
-export abstract class OdooRESTAbstract extends JsonRESTClientAbstract {
+export abstract class OdooRESTAbstract extends JsonRESTSessionClientAbstract {
 
     API_VERSION = 1
+
+    AUTH_HEADER = "API-KEY"
 
     dbName: string
 
@@ -23,23 +25,6 @@ export abstract class OdooRESTAbstract extends JsonRESTClientAbstract {
         this.dbName = dbName
         this.authHeaders = {}
     }
-
-    _apiToken: string
-
-    set apiToken(apiToken: string) {
-        if (apiToken) {
-            this.authHeaders["API-KEY"] = apiToken
-        } else {
-            delete this.authHeaders["API-KEY"]
-        }
-        this._apiToken = apiToken
-    }
-
-
-    get apiToken(): string {
-        return this._apiToken
-    }
-
 
     async authenticate(login: string, password: string): Promise<any> {
         try {
@@ -133,13 +118,13 @@ let METHODS = "get post put delete"
 METHODS.split(" ").forEach(method => {
     OdooRESTAbstract.prototype[method] = function(
         path: string, data?: any, headers?: any) {
-        return JsonRESTClientAbstract.prototype[method].apply(this,
+        return JsonRESTSessionClientAbstract.prototype[method].apply(this,
             [`/lokavaluto_api/public${path}`, data, headers])
     }
 
     OdooRESTAbstract.prototype["$" + method] = function(
         path: string, data?: any, headers?: any) {
-        return JsonRESTClientAbstract.prototype['$' + method].apply(this,
+        return JsonRESTSessionClientAbstract.prototype['$' + method].apply(this,
             [`/lokavaluto_api/private${path}`, data, headers])
     }
 })

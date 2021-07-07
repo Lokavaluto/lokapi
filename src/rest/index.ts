@@ -21,6 +21,24 @@ export abstract class JsonRESTClientAbstract {
 
     authHeaders: any
 
+    /**
+     * Adds headers that are intended to be sent in each authenticated
+     * call. Setting to 'null' or 'false' or empty string will remove
+     * the header.
+     *
+     * @param name   Header name
+     * @param value  Value to be set to given header
+     *
+     * @returns void
+     */
+    setAuthHeader(name: string, value: string) {
+        if (value) {
+            this.authHeaders[name] = value
+        } else {
+            delete this.authHeaders[name]
+        }
+    }
+
 
     constructor(host_or_url: string) {
         if (host_or_url.includes("://")) {
@@ -123,3 +141,35 @@ METHODS.split(" ").forEach(method => {
             [path, data, Object.assign({}, this.authHeaders, headers || {})])
     }
 })
+
+
+
+
+
+export abstract class JsonRESTSessionClientAbstract extends JsonRESTClientAbstract {
+
+    abstract AUTH_HEADER: string
+
+    _apiToken: string
+    get apiToken(): string {
+        return this._apiToken
+    }
+
+    set apiToken(value: string) {
+        this._apiToken = value
+        this.onSetToken(value)
+    }
+
+
+    /**
+     * Provides an overriding mechanism to subclass to eventually
+     * change, or add behavior upon receiving new token
+     *
+     * @param apiToken  The new token string that was set.
+     */
+    protected onSetToken(apiToken: string) {
+        this.setAuthHeader(this.AUTH_HEADER, apiToken)
+    }
+
+
+}
