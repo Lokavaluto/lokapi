@@ -3,7 +3,7 @@
 <head>
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
-	<title>CyclosBackendAbstract | LokAPI - v0.0.7</title>
+	<title>IPersistentStore | LokAPI - v0.0.7</title>
 	<meta name="description" content="Documentation for LokAPI - v0.0.7">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<link rel="stylesheet" href="../assets/css/main.css">
@@ -55,13 +55,13 @@
 					<a href="../modules.html">LokAPI - v0.0.7</a>
 				</li>
 				<li>
-					<a href="../modules/backend_cyclos.html">backend/cyclos</a>
+					<a href="../modules/type.html">type</a>
 				</li>
 				<li>
-					<a href="backend_cyclos.cyclosbackendabstract.html">CyclosBackendAbstract</a>
+					<a href="type.ipersistentstore.html">IPersistentStore</a>
 				</li>
 			</ul>
-			<h1>Class CyclosBackendAbstract</h1>
+			<h1>Interface IPersistentStore</h1>
 		</div>
 	</div>
 </header>
@@ -72,7 +72,7 @@
 				<h3>Hierarchy</h3>
 				<ul class="tsd-hierarchy">
 					<li>
-						<span class="target">CyclosBackendAbstract</span>
+						<span class="target">IPersistentStore</span>
 					</li>
 				</ul>
 			</section>
@@ -81,88 +81,90 @@
 				<section class="tsd-panel tsd-index-panel">
 					<div class="tsd-index-content">
 						<section class="tsd-index-section ">
-							<h3>Constructors</h3>
-							<ul class="tsd-index-list">
-								<li class="tsd-kind-constructor tsd-parent-kind-class"><a href="backend_cyclos.cyclosbackendabstract.html#constructor" class="tsd-kind-icon">constructor</a></li>
-							</ul>
-						</section>
-						<section class="tsd-index-section ">
-							<h3>Accessors</h3>
-							<ul class="tsd-index-list">
-								<li class="tsd-kind-get-signature tsd-parent-kind-class"><a href="backend_cyclos.cyclosbackendabstract.html#internalid" class="tsd-kind-icon">internal<wbr>Id</a></li>
-							</ul>
-						</section>
-						<section class="tsd-index-section ">
 							<h3>Methods</h3>
 							<ul class="tsd-index-list">
-								<li class="tsd-kind-method tsd-parent-kind-class"><a href="backend_cyclos.cyclosbackendabstract.html#getaccounts" class="tsd-kind-icon">get<wbr>Accounts</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-interface"><a href="type.ipersistentstore.html#del" class="tsd-kind-icon">del</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-interface"><a href="type.ipersistentstore.html#get" class="tsd-kind-icon">get</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-interface"><a href="type.ipersistentstore.html#set" class="tsd-kind-icon">set</a></li>
 							</ul>
 						</section>
 					</div>
 				</section>
 			</section>
 			<section class="tsd-panel-group tsd-member-group ">
-				<h2>Constructors</h2>
-				<section class="tsd-panel tsd-member tsd-kind-constructor tsd-parent-kind-class">
-					<a name="constructor" class="tsd-anchor"></a>
-					<h3>constructor</h3>
-					<ul class="tsd-signatures tsd-kind-constructor tsd-parent-kind-class">
-						<li class="tsd-signature tsd-kind-icon">new <wbr>Cyclos<wbr>Backend<wbr>Abstract<span class="tsd-signature-symbol">(</span>jsonData<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="backend_cyclos.cyclosbackendabstract.html" class="tsd-signature-type" data-tsd-kind="Class">CyclosBackendAbstract</a></li>
+				<h2>Methods</h2>
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-interface">
+					<a name="del" class="tsd-anchor"></a>
+					<h3>del</h3>
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-interface">
+						<li class="tsd-signature tsd-kind-icon">del<span class="tsd-signature-symbol">(</span>key<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/Lokavaluto/lokapi/blob/275c2e6/src/backend/cyclos/index.ts#L16">src/backend/cyclos/index.ts:16</a></li>
+									<li>Defined in <a href="https://github.com/Lokavaluto/lokapi/blob/275c2e6/src/type.ts#L28">src/type.ts:28</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
-									<h5>jsonData: <span class="tsd-signature-type">any</span></h5>
+									<h5>key: <span class="tsd-signature-type">string</span></h5>
 								</li>
 							</ul>
-							<h4 class="tsd-returns-title">Returns <a href="backend_cyclos.cyclosbackendabstract.html" class="tsd-signature-type" data-tsd-kind="Class">CyclosBackendAbstract</a></h4>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">void</span></h4>
 						</li>
 					</ul>
 				</section>
-			</section>
-			<section class="tsd-panel-group tsd-member-group ">
-				<h2>Accessors</h2>
-				<section class="tsd-panel tsd-member tsd-kind-get-signature tsd-parent-kind-class">
-					<a name="internalid" class="tsd-anchor"></a>
-					<h3>internal<wbr>Id</h3>
-					<ul class="tsd-signatures tsd-kind-get-signature tsd-parent-kind-class">
-						<li class="tsd-signature tsd-kind-icon"><span class="tsd-signature-symbol">get</span> internalId<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span></li>
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-interface">
+					<a name="get" class="tsd-anchor"></a>
+					<h3>get</h3>
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-interface">
+						<li class="tsd-signature tsd-kind-icon">get<span class="tsd-signature-symbol">(</span>key<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span>, defaultValue<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/Lokavaluto/lokapi/blob/275c2e6/src/backend/cyclos/index.ts#L64">src/backend/cyclos/index.ts:64</a></li>
+									<li>Defined in <a href="https://github.com/Lokavaluto/lokapi/blob/275c2e6/src/type.ts#L26">src/type.ts:26</a></li>
 								</ul>
 							</aside>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5>key: <span class="tsd-signature-type">string</span></h5>
+								</li>
+								<li>
+									<h5><span class="tsd-flag ts-flagOptional">Optional</span> defaultValue: <span class="tsd-signature-type">string</span></h5>
+								</li>
+							</ul>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">string</span></h4>
 						</li>
 					</ul>
 				</section>
-			</section>
-			<section class="tsd-panel-group tsd-member-group ">
-				<h2>Methods</h2>
-				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class">
-					<a name="getaccounts" class="tsd-anchor"></a>
-					<h3>get<wbr>Accounts</h3>
-					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
-						<li class="tsd-signature tsd-kind-icon">get<wbr>Accounts<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">&gt;</span></li>
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-interface">
+					<a name="set" class="tsd-anchor"></a>
+					<h3>set</h3>
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-interface">
+						<li class="tsd-signature tsd-kind-icon">set<span class="tsd-signature-symbol">(</span>key<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span>, value<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/Lokavaluto/lokapi/blob/275c2e6/src/backend/cyclos/index.ts#L52">src/backend/cyclos/index.ts:52</a></li>
+									<li>Defined in <a href="https://github.com/Lokavaluto/lokapi/blob/275c2e6/src/type.ts#L27">src/type.ts:27</a></li>
 								</ul>
 							</aside>
-							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">&gt;</span></h4>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5>key: <span class="tsd-signature-type">string</span></h5>
+								</li>
+								<li>
+									<h5>value: <span class="tsd-signature-type">string</span></h5>
+								</li>
+							</ul>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">void</span></h4>
 						</li>
 					</ul>
 				</section>
@@ -177,7 +179,7 @@
 					<li class=" tsd-kind-module">
 						<a href="../modules/backend.html">backend</a>
 					</li>
-					<li class="current tsd-kind-module">
+					<li class=" tsd-kind-module">
 						<a href="../modules/backend_cyclos.html">backend/cyclos</a>
 					</li>
 					<li class=" tsd-kind-module">
@@ -198,7 +200,7 @@
 					<li class=" tsd-kind-module">
 						<a href="../modules/rest_odoo.html">rest/odoo</a>
 					</li>
-					<li class=" tsd-kind-module">
+					<li class="current tsd-kind-module">
 						<a href="../modules/type.html">type</a>
 					</li>
 				</ul>
@@ -207,24 +209,36 @@
 				<ul class="before-current">
 				</ul>
 				<ul class="current">
-					<li class="current tsd-kind-class tsd-parent-kind-module">
-						<a href="backend_cyclos.cyclosbackendabstract.html" class="tsd-kind-icon">Cyclos<wbr>Backend<wbr>Abstract</a>
+					<li class="current tsd-kind-interface tsd-parent-kind-module">
+						<a href="type.ipersistentstore.html" class="tsd-kind-icon">IPersistent<wbr>Store</a>
 						<ul>
-							<li class=" tsd-kind-constructor tsd-parent-kind-class">
-								<a href="backend_cyclos.cyclosbackendabstract.html#constructor" class="tsd-kind-icon">constructor</a>
+							<li class=" tsd-kind-method tsd-parent-kind-interface">
+								<a href="type.ipersistentstore.html#del" class="tsd-kind-icon">del</a>
 							</li>
-							<li class=" tsd-kind-get-signature tsd-parent-kind-class">
-								<a href="backend_cyclos.cyclosbackendabstract.html#internalid" class="tsd-kind-icon">internal<wbr>Id</a>
+							<li class=" tsd-kind-method tsd-parent-kind-interface">
+								<a href="type.ipersistentstore.html#get" class="tsd-kind-icon">get</a>
 							</li>
-							<li class=" tsd-kind-method tsd-parent-kind-class">
-								<a href="backend_cyclos.cyclosbackendabstract.html#getaccounts" class="tsd-kind-icon">get<wbr>Accounts</a>
+							<li class=" tsd-kind-method tsd-parent-kind-interface">
+								<a href="type.ipersistentstore.html#set" class="tsd-kind-icon">set</a>
 							</li>
 						</ul>
 					</li>
 				</ul>
 				<ul class="after-current">
-					<li class=" tsd-kind-class tsd-parent-kind-module">
-						<a href="backend_cyclos.cyclosuseraccountabstract.html" class="tsd-kind-icon">Cyclos<wbr>User<wbr>Account<wbr>Abstract</a>
+					<li class=" tsd-kind-type-alias tsd-parent-kind-module">
+						<a href="../modules/type.html#base64encode" class="tsd-kind-icon">Base64<wbr>Encode</a>
+					</li>
+					<li class=" tsd-kind-type-alias tsd-parent-kind-module">
+						<a href="../modules/type.html#httpopts" class="tsd-kind-icon">Http<wbr>Opts</a>
+					</li>
+					<li class=" tsd-kind-type-alias tsd-parent-kind-module">
+						<a href="../modules/type.html#httprequest" class="tsd-kind-icon">Http<wbr>Request</a>
+					</li>
+					<li class=" tsd-kind-type-alias tsd-parent-kind-module">
+						<a href="../modules/type.html#corehttpopts" class="tsd-kind-icon">core<wbr>Http<wbr>Opts</a>
+					</li>
+					<li class=" tsd-kind-type-alias tsd-parent-kind-module">
+						<a href="../modules/type.html#restmethod" class="tsd-kind-icon">rest<wbr>Method</a>
 					</li>
 				</ul>
 			</nav>
@@ -236,16 +250,15 @@
 		<h2>Legend</h2>
 		<div class="tsd-legend-group">
 			<ul class="tsd-legend">
-				<li class="tsd-kind-class"><span class="tsd-kind-icon">Class</span></li>
-				<li class="tsd-kind-constructor tsd-parent-kind-class"><span class="tsd-kind-icon">Constructor</span></li>
-				<li class="tsd-kind-method tsd-parent-kind-class"><span class="tsd-kind-icon">Method</span></li>
-			</ul>
-			<ul class="tsd-legend">
 				<li class="tsd-kind-variable"><span class="tsd-kind-icon">Variable</span></li>
 				<li class="tsd-kind-type-alias"><span class="tsd-kind-icon">Type alias</span></li>
 			</ul>
 			<ul class="tsd-legend">
 				<li class="tsd-kind-interface"><span class="tsd-kind-icon">Interface</span></li>
+				<li class="tsd-kind-method tsd-parent-kind-interface"><span class="tsd-kind-icon">Method</span></li>
+			</ul>
+			<ul class="tsd-legend">
+				<li class="tsd-kind-class"><span class="tsd-kind-icon">Class</span></li>
 			</ul>
 		</div>
 	</div>
