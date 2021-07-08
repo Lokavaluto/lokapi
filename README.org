@@ -260,6 +260,19 @@ console.log(`balance in first account: ${balance} ${symbol}`)
 
 - =account.getSymbol()= is the currency symbol for the account
 
+** Looking for recipients
+
+Recipient are possible receiving end of a transfer of
+money. These are connected to identities in ``lokapi``.
+
+#+begin_src typescript
+let recipients = await lokAPI.searchRecipients("Alain")
+
+recipients.forEach(recipient => {
+    console.log(`name: ${recipient.name}`)
+})
+#+end_src
+
 
 ** Direct request to odoo api
 

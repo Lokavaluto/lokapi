@@ -29,4 +29,8 @@ export interface IPersistentStore {
 }
 
 
+export interface IRecipient {
+    backend: any
+}
+
 export type Base64Encode = (s: string) => string

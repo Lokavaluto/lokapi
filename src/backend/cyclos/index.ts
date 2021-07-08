@@ -3,6 +3,7 @@ import { JsonRESTPersistentClientAbstract } from "../../rest"
 import * as t from "../../type"
 
 import { CyclosAccount } from "./account"
+import { CyclosRecipient } from "./recipient"
 
 import { BackendFactories } from ".."
 
@@ -60,6 +61,16 @@ export abstract class CyclosBackendAbstract {
         }
         return backendBankAccounts
     }
+
+
+    public makeRecipients(jsonData: any): any {
+        let recipients = []
+        jsonData.monujo_backends[this.internalId].forEach((ownerId: string) => {
+            recipients.push(new CyclosRecipient(this, this, jsonData, ownerId))
+        })
+        return recipients
+    }
+
 
     get internalId() {
         let endingPart = this._jsonData.user_accounts[0].url.split("://")[1];

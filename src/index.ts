@@ -123,6 +123,37 @@ abstract class LokAPIAbstract extends OdooRESTAbstract {
         return lokapiBankAccounts
     }
 
+
+    /**
+     * Get list of Partners
+     *
+     * @throws {RequestFailed, APIRequestFailed, InvalidCredentials, InvalidJson}
+     *
+     * @returns Object
+     */
+    public async searchRecipient(value: string): Promise<any> {
+        // XXXvlab: to cache with global cache decorator that allow fine control
+        // of forceRefresh
+        let backends = await this.getBackends()
+        let partners = await this.$post('/partner/partner_search', {
+            "value": value,
+            "backend_keys": Object.keys(backends),
+            // "offset": 0,
+            // "limit": 40,
+        })
+        let recipients = []
+        partners.rows.forEach((partnerData: any) => {
+            Object.keys(partnerData.monujo_backends).forEach((backendId: string) => {
+                let backendRecipients = backends[backendId].makeRecipients(partnerData)
+                backendRecipients.forEach((recipient: any) => {
+                    recipients.push(recipient)
+                })
+            })
+        })
+        return recipients
+    }
+
+
 }
 
 
