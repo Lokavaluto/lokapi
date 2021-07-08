@@ -40,4 +40,9 @@ export interface IPayment {
 }
 
 
+export interface ITransaction {
+    backend: any
+}
+
+
 export type Base64Encode = (s: string) => string

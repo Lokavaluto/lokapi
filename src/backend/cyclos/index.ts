@@ -5,6 +5,7 @@ import * as t from "../../type"
 import { CyclosPayment } from "./payment"
 import { CyclosAccount } from "./account"
 import { CyclosRecipient } from "./recipient"
+import { CyclosTransaction } from "./transaction"
 
 import { BackendFactories } from ".."
 
@@ -80,6 +81,20 @@ export abstract class CyclosBackendAbstract {
         return `cyclos:${host}`
     }
 
+
+    public async getTransactions(): Promise<any> {
+        let backendTransactions = []
+        for (const id in this.userAccounts) {
+            let userAccount = this.userAccounts[id]
+            // XXXvlab: these promises should be awaited in parallel
+            let transactions = await userAccount.getTransactions()
+            transactions.forEach((transaction: any) => {
+                backendTransactions.push(transaction)
+            })
+        }
+        return backendTransactions
+    }
+
 }
 
 
@@ -130,6 +145,20 @@ export abstract class CyclosUserAccountAbstract extends JsonRESTPersistentClient
         })
         return new CyclosPayment(this, this, jsonData)
     }
+
+
+    public async getTransactions(): Promise<any> {
+        let jsonTransactions = await this.$get(`/${this.owner_id}/transactions`)
+
+        let transactions = []
+
+        jsonTransactions.forEach((jsonTransactionData: any) => {
+            transactions.push(new CyclosTransaction(this, this, jsonTransactionData))
+        })
+        return transactions
+    }
+
+
 }
 
 

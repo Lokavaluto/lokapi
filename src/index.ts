@@ -177,6 +177,30 @@ abstract class LokAPIAbstract extends OdooRESTAbstract {
         return await fromAccount.transfer(recipient, amount, description)
     }
 
+
+    /**
+     * Transfer amount between 2 accounts. First account is supposed
+     * to be logged in and linked to an authentified backend. Second
+     * account should belong to same backend.
+     *
+     * @throws {RequestFailed, APIRequestFailed, InvalidCredentials, InvalidJson}
+     *
+     * @returns Object
+     */
+    public async getTransactions(): Promise<any> {
+        let backends = await this.getBackends()
+        let lokapiTransactions = []
+        for (const id in backends) {
+            let backend = backends[id]
+            // XXXvlab: should go for parallel waits
+            let transactions = await backend.getTransactions()
+            transactions.forEach((transaction: any) => {
+                lokapiTransactions.push(transaction)
+            })
+        }
+        return lokapiTransactions
+    }
+
 }
 
 
