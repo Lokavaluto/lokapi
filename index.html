@@ -280,6 +280,33 @@
 					<li><p><code>account.getSymbol()</code> is the currency symbol for the account</p>
 					</li>
 				</ul>
+				<a href="#looking-for-recipients" id="looking-for-recipients" style="color: inherit; text-decoration: none;">
+					<h2>Looking for recipients</h2>
+				</a>
+				<p>Recipient are possible receiving end of a transfer of
+				money. These are connected to identities in <code>lokapi</code>.</p>
+				<pre><code class="language-typescript"><span style="color: #0000FF">let</span><span style="color: #000000"> </span><span style="color: #001080">recipients</span><span style="color: #000000"> = </span><span style="color: #AF00DB">await</span><span style="color: #000000"> </span><span style="color: #001080">lokAPI</span><span style="color: #000000">.</span><span style="color: #795E26">searchRecipients</span><span style="color: #000000">(</span><span style="color: #A31515">&quot;Alain&quot;</span><span style="color: #000000">)</span>
+
+<span style="color: #001080">recipients</span><span style="color: #000000">.</span><span style="color: #795E26">forEach</span><span style="color: #000000">(</span><span style="color: #001080">recipient</span><span style="color: #000000"> </span><span style="color: #0000FF">=&gt;</span><span style="color: #000000"> {</span>
+<span style="color: #000000">    </span><span style="color: #001080">console</span><span style="color: #000000">.</span><span style="color: #795E26">log</span><span style="color: #000000">(</span><span style="color: #A31515">`name: </span><span style="color: #0000FF">${</span><span style="color: #001080">recipient</span><span style="color: #000000FF">.</span><span style="color: #001080">name</span><span style="color: #0000FF">}</span><span style="color: #A31515">`</span><span style="color: #000000">)</span>
+<span style="color: #000000">})</span>
+</code></pre>
+				<a href="#transfer-money-between-an-account-to-a-recipient" id="transfer-money-between-an-account-to-a-recipient" style="color: inherit; text-decoration: none;">
+					<h2>Transfer money between an account to a recipient</h2>
+				</a>
+				<p>Transfering money is done from an account of the logged-in user
+				to a recipient:</p>
+				<pre><code class="language-typescript"><span style="color: #008000">// Get my accounts</span>
+<span style="color: #0000FF">let</span><span style="color: #000000"> </span><span style="color: #001080">accounts</span><span style="color: #000000"> = </span><span style="color: #AF00DB">await</span><span style="color: #000000"> </span><span style="color: #001080">lokAPI</span><span style="color: #000000">.</span><span style="color: #795E26">getAccounts</span><span style="color: #000000">()</span>
+
+<span style="color: #008000">// Fetch recipients named &#039;Alain&#039;</span>
+<span style="color: #0000FF">let</span><span style="color: #000000"> </span><span style="color: #001080">recipients</span><span style="color: #000000"> = </span><span style="color: #AF00DB">await</span><span style="color: #000000"> </span><span style="color: #001080">lokAPI</span><span style="color: #000000">.</span><span style="color: #795E26">searchRecipients</span><span style="color: #000000">(</span><span style="color: #A31515">&quot;Alain&quot;</span><span style="color: #000000">)</span>
+
+<span style="color: #AF00DB">await</span><span style="color: #000000"> </span><span style="color: #001080">lokAPI</span><span style="color: #000000">.</span><span style="color: #795E26">transfer</span><span style="color: #000000">(</span><span style="color: #001080">accounts</span><span style="color: #000000">[</span><span style="color: #098658">0</span><span style="color: #000000">], </span><span style="color: #001080">recipients</span><span style="color: #000000">[</span><span style="color: #098658">0</span><span style="color: #000000">], </span><span style="color: #A31515">&quot;12&quot;</span><span style="color: #000000">, </span><span style="color: #A31515">&quot;Dinner Party participation&quot;</span><span style="color: #000000">)</span>
+<span style="color: #008000">// or:</span>
+<span style="color: #AF00DB">await</span><span style="color: #000000"> </span><span style="color: #001080">accounts</span><span style="color: #000000">[</span><span style="color: #098658">0</span><span style="color: #000000">].</span><span style="color: #795E26">transfer</span><span style="color: #000000">(</span><span style="color: #001080">recipients</span><span style="color: #000000">[</span><span style="color: #098658">0</span><span style="color: #000000">], </span><span style="color: #A31515">&quot;13&quot;</span><span style="color: #000000">, </span><span style="color: #A31515">&quot;Coffee&quot;</span><span style="color: #000000">)</span>
+
+</code></pre>
 				<a href="#direct-request-to-odoo-api" id="direct-request-to-odoo-api" style="color: inherit; text-decoration: none;">
 					<h2>Direct request to odoo api</h2>
 				</a>
@@ -320,6 +347,12 @@
 					</li>
 					<li class=" tsd-kind-module">
 						<a href="modules/backend_cyclos_account.html">backend/cyclos/account</a>
+					</li>
+					<li class=" tsd-kind-module">
+						<a href="modules/backend_cyclos_payment.html">backend/cyclos/payment</a>
+					</li>
+					<li class=" tsd-kind-module">
+						<a href="modules/backend_cyclos_recipient.html">backend/cyclos/recipient</a>
 					</li>
 					<li class=" tsd-kind-module">
 						<a href="modules/exception.html">exception</a>
