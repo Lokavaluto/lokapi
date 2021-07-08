@@ -2,6 +2,7 @@
 import { JsonRESTPersistentClientAbstract } from "../../rest"
 import * as t from "../../type"
 
+import { CyclosPayment } from "./payment"
 import { CyclosAccount } from "./account"
 import { CyclosRecipient } from "./recipient"
 
@@ -82,7 +83,6 @@ export abstract class CyclosBackendAbstract {
 }
 
 
-
 export abstract class CyclosUserAccountAbstract extends JsonRESTPersistentClientAbstract {
 
     AUTH_HEADER = "Session-token"
@@ -111,6 +111,25 @@ export abstract class CyclosUserAccountAbstract extends JsonRESTPersistentClient
         return `cyclos:${this.owner_id}@${this.host}`
     }
 
+    public async transfer(recipient: CyclosRecipient, amount: number, description: string) {
+        const jsonDataPerform = await this.$get(
+            `/self/payments/data-for-perform`,
+            { to: recipient.ownerId })
+        if (jsonDataPerform.paymentTypes.length == 0) {
+            throw new Error('No payment types available between selected accounts')
+        }
+        if (jsonDataPerform.paymentTypes.length > 1) {
+            throw new Error(
+                'More than one payment types available between ' +
+                'selected accounts. Not supported yet !')
+        }
+        const jsonData = await this.$post(`/self/payments`, {
+            amount: amount,
+            description: description,
+            subject: recipient.ownerId,
+        })
+        return new CyclosPayment(this, this, jsonData)
+    }
 }
 
 

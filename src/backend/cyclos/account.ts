@@ -1,3 +1,6 @@
+
+import { CyclosRecipient } from "./recipient"
+
 import { BridgeObject } from ".."
 
 
@@ -13,6 +16,11 @@ export class CyclosAccount extends BridgeObject {
 
     get internalId() {
         return `${this.parent.internalId}/${this.parent.owner_id}/${this.jsonData.id}`
+    }
+
+    public async transfer(recipient: CyclosRecipient, amount: number, description: string) {
+        // On cyclos, account transfer is managed through the owner account
+        return this.parent.transfer(recipient, amount, description)
     }
 
 }

@@ -127,11 +127,13 @@ abstract class LokAPIAbstract extends OdooRESTAbstract {
     /**
      * Get list of Partners
      *
+     * @param value The given string will be searched in name, email, phone
+     *
      * @throws {RequestFailed, APIRequestFailed, InvalidCredentials, InvalidJson}
      *
-     * @returns Object
+     * @returns Array<t.IRecipient>
      */
-    public async searchRecipient(value: string): Promise<any> {
+    public async searchRecipient(value: string): Promise<Array<t.IRecipient>> {
         // XXXvlab: to cache with global cache decorator that allow fine control
         // of forceRefresh
         let backends = await this.getBackends()
@@ -153,6 +155,27 @@ abstract class LokAPIAbstract extends OdooRESTAbstract {
         return recipients
     }
 
+
+    /**
+     * Transfer amount between 2 accounts. First account is supposed
+     * to be logged in and linked to an authentified backend. Second
+     * account should belong to same backend.
+     *
+     * @throws {RequestFailed, APIRequestFailed, InvalidCredentials, InvalidJson}
+     *
+     * @returns Object
+     */
+    public async transfer(fromAccount: any,
+        recipient: t.IRecipient,
+        amount: number,
+        description: string): Promise<t.IPayment> {
+        // XXXvlab: this check is not working yet and need to be more
+        // thought through
+        // if (fromAccount.backend.internalId !== recipient.backend.internalId) {
+        //     throw new Error("Transfer across backends is not supported.")
+        // }
+        return await fromAccount.transfer(recipient, amount, description)
+    }
 
 }
 

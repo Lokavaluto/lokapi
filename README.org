@@ -273,6 +273,24 @@ recipients.forEach(recipient => {
 })
 #+end_src
 
+** Transfer money between an account to a recipient
+
+Transfering money is done from an account of the logged-in user
+to a recipient:
+
+#+begin_src typescript
+// Get my accounts
+let accounts = await lokAPI.getAccounts()
+
+// Fetch recipients named 'Alain'
+let recipients = await lokAPI.searchRecipients("Alain")
+
+await lokAPI.transfer(accounts[0], recipients[0], "12", "Dinner Party participation")
+// or:
+await accounts[0].transfer(recipients[0], "13", "Coffee")
+
+#+end_src
+
 
 ** Direct request to odoo api
 

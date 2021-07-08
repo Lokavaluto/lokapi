@@ -3,7 +3,6 @@ import * as t from "../../type"
 import { BridgeObject } from ".."
 
 
-
 export class CyclosRecipient extends BridgeObject implements t.IRecipient {
 
     ownerId: string
