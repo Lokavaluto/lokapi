@@ -67,6 +67,49 @@ export abstract class OdooRESTAbstract extends JsonRESTPersistentClientAbstract 
         }
     }
 
+    private getHTMLErrorMessage(htmlString: string): string {
+        let parser = new DOMParser()
+        let htmlDoc: any
+        let errMessage: any
+        try {
+            htmlDoc = parser.parseFromString(htmlString, 'text/html')
+        } catch (err) {
+            console.log('Unexpected HTML parsing error:', err)
+            throw err
+        }
+
+        try {
+            errMessage = htmlDoc.head.getElementsByTagName('title')[0].innerHTML
+        } catch (err) {
+            console.log('Unexpected HTML structure:', err)
+            throw err
+        }
+
+        return errMessage
+    }
+
+    public async request(path: string, opts: t.HttpOpts): Promise<any> {
+        let response: any
+        try {
+            response = await super.request(path, opts)
+        } catch (err) {
+            if (err instanceof e.HttpError && err.code == 500) {
+                let errMessage: string
+                try {
+                    errMessage = this.getHTMLErrorMessage(err.data)
+                } catch (err2) {
+                    console.log('Could not get error message in HTML from request body', err2)
+                    throw err
+                }
+                if (errMessage.startsWith("odoo.exceptions.AccessDenied")) {
+                    console.log('Authentication Required')
+                    throw new e.AuthenticationRequired("Authentication Failed")
+                }
+            }
+            throw err
+        }
+        return response
+    }
 
     /**
      * Log in to lokavaluto server target API. It actually will probe
