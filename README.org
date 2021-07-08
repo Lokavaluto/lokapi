@@ -292,6 +292,19 @@ await accounts[0].transfer(recipients[0], "13", "Coffee")
 #+end_src
 
 
+** List transactions
+
+List past transactions for the current logged in user.
+
+#+begin_src typescript
+let transactions = await $lokapi.getTransactions()
+
+transactions.forEach((tr:any) => {
+    console.log(`  ${tr.date} ${tr.amount} ${tr.currency}`)
+})
+#+end_src
+
+
 ** Direct request to odoo api
 
 
