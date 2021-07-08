@@ -277,7 +277,7 @@ counterparts, =$get=, =$post=, =$put=, =$delete=.
 // use this endpoint as it is used by the lokAPI.login() and
 // manages token for you.
 lokAPI.post('/auth/authenticate', {
-  api_version: this.API_VERSION,
+  api_version: 2,
   db: 'mydb',
   params: ['lcc_app']
 }, {
