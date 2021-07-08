@@ -10,4 +10,9 @@ export class CyclosAccount extends BridgeObject {
     async getSymbol() {
         return this.jsonData.currency.symbol
     }
+
+    get internalId() {
+        return `${this.parent.internalId}/${this.parent.owner_id}/${this.jsonData.id}`
+    }
+
 }

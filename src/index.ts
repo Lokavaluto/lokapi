@@ -14,11 +14,6 @@ import "./backend/cyclos"
 
 abstract class LokAPIAbstract extends OdooRESTAbstract {
 
-    // User data
-
-    public backends: any
-
-
     /**
      * Log in to Lokavaluto Odoo server target API.
      *
@@ -31,33 +26,29 @@ abstract class LokAPIAbstract extends OdooRESTAbstract {
      * @throws {RequestFailed, APIRequestFailed, InvalidCredentials, InvalidJson}
      */
     public async login(login: string, password: string): Promise<any> {
-        let userData = await super.login(login, password)
-        let backends = []
-        let { httpRequest, base64Encode, persistentStore } = this
-        if (userData.backends) {
-            userData.backends.forEach(accountData => {
-                let BackendClassAbstract = BackendFactories[accountData.type]
-                if (!BackendClassAbstract) {
-                    console.log(`Data received for unknown backend ${accountData.type}`)
-                    return;
-                }
-                class Backend extends BackendClassAbstract {
-                    httpRequest = httpRequest
-                    base64Encode = base64Encode
-                    persistentStore = persistentStore
-
-                    // This function declaration seems necessary for typescript
-                    // to avoid having issues with this dynamic abstract class
-                    constructor(...args) { super(...args) }
-                }
-                backends.push(new Backend(accountData))
-            })
-            this.backends = backends
-        } else {
-            this.backends = []
-        }
+        let authData = await super.login(login, password)
+        this._backend_credentials = authData.prefetch.backend_credentials
+        this._backends = false // force prefetch
         return true
     }
+
+
+    /**
+     * Get backend credentials
+     *
+     * @throws {RequestFailed, APIRequestFailed, InvalidCredentials, InvalidJson}
+     *
+     * @returns Object
+     */
+    private async getBackendCredentials(): Promise<any> {
+        // XXXvlab: cached, should transition to general cache decorator to allow
+        // fine control of when we required a fetch.
+        if (!this._backend_credentials) {
+            this._backend_credentials = await this.$post('/partner/backend_credentials')
+        }
+        return this._backend_credentials
+    }
+    private _backend_credentials: any
 
 
     /**
@@ -67,8 +58,69 @@ abstract class LokAPIAbstract extends OdooRESTAbstract {
      *
      * @returns Object
      */
-    async getBackends(): Promise<any> {
-        return this.backends
+    private async getBackends(): Promise<any> {
+        // XXXvlab: cached, should transition to general cache decorator to allow
+        // fine control of when we required a fetch.
+        if (!this._backends) {
+            let backend_credentials = await this.getBackendCredentials()
+            this._backends = this.makeBackends(backend_credentials)
+        }
+        return this._backends
+    }
+    private _backends: any
+
+    private makeBackends(backend_credentials: any): any {
+        let backends = {}
+        let { httpRequest, base64Encode, persistentStore } = this
+        backend_credentials.forEach((backendData: any) => {
+            let BackendClassAbstract = BackendFactories[backendData.type]
+            if (!BackendClassAbstract) {
+                console.log(`Data received for unknown backend ${backendData.type}`)
+                return
+            }
+            class Backend extends BackendClassAbstract {
+                httpRequest = httpRequest
+                base64Encode = base64Encode
+                persistentStore = persistentStore
+
+                // This function declaration seems necessary for typescript
+                // to avoid having issues with this dynamic abstract class
+                constructor(...args) { super(...args) }
+            }
+            let backend: any
+            try {
+                backend = new Backend(backendData)
+            } catch (err) {
+                console.log(`Backend ${backendData.type} creation failed:`, err)
+                return
+            }
+            backends[backend.internalId] = backend
+        })
+        return backends
+    }
+
+
+    /**
+     * Get list of Accounts
+     *
+     * @throws {RequestFailed, APIRequestFailed, InvalidCredentials, InvalidJson}
+     *
+     * @returns Object
+     */
+    public async getAccounts(): Promise<any> {
+        // XXXvlab: to cache with global cache decorator that allow fine control
+        // of forceRefresh
+        let backends = await this.getBackends()
+        let lokapiBankAccounts = []
+        for (const id in backends) {
+            let backend = backends[id]
+            // XXXvlab: should go for parallel waits
+            let bankAccounts = await backend.getAccounts()
+            bankAccounts.forEach((bankAccount: any) => {
+                lokapiBankAccounts.push(bankAccount)
+            })
+        }
+        return lokapiBankAccounts
     }
 
 }

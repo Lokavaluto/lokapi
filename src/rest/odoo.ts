@@ -7,16 +7,16 @@ import { JsonRESTPersistentClientAbstract } from "."
 
 export abstract class OdooRESTAbstract extends JsonRESTPersistentClientAbstract {
 
-    API_VERSION = 1
+    API_VERSION = 2
 
     AUTH_HEADER = "API-KEY"
     internalId = "odoo"
 
     dbName: string
 
-    userData: {
+    connectionData: {
+        server_api_version: string
         login: string
-        partner_id: number
         uid: number
     }
     userProfile: any
@@ -53,15 +53,9 @@ export abstract class OdooRESTAbstract extends JsonRESTPersistentClientAbstract 
                     `and server (${response.api_version})`)
             }
             this.apiToken = response.api_token
-            return {
-                login: login,
-                partner_id: response.partner_id,
-                uid: response.uid,
-                backends: response.monujo_backends,
-                api_version: response.api_version
-            }
+            return response
         } catch (err) {
-            console.log('getToken failed: ', err.message)
+            console.log('authenticate failed: ', err.message)
             this.apiToken = undefined
             throw err
         }
@@ -124,9 +118,14 @@ export abstract class OdooRESTAbstract extends JsonRESTPersistentClientAbstract 
      * @throws {RequestFailed, APIRequestFailed, InvalidCredentials, InvalidJson}
      */
     async login(login: string, password: string): Promise<any> {
-        this.userData = await this.authenticate(login, password)
-        this.userProfile = await this.getUserProfile(this.userData.partner_id);
-        return this.userData
+        let authData = await this.authenticate(login, password)
+        this.connectionData = {
+            server_api_version: authData.api_version,
+            login: login,
+            uid: authData.uid,
+        }
+        this.userProfile = authData.prefetch.partner
+        return authData
     }
 
 

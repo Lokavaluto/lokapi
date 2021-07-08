@@ -245,18 +245,13 @@ We assume that you've instanciated =LokAPI= as stated in the previous
 section, and you have logged in.
 
 #+begin_src typescript
-let backends = await lokAPI.getBackends()
-let accounts = await backends[0].getAccounts()
+let accounts = await lokAPI.getAccounts()
 
-let balance = await accounts.getBalance()
-let symbol= await accounts.getSymbol()
+let balance = await accounts[0].getBalance()
+let symbol= await accounts[0].getSymbol()
 
 console.log(`balance in first account: ${balance} ${symbol}`)
 #+end_src
-
-- =lokAPI.getBackends()= is the list of backends connections that are
-  managed by the current account. For now, don't expect more than one
-  element inside.
 
 - =backend.getAccounts()= is the list of accounts in that connection
   (warning, this is a promise).
