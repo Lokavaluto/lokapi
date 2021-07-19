@@ -291,6 +291,26 @@ await accounts[0].transfer(recipients[0], "13", "Coffee")
 
 #+end_src
 
+** Requesting info on given partner
+
+The method =lokAPI.getUserInfo(userId?: number)= allows you to get
+back user info given it's user id. If you don't provide this user id,
+you'll get your own information. This is useful especially if you
+don't know yet your own =userId=:
+
+#+begin_src typescript
+
+let partnerId = 9
+
+let userInfo = await lokAPI.getUserInfo(partnerId)
+console.log(`Partner 9 name: ${userInfo.name}`)
+
+// My own information
+let myOwnInfo = await lokAPI.getUserInfo()
+console.log(`My user id: ${myOwnInfo.id}`)
+
+#+end_src
+
 
 ** List transactions
 

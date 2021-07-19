@@ -130,13 +130,19 @@ export abstract class OdooRESTAbstract extends JsonRESTPersistentClientAbstract 
 
 
     /**
-     * Get given user's profile
+     * Get given userId's profile. If no id is specified, returns the
+     * current logged in user's info.
      *
      * @throws {RequestFailed, APIRequestFailed, InvalidCredentials, InvalidJson}
      *
+     * @param userId The integer of the target partner's id in
+     *               odoo. If not specified it'll take the value 0, which
+     *               has a special meaning of 'me', the current logged in
+     *               user.
+     *
      * @returns Object
      */
-    async getUserProfile(userId: number) {
+    async getUserProfile(userId: number = 0) {
         const profile = await this.$get(`/partner/${userId}`)
         return profile || null
     }
