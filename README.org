@@ -311,6 +311,21 @@ console.log(`My user id: ${myOwnInfo.id}`)
 
 #+end_src
 
+** Toggling Favorite status
+
+You can toggle the "favorite" state of a given contact with the
+=lokAPI.toggleFavorite(..)= method. The argument can be a recipient
+(from =.searchRecipients()=) or a contact (from =.getUserInfo()=).
+
+It'll return a new contact with the updated information.
+
+#+begin_src typescript
+let recipients = await lokAPI.searchRecipients("Alain")
+
+let newContact = await lokAPI.toggleFavorite(recipients[2])
+console.log(`${newContact.name} ${newContact.is_favorite ? 'IS' : 'IS NOT'} one of my favorite.`)
+#+end_src
+
 
 ** List transactions
 

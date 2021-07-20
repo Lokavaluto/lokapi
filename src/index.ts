@@ -125,7 +125,7 @@ abstract class LokAPIAbstract extends OdooRESTAbstract {
 
 
     /**
-     * Get list of Partners
+     * Get list of Recipients (partners that can receive money from me)
      *
      * @param value The given string will be searched in name, email, phone
      *
@@ -160,6 +160,11 @@ abstract class LokAPIAbstract extends OdooRESTAbstract {
      * Transfer amount between 2 accounts. First account is supposed
      * to be logged in and linked to an authentified backend. Second
      * account should belong to same backend.
+     *
+     * @param fromAccount Source account for transfer, from ``.getAccounts()``
+     * @param recipient Recipient for the transfer, from ``.searchRecipient(..)``
+     * @param amount Amount of the transfer (ie: "100.02")
+     * @param description Text to decribe the transaction
      *
      * @throws {RequestFailed, APIRequestFailed, InvalidCredentials, InvalidJson}
      *
