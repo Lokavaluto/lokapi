@@ -3,8 +3,8 @@
 <head>
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
-	<title>LokAPI - v0.0.10</title>
-	<meta name="description" content="Documentation for LokAPI - v0.0.10">
+	<title>LokAPI - v0.0.11</title>
+	<meta name="description" content="Documentation for LokAPI - v0.0.11">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<link rel="stylesheet" href="assets/css/main.css">
 	<script async src="assets/js/search.js" id="search-script"></script>
@@ -23,7 +23,7 @@
 						<li class="state loading">Preparing search index...</li>
 						<li class="state failure">The search index is not available</li>
 					</ul>
-					<a href="index.html" class="title">LokAPI - v0.0.10</a>
+					<a href="index.html" class="title">LokAPI - v0.0.11</a>
 				</div>
 				<div class="table-cell" id="tsd-widgets">
 					<div id="tsd-filter">
@@ -50,7 +50,7 @@
 	</div>
 	<div class="tsd-page-title">
 		<div class="container">
-			<h1>LokAPI - v0.0.10</h1>
+			<h1>LokAPI - v0.0.11</h1>
 		</div>
 	</div>
 </header>
@@ -323,6 +323,18 @@
 <span style="color: #0000FF">let</span><span style="color: #000000"> </span><span style="color: #001080">myOwnInfo</span><span style="color: #000000"> = </span><span style="color: #AF00DB">await</span><span style="color: #000000"> </span><span style="color: #001080">lokAPI</span><span style="color: #000000">.</span><span style="color: #795E26">getUserInfo</span><span style="color: #000000">()</span>
 <span style="color: #001080">console</span><span style="color: #000000">.</span><span style="color: #795E26">log</span><span style="color: #000000">(</span><span style="color: #A31515">`My user id: </span><span style="color: #0000FF">${</span><span style="color: #001080">myOwnInfo</span><span style="color: #000000FF">.</span><span style="color: #001080">id</span><span style="color: #0000FF">}</span><span style="color: #A31515">`</span><span style="color: #000000">)</span>
 
+</code></pre>
+				<a href="#toggling-favorite-status" id="toggling-favorite-status" style="color: inherit; text-decoration: none;">
+					<h2>Toggling Favorite status</h2>
+				</a>
+				<p>You can toggle the &quot;favorite&quot; state of a given contact with the
+					<code>lokAPI.toggleFavorite(..)</code> method. The argument can be a recipient
+				(from <code>.searchRecipients()</code>) or a contact (from <code>.getUserInfo()</code>).</p>
+				<p>It&#39;ll return a new contact with the updated information.</p>
+				<pre><code class="language-typescript"><span style="color: #0000FF">let</span><span style="color: #000000"> </span><span style="color: #001080">recipients</span><span style="color: #000000"> = </span><span style="color: #AF00DB">await</span><span style="color: #000000"> </span><span style="color: #001080">lokAPI</span><span style="color: #000000">.</span><span style="color: #795E26">searchRecipients</span><span style="color: #000000">(</span><span style="color: #A31515">&quot;Alain&quot;</span><span style="color: #000000">)</span>
+
+<span style="color: #0000FF">let</span><span style="color: #000000"> </span><span style="color: #001080">newContact</span><span style="color: #000000"> = </span><span style="color: #AF00DB">await</span><span style="color: #000000"> </span><span style="color: #001080">lokAPI</span><span style="color: #000000">.</span><span style="color: #795E26">toggleFavorite</span><span style="color: #000000">(</span><span style="color: #001080">recipients</span><span style="color: #000000">[</span><span style="color: #098658">2</span><span style="color: #000000">])</span>
+<span style="color: #001080">console</span><span style="color: #000000">.</span><span style="color: #795E26">log</span><span style="color: #000000">(</span><span style="color: #A31515">`</span><span style="color: #0000FF">${</span><span style="color: #001080">newContact</span><span style="color: #000000FF">.</span><span style="color: #001080">name</span><span style="color: #0000FF">}</span><span style="color: #A31515"> </span><span style="color: #0000FF">${</span><span style="color: #001080">newContact</span><span style="color: #000000FF">.</span><span style="color: #001080">is_favorite</span><span style="color: #000000FF"> </span><span style="color: #000000">?</span><span style="color: #000000FF"> </span><span style="color: #A31515">&#039;IS&#039;</span><span style="color: #000000FF"> </span><span style="color: #000000">:</span><span style="color: #000000FF"> </span><span style="color: #A31515">&#039;IS NOT&#039;</span><span style="color: #0000FF">}</span><span style="color: #A31515"> one of my favorite.`</span><span style="color: #000000">)</span>
 </code></pre>
 				<a href="#list-transactions" id="list-transactions" style="color: inherit; text-decoration: none;">
 					<h2>List transactions</h2>
