@@ -1,6 +1,6 @@
 {
     "name": "lokapi",
-    "version": "0.0.10",
+    "version": "0.0.11",
     "description": "Lokavaluto API",
     "main": "build/index.js",
     "types": "build/index.d.ts",

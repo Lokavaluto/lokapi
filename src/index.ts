@@ -192,8 +192,8 @@ abstract class LokAPIAbstract extends OdooRESTAbstract {
      * @returns Object
      */
     public async getTransactions(): Promise<any> {
-        let backends = await this.getBackends()
-        let lokapiTransactions = []
+        const backends = await this.getBackends()
+        const lokapiTransactions = []
         for (const id in backends) {
             let backend = backends[id]
             // XXXvlab: should go for parallel waits
