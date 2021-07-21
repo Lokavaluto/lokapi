@@ -125,7 +125,8 @@ abstract class LokAPIAbstract extends OdooRESTAbstract {
 
 
     /**
-     * Get list of Recipients (partners that can receive money from me)
+     * Get list of Recipients (partners that can receive money from
+     * me) matching given string filter.
      *
      * @param value The given string will be searched in name, email, phone
      *
@@ -184,9 +185,7 @@ abstract class LokAPIAbstract extends OdooRESTAbstract {
 
 
     /**
-     * Transfer amount between 2 accounts. First account is supposed
-     * to be logged in and linked to an authentified backend. Second
-     * account should belong to same backend.
+     * Get history of transactions on all backends.
      *
      * @throws {RequestFailed, APIRequestFailed, InvalidCredentials, InvalidJson}
      *
