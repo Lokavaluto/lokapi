@@ -7,6 +7,7 @@ export abstract class JsonRESTClientAbstract {
     protocol: string = ""
     host: string = ""
     path: string = ""
+    port: number
 
     protected abstract httpRequest: t.HttpRequest
     protected abstract base64Encode: t.Base64Encode
@@ -45,14 +46,31 @@ export abstract class JsonRESTClientAbstract {
             [this.protocol, host_or_url] = host_or_url.split("://")
         } else {
             this.protocol = "https"
+            this.port = 443
             host_or_url = host_or_url.replace(/\/$/, '')
         }
         if (host_or_url.includes("/")) {
-            var splits = host_or_url.split("/");
+            const splits = host_or_url.split("/");
             [this.host, this.path] = [splits[0], "/" + splits.slice(1).join("/")]
         } else {  // assume host only
             this.path = ""
             this.host = host_or_url
+        }
+        if (this.host.includes(":")) {
+            const splits = this.host.split(":");
+            if (splits.length > 2) {
+                throw new e.InvalidConnectionDetails(`Too many ':' to get host and port: ${this.host}`)
+            }
+            [this.host, this.port] = [splits[0], parseInt(splits[1])]
+
+        } else {
+            if (this.protocol === "http") {
+                this.port = 80
+            } else if (this.protocol === "https") {
+                this.port = 443
+            } else {
+                this.port = 0
+            }
         }
         this.authHeaders = {}
     }
@@ -60,13 +78,6 @@ export abstract class JsonRESTClientAbstract {
     public async request(path: string, opts: t.HttpOpts): Promise<any> {
         let headers = Object.assign({}, this.COMMON_HEADERS, opts.headers)
         let rawData: any
-        if (
-            (typeof this.host === undefined) ||
-            (!/^[a-zA-Z0-9][a-zA-Z0-9-]{1,61}[a-zA-Z0-9](?:\.[a-zA-Z]{2,})+$/.test(this.host))
-        ) {
-            return new e.InvalidConnectionDetails(`Invalid value for host: ${this.host}`)
-        }
-
         let qs = ""
         if (opts.method === "GET" && Object.keys(opts.data).length != 0) {
             qs = (new URLSearchParams(opts.data)).toString()
@@ -78,7 +89,8 @@ export abstract class JsonRESTClientAbstract {
                 path: `${this.path}/${path.replace(/^\//, '')}` + (qs ? `?${qs}` : ""),
                 headers: headers,
                 method: opts.method,
-                data: qs ? null : opts.data,
+                ...!qs && { data: opts.data },
+                ...this.port && { port: this.port },
             })
         } catch (err) {
             console.log(`Failed ${opts.method} request to ${path} (Host: ${this.host})`)
