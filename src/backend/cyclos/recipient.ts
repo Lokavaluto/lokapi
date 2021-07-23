@@ -37,6 +37,10 @@ export class CyclosRecipient extends BridgeObject implements t.IRecipient {
         return this.jsonData.is_favorite
     }
 
+    set is_favorite(value) {
+        this.jsonData.is_favorite = value
+    }
+
     get mobile() {
         return this.jsonData.mobile
     }

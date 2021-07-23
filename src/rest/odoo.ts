@@ -7,7 +7,7 @@ import { JsonRESTPersistentClientAbstract } from "."
 
 export abstract class OdooRESTAbstract extends JsonRESTPersistentClientAbstract {
 
-    API_VERSION = 2
+    API_VERSION = 3
 
     AUTH_HEADER = "API-KEY"
     internalId = "odoo"
@@ -158,9 +158,41 @@ export abstract class OdooRESTAbstract extends JsonRESTPersistentClientAbstract 
      *
      * @returns Object
      */
-    public async toggleFavorite(user: t.IPartner): Promise<t.IPartner> {
-        return this.$post(`/partner/${user.id}/toggle_favorite`)
+    public async toggleFavorite(user: t.IPartner): Promise<void> {
+        if (user.is_favorite) return this.unsetFavorite(user);
+        return this.setFavorite(user)
     }
+
+
+    /**
+     * Set favorite status of given IPartner object
+     *
+     * @throws {RequestFailed, APIRequestFailed, InvalidCredentials, InvalidJson}
+     *
+     * @param partner The partner set favorite status
+     *
+     * @returns Object
+     */
+    public async setFavorite(user: t.IPartner): Promise<void> {
+        await this.$put(`/partner/${user.id}/favorite/set`)
+        user.is_favorite = true
+    }
+
+
+    /**
+     * Unset favorite status of given IPartner object
+     *
+     * @throws {RequestFailed, APIRequestFailed, InvalidCredentials, InvalidJson}
+     *
+     * @param partner The partner to remove favorite status
+     *
+     * @returns Object
+     */
+    public async unsetFavorite(user: t.IPartner): Promise<void> {
+        await this.$put(`/partner/${user.id}/favorite/unset`)
+        user.is_favorite = false
+    }
+
 
 }
 
