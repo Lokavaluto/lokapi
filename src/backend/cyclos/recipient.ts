@@ -1,69 +1,46 @@
 import * as t from "../../type"
 
-import { BridgeObject } from ".."
+import { Contact } from "../odoo/contact"
+import { CyclosPayment } from "./payment"
 
+interface IPerform extends t.JsonData {
+    paymentTypes: t.JsonData[]
+}
 
-export class CyclosRecipient extends BridgeObject implements t.IRecipient {
+export class CyclosRecipient extends Contact implements t.IRecipient {
 
-    ownerId: string
-
-    constructor(backend, parent, jsonData, ownerId) {
-        super(backend, parent, jsonData)
-        this.ownerId = ownerId
+    public async transfer(amount: number, description: string) {
+        const jsonDataPerform = await this.backends.cyclos.$get('/self/payments/data-for-perform', {
+            to: this.jsonData.cyclos.owner_id
+        })
+        if (!jsonDataPerform.paymentTypes) {
+            throw new Error('Unexpected data: no "PaymentTypes" in response.')
+        }
+        if (!(jsonDataPerform.paymentTypes instanceof Array)) {
+            throw new Error('Unexpected data: no "PaymentTypes" data.')
+        }
+        if (jsonDataPerform.paymentTypes.length == 0) {
+            throw new Error('No payment types available between selected accounts')
+        }
+        if (jsonDataPerform.paymentTypes.length > 1) {
+            throw new Error(
+                'More than one payment types available between ' +
+                'selected accounts. Not supported yet !')
+        }
+        const jsonData = await this.backends.cyclos.$post('/self/payments', {
+            amount: amount,
+            description: description,
+            subject: this.jsonData.cyclos.owner_id,
+        })
+        return new CyclosPayment(
+            { 'cyclos': this.backends.cyclos },
+            this,
+            { 'cyclos': jsonData }
+        )
     }
-
-
-    get name() {
-        return this.jsonData.name
-    }
-
-    get city() {
-        return this.jsonData.city
-    }
-
-    get email() {
-        return this.jsonData.email
-    }
-
-    get id() {
-        return this.jsonData.id
-    }
-
-    get is_company() {
-        return this.jsonData.is_company
-    }
-
-    get is_favorite() {
-        return this.jsonData.is_favorite
-    }
-
-    set is_favorite(value) {
-        this.jsonData.is_favorite = value
-    }
-
-    get mobile() {
-        return this.jsonData.mobile
-    }
-
-    get phone() {
-        return this.jsonData.phone
-    }
-
-    get street() {
-        return this.jsonData.street
-    }
-
-    get street2() {
-        return this.jsonData.street2
-    }
-
-    get zip() {
-        return this.jsonData.zip
-    }
-
 
     get internalId() {
-        return `${this.parent.internalId}/${this.ownerId}`
+        return `${this.parent.internalId}/${this.backends.cyclos.owner_id}`
     }
 
 }

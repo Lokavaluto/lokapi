@@ -279,35 +279,23 @@ Transfering money is done from an account of the logged-in user
 to a recipient:
 
 #+begin_src typescript
-// Get my accounts
-let accounts = await lokAPI.getAccounts()
 
 // Fetch recipients named 'Alain'
 let recipients = await lokAPI.searchRecipients("Alain")
 
-await lokAPI.transfer(accounts[0], recipients[0], "12", "Dinner Party participation")
-// or:
-await accounts[0].transfer(recipients[0], "13", "Coffee")
-
+await recipients.transfer("12", "Dinner Party participation")
 #+end_src
 
-** Requesting info on given partner
+** Requesting contact info on current logged in user
 
-The method =lokAPI.getUserInfo(userId?: number)= allows you to get
-back user info given it's user id. If you don't provide this user id,
-you'll get your own information. This is useful especially if you
-don't know yet your own =userId=:
+The method =lokAPI.getMyContact()= allows you to get back
+your own information.:
 
 #+begin_src typescript
 
-let partnerId = 9
-
-let userInfo = await lokAPI.getUserInfo(partnerId)
-console.log(`Partner 9 name: ${userInfo.name}`)
-
 // My own information
-let myOwnInfo = await lokAPI.getUserInfo()
-console.log(`My user id: ${myOwnInfo.id}`)
+let me = await lokAPI.getContact()
+console.log(`My user name: ${me.name}`)
 
 #+end_src
 
@@ -315,16 +303,22 @@ console.log(`My user id: ${myOwnInfo.id}`)
 
 You can set or unset the "favorite" state of a given contact with the
 =lokAPI.setFavorite(..)=, =lokAPI.unsetFavorite(..)=, or
-=lokAPI.toggleFavorite(..)= method. The argument can be a recipient
-(from =.searchRecipients()=) or a contact (from =.getUserInfo()=).
+=lokAPI.toggleFavorite(..)= method. This can be used on a recipient
+(from =.searchRecipients()=) or a contact (but for now, only
+=.getMyContact()= is outputting a contact, and it doesn't make 
+sense to be your own favorite, does it ?).
 
-It'll return a new contact with the updated information.
+It'll not return any value, but the contact will be updated
+accordingly.
 
 #+begin_src typescript
 let recipients = await lokAPI.searchRecipients("Alain")
 
-await lokAPI.setFavorite(recipients[2])
-await lokAPI.unsetFavorite(recipients[3])
+await recipients[2].setFavorite()
+await recipients[3].unsetFavorite()
+
+console.log(recipients[3].is_favorite) // is expected to be unset
+
 #+end_src
 
 
@@ -343,7 +337,6 @@ transactions.forEach((tr:any) => {
 
 ** Direct request to odoo api
 
-
 You can use =lokapi= instance to query directly the odoo api trough
 the =get=, =post=, =put=, =delete= methods and their authenticated
 counterparts, =$get=, =$post=, =$put=, =$delete=.
@@ -351,7 +344,7 @@ counterparts, =$get=, =$post=, =$put=, =$delete=.
 #+begin_src typescript
 
 // All 8 methods have this signature:
-// type restMethod = (path: string, data?: any, headers?: any) => any
+// type restMethod = (path: string, data?: JsonData, headers?: { [label: string]: string }): Promise<JsonData>
 
 // Notice that the next call is an example, but you don't need to
 // use this endpoint as it is used by the lokAPI.login() and
@@ -365,6 +358,5 @@ lokAPI.post('/auth/authenticate', {
 })
 
 lokAPI.$post(`/partner/${userId}`)
-lokAPI.$post(`/partner/favorite`)
-lokAPI.$post(`/partner/${userId}/toggle_favorite`)
+lokAPI.$put(`/partner/${userId}/favorite/set`)
 #+end_src

@@ -1,26 +1,27 @@
+import * as t from "../../type"
 
 import { CyclosRecipient } from "./recipient"
 
 import { BridgeObject } from ".."
 
 
-export class CyclosAccount extends BridgeObject {
+export class CyclosAccount extends BridgeObject implements t.IAccount {
 
     async getBalance() {
-        return this.jsonData.status.balance
+        return this.jsonData.cyclos.status.balance
     }
 
     async getSymbol() {
-        return this.jsonData.currency.symbol
+        return this.jsonData.cyclos.currency.symbol
     }
 
     get internalId() {
-        return `${this.parent.internalId}/${this.parent.owner_id}/${this.jsonData.id}`
+        return `${this.parent.internalId}/${this.parent.owner_id}/${this.jsonData.cyclos.id}`
     }
 
     public async transfer(recipient: CyclosRecipient, amount: number, description: string) {
         // On cyclos, account transfer is managed through the owner account
-        return this.parent.transfer(recipient, amount, description)
+        return recipient.transfer(amount, description)
     }
 
 }

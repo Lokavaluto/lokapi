@@ -1,8 +1,8 @@
-import * as t from "../type"
-import * as e from "./exception"
+import { JsonRESTPersistentClientAbstract } from "../../rest"
+import { Contact } from "./contact"
+import * as t from "../../type"
 
-
-import { JsonRESTPersistentClientAbstract } from "."
+import * as e from "../../exception"
 
 
 export abstract class OdooRESTAbstract extends JsonRESTPersistentClientAbstract {
@@ -117,7 +117,7 @@ export abstract class OdooRESTAbstract extends JsonRESTPersistentClientAbstract 
      *
      * @throws {RequestFailed, APIRequestFailed, InvalidCredentials, InvalidJson}
      */
-    async login(login: string, password: string): Promise<any> {
+    public async login(login: string, password: string): Promise<any> {
         let authData = await this.authenticate(login, password)
         this.connectionData = {
             server_api_version: authData.api_version,
@@ -130,69 +130,21 @@ export abstract class OdooRESTAbstract extends JsonRESTPersistentClientAbstract 
 
 
     /**
-     * Get given userId's profile. If no id is specified, returns the
-     * current logged in user's info.
+     * Get Contact of given contact id's. If no id is specified, returns the
+     * current logged in user's `Contact` info.
      *
      * @throws {RequestFailed, APIRequestFailed, InvalidCredentials, InvalidJson}
      *
-     * @param userId The integer of the target partner's id in
-     *               odoo. If not specified it'll take the value 0,
-     *               which has a special meaning of 'me', the current
-     *               logged in user.
+     * @param user The integer of the target partner's id in
+     *             odoo. If not specified it'll take the value 0,
+     *             which has a special meaning of 'me', the current
+     *             logged in user.
      *
      * @returns {Object
      */
-    async getUserProfile(user: number | t.IPartner = 0): Promise<t.IPartner> {
-        const uid: number = typeof user === "number" ? user : user.id
-        const partner: t.IPartner = await this.$get(`/partner/${uid}`)
-        return partner || null
+    public async getMyContact(): Promise<t.IContact> {
+        return new Contact({ odoo: this }, this, { odoo: await this.$get(`/partner/0`) })
     }
-
-
-    /**
-     * Toggle favorite status of given IPartner object
-     *
-     * @throws {RequestFailed, APIRequestFailed, InvalidCredentials, InvalidJson}
-     *
-     * @param partner The partner to toggle favorite status
-     *
-     * @returns Object
-     */
-    public async toggleFavorite(user: t.IPartner): Promise<void> {
-        if (user.is_favorite) return this.unsetFavorite(user);
-        return this.setFavorite(user)
-    }
-
-
-    /**
-     * Set favorite status of given IPartner object
-     *
-     * @throws {RequestFailed, APIRequestFailed, InvalidCredentials, InvalidJson}
-     *
-     * @param partner The partner set favorite status
-     *
-     * @returns Object
-     */
-    public async setFavorite(user: t.IPartner): Promise<void> {
-        await this.$put(`/partner/${user.id}/favorite/set`)
-        user.is_favorite = true
-    }
-
-
-    /**
-     * Unset favorite status of given IPartner object
-     *
-     * @throws {RequestFailed, APIRequestFailed, InvalidCredentials, InvalidJson}
-     *
-     * @param partner The partner to remove favorite status
-     *
-     * @returns Object
-     */
-    public async unsetFavorite(user: t.IPartner): Promise<void> {
-        await this.$put(`/partner/${user.id}/favorite/unset`)
-        user.is_favorite = false
-    }
-
 
 }
 

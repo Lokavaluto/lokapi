@@ -1,5 +1,5 @@
 
-import { OdooRESTAbstract } from "./rest/odoo"
+import { OdooRESTAbstract } from "./backend/odoo"
 
 import * as e from "./rest/exception"
 import * as t from "./type"
@@ -89,7 +89,7 @@ abstract class LokAPIAbstract extends OdooRESTAbstract {
             }
             let backend: any
             try {
-                backend = new Backend(backendData)
+                backend = new Backend({ odoo: this }, backendData)
             } catch (err) {
                 console.log(`Backend ${backendData.type} creation failed:`, err)
                 return
@@ -134,9 +134,10 @@ abstract class LokAPIAbstract extends OdooRESTAbstract {
      *
      * @returns Array<t.IRecipient>
      */
-    public async searchRecipient(value: string): Promise<Array<t.IRecipient>> {
+    public async searchRecipients(value: string): Promise<t.IRecipient[]> {
         // XXXvlab: to cache with global cache decorator that allow fine control
         // of forceRefresh
+
         let backends = await this.getBackends()
         let partners = await this.$post('/partner/partner_search', {
             "value": value,
@@ -158,34 +159,7 @@ abstract class LokAPIAbstract extends OdooRESTAbstract {
 
 
     /**
-     * Transfer amount between 2 accounts. First account is supposed
-     * to be logged in and linked to an authentified backend. Second
-     * account should belong to same backend.
-     *
-     * @param fromAccount Source account for transfer, from ``.getAccounts()``
-     * @param recipient Recipient for the transfer, from ``.searchRecipient(..)``
-     * @param amount Amount of the transfer (ie: "100.02")
-     * @param description Text to decribe the transaction
-     *
-     * @throws {RequestFailed, APIRequestFailed, InvalidCredentials, InvalidJson}
-     *
-     * @returns Object
-     */
-    public async transfer(fromAccount: any,
-        recipient: t.IRecipient,
-        amount: number,
-        description: string): Promise<t.IPayment> {
-        // XXXvlab: this check is not working yet and need to be more
-        // thought through
-        // if (fromAccount.backend.internalId !== recipient.backend.internalId) {
-        //     throw new Error("Transfer across backends is not supported.")
-        // }
-        return await fromAccount.transfer(recipient, amount, description)
-    }
-
-
-    /**
-     * Get history of transactions on all backends.
+     * Get history of transactions on all backends for currently logged in user.
      *
      * @throws {RequestFailed, APIRequestFailed, InvalidCredentials, InvalidJson}
      *
