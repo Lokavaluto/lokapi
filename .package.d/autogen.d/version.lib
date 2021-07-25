@@ -1,0 +1,13 @@
+# -*- mode: shell-script -*-
+
+get_current_version() {
+
+    version=$("$git" describe --tags)
+    if matches "$version" "$short_tag"; then
+        echo "$version"
+    else
+        version=$(echo "$version" | compat_sed "$get_short_tag")
+        echo "${version}-alpha.$(dev_version_tag)"
+    fi
+
+}
