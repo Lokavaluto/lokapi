@@ -4,3 +4,8 @@ node_modules
 docs
 coverage
 *.old
+autogen.sh
+.pkg
+.package.d
+.package
+.gitchangelog.rc
