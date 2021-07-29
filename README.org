@@ -260,6 +260,20 @@ console.log(`balance in first account: ${balance} ${symbol}`)
 
 - =account.getSymbol()= is the currency symbol for the account
 
+** Crediting account
+
+You can credit your account thanks to =account.getCreditUrl(amount)=.
+This will return an url to finish the purchase of new credits.
+
+#+begin_src typescript
+let accounts = await lokAPI.getAccounts()
+
+url = await accounts[0].getCreditUrl(100)
+
+console.log(`I need to follow instructions on $url ` +
+            'to purchase credit to store in my account.')
+#+end_src
+
 ** Looking for recipients
 
 Recipient are possible receiving end of a transfer of
