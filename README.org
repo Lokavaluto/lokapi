@@ -373,4 +373,12 @@ lokAPI.post('/auth/authenticate', {
 
 lokAPI.$post(`/partner/${userId}`)
 lokAPI.$put(`/partner/${userId}/favorite/set`)
+lokAPI.$get(`/partner/partner_search`, {
+  value: "foo"
+})
 #+end_src
+
+Please note that ``.get(..)`` and ``.$get(..)`` have same prototype
+and usage than other function and do not require you to build a query
+string as it'll encode in the URL as a querystring the data you've
+provided.
