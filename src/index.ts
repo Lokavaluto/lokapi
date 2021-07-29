@@ -139,7 +139,7 @@ abstract class LokAPIAbstract extends OdooRESTAbstract {
         // of forceRefresh
 
         let backends = await this.getBackends()
-        let partners = await this.$post('/partner/partner_search', {
+        let partners = await this.$get('/partner/partner_search', {
             "value": value,
             "backend_keys": Object.keys(backends),
             // "offset": 0,
