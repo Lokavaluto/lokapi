@@ -24,4 +24,19 @@ export class CyclosAccount extends BridgeObject implements t.IAccount {
         return recipient.transfer(amount, description)
     }
 
+
+    /**
+     * get URL to Credit given amount on current account
+     *
+     * @throws {RequestFailed, APIRequestFailed, InvalidCredentials, InvalidJson}
+     *
+     * @returns Object
+     */
+    public async getCreditUrl(amount: number): Promise<string> {
+        return this.backends.odoo.$post('/cyclos/credit', {
+            owner_id: this.parent.ownerId,
+            amount,
+        })
+    }
+
 }
