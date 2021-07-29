@@ -1,5 +1,6 @@
 import * as e from "./exception"
 import * as t from "../type"
+import { stringify as toQueryString } from "query-string"
 
 
 export abstract class JsonRESTClientAbstract {
@@ -80,7 +81,7 @@ export abstract class JsonRESTClientAbstract {
         let rawData: any
         let qs = ""
         if (opts.method === "GET" && Object.keys(opts.data).length != 0) {
-            qs = (new URLSearchParams(opts.data)).toString()
+            qs = toQueryString(opts.data, { arrayFormat: 'index' })
         }
         try {
             rawData = await this.httpRequest({
