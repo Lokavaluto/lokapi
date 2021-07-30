@@ -61,12 +61,12 @@ export abstract class CyclosBackendAbstract extends BackendAbstract {
     public makeRecipients(jsonData: t.JsonData): t.IRecipient[] {
         let recipients = []
         if (Object.keys(this.userAccounts).length === 0) {
-            throw new Error("Current user as no account in cyclos. Unsupported yet.")
+            throw new Error("Current user has no account in cyclos. Unsupported yet.")
         }
         if (Object.keys(this.userAccounts).length > 1) {
             // We will need to select one of the source userAccount of the
             // current logged in user
-            throw new Error("Current user as more than one account in cyclos. Unsupported yet.")
+            throw new Error("Current user has more than one account in cyclos. Unsupported yet.")
         }
         jsonData.monujo_backends[this.internalId].forEach((ownerId: string) => {
             // Each ownerId here is a different account in cyclos for recipient
