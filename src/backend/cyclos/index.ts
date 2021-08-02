@@ -1,5 +1,7 @@
 
 import { JsonRESTPersistentClientAbstract } from "../../rest"
+
+import * as e from "../../exception"
 import * as t from "../../type"
 
 import { CyclosAccount } from "./account"
@@ -153,6 +155,33 @@ export abstract class CyclosUserAccountAbstract extends JsonRESTPersistentClient
         })
         return transactions
     }
+
+    public async request(path: string, opts: t.HttpOpts): Promise<any> {
+        let response: any
+        try {
+            response = await super.request(path, opts)
+        } catch (err) {
+            // XXXvlab: Here ``err instanceof e.HttpError`` would fail, not sure
+            // why. It seems safe enough to test directly ``err.code``.
+            if (err.code === 401) {
+                let errCode: string
+                try {
+                    let data = JSON.parse(err.data)
+                    errCode = data.code
+                } catch (err2) {
+                    console.log('Could not get error code from JSON request body', err2)
+                    throw err
+                }
+                if (errCode === "loggedOut") {
+                    console.log('Authentication Required')
+                    throw new e.AuthenticationRequired("Authentication Failed")
+                }
+            }
+            throw err
+        }
+        return response
+    }
+
 }
 
 

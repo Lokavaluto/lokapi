@@ -71,7 +71,7 @@ abstract class LokAPIAbstract extends OdooRESTAbstract {
 
     private makeBackends(backend_credentials: any): any {
         let backends = {}
-        let { httpRequest, base64Encode, persistentStore } = this
+        let { httpRequest, base64Encode, persistentStore, requestLogin } = this
         backend_credentials.forEach((backendData: any) => {
             let BackendClassAbstract = BackendFactories[backendData.type]
             if (!BackendClassAbstract) {
@@ -82,6 +82,7 @@ abstract class LokAPIAbstract extends OdooRESTAbstract {
                 httpRequest = httpRequest
                 base64Encode = base64Encode
                 persistentStore = persistentStore
+                requestLogin = requestLogin
 
                 // This function declaration seems necessary for typescript
                 // to avoid having issues with this dynamic abstract class
