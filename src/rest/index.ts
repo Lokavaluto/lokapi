@@ -249,12 +249,14 @@ export abstract class JsonRESTPersistentClientAbstract extends JsonRESTSessionCl
         super.requireAuth()
     }
 
-
     public async authRequest(path: string, opts: t.HttpOpts): Promise<any> {
         try {
             return await super.authRequest(path, opts)
         } catch (err) {
-            if (err instanceof e.AuthenticationRequired) {
+            // XXXvlab: err instanceof e.AuthenticationRequired is giving false
+            // despite it seeming to be perfectly valid.
+            //if (err instanceof e.AuthenticationRequired) {
+            if (err.constructor.name === "AuthenticationRequired") {
                 this.apiToken = null
                 if (!!this.requestLogin) {
                     this.requestLogin()
