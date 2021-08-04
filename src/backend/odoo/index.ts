@@ -7,7 +7,7 @@ import * as e from "../../exception"
 
 export abstract class OdooRESTAbstract extends JsonRESTPersistentClientAbstract {
 
-    API_VERSION = 3
+    API_VERSION = 4
 
     AUTH_HEADER = "API-KEY"
     internalId = "odoo"

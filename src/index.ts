@@ -160,6 +160,40 @@ abstract class LokAPIAbstract extends OdooRESTAbstract {
 
 
     /**
+     * Get recipients from a QR code url string. It'll return a recipient per
+     * backend.
+     *
+     * @throws {RequestFailed, APIRequestFailed, InvalidCredentials, InvalidJson}
+     *
+     * @param url The QR code url identifying a user
+     *
+     * @returns {Object
+     */
+    public async getRecipientsFromUrl(url: string): Promise<t.IRecipient[]> {
+        let backends = await this.getBackends()
+        let partner
+        try {
+            partner = await this.$get('/partner/get_by_url', {
+                url,
+                backend_keys: Object.keys(backends),
+            })
+        } catch (err) {
+            if (err instanceof e.HttpError && err.code === 404) {
+                return []
+            }
+        }
+        let recipients = []
+        Object.keys(partner.monujo_backends).forEach((backendId: string) => {
+            let backendRecipients = backends[backendId].makeRecipients(partner)
+            backendRecipients.forEach((recipient: any) => {
+                recipients.push(recipient)
+            })
+        })
+        return recipients
+    }
+
+
+    /**
      * Get history of transactions on all backends for currently logged in user.
      *
      * @throws {RequestFailed, APIRequestFailed, InvalidCredentials, InvalidJson}

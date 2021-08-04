@@ -287,6 +287,20 @@ recipients.forEach(recipient => {
 })
 #+end_src
 
+You can also grab recipients by url. This url is the identity
+url created by odoo. It'll return a list of recipients, one
+for each backend you can use to send money.
+
+#+begin_src typescript
+let url = "https://myhost.com/fr_FR/partners/foo-bar-13"
+let recipients = await lokAPI.getRecipientsFromUrl(url)
+
+recipients.forEach(recipient => {
+    console.log(`name: ${recipient.name}`)
+})
+#+end_src
+
+
 ** Transfer money between an account to a recipient
 
 Transfering money is done from an account of the logged-in user
