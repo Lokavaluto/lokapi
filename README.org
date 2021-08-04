@@ -1,19 +1,10 @@
 # -*- ispell-local-dictionary: "english" -*-
-#+SETUPFILE: ~/.emacs.d/etc/setup/default.setup
-#+SETUPFILE: ~/.emacs.d/etc/setup/latex.setup
-#+SETUPFILE: ~/.emacs.d/etc/setup/html-readtheorg-local.setup
 
 #+TITLE: Lokavaluto's LokAPI
-#+LATEX: \pagebreak
 
 LokAPI is a javascript library intended to be used in mobile
 applications or web application to abstract all logics with
 lokavaluto's server.
-
-#+LATEX: \pagebreak
-#+LATEX: \pagebreak
-
-
 
 
 * Adding =lokapi= to your project
@@ -382,7 +373,7 @@ lokAPI.post('/auth/authenticate', {
   db: 'mydb',
   params: ['lcc_app']
 }, {
-  'Authorization': '',
+  'Authorization': 'XYZ',
 })
 
 lokAPI.$post(`/partner/${userId}`)

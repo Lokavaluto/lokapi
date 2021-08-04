@@ -21,7 +21,7 @@
         "esModuleInterop": true,
         "lib": ["esnext", "dom"],
         "baseUrl": ".",
-	"outDir": "build",
+        "outDir": "build",
         "paths": {
             "*": ["src/types/*"]
         }
@@ -39,4 +39,3 @@
     "include": ["src/**/*", "references.d.ts"],
     "exclude": ["node_modules", "platforms", "**/angular"]
 }
-

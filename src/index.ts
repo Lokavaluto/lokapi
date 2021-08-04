@@ -44,7 +44,9 @@ abstract class LokAPIAbstract extends OdooRESTAbstract {
         // XXXvlab: cached, should transition to general cache decorator to allow
         // fine control of when we required a fetch.
         if (!this._backend_credentials) {
-            this._backend_credentials = await this.$post('/partner/backend_credentials')
+            this._backend_credentials = await this.$post(
+                "/partner/backend_credentials"
+            )
         }
         return this._backend_credentials
     }
@@ -75,7 +77,9 @@ abstract class LokAPIAbstract extends OdooRESTAbstract {
         backend_credentials.forEach((backendData: any) => {
             let BackendClassAbstract = BackendFactories[backendData.type]
             if (!BackendClassAbstract) {
-                console.log(`Data received for unknown backend ${backendData.type}`)
+                console.log(
+                    `Data received for unknown backend ${backendData.type}`
+                )
                 return
             }
             class Backend extends BackendClassAbstract {
@@ -86,7 +90,9 @@ abstract class LokAPIAbstract extends OdooRESTAbstract {
 
                 // This function declaration seems necessary for typescript
                 // to avoid having issues with this dynamic abstract class
-                constructor(...args) { super(...args) }
+                constructor(...args) {
+                    super(...args)
+                }
             }
             let backend: any
             try {
@@ -173,7 +179,7 @@ abstract class LokAPIAbstract extends OdooRESTAbstract {
         let backends = await this.getBackends()
         let partner
         try {
-            partner = await this.$get('/partner/get_by_url', {
+            partner = await this.$get("/partner/get_by_url", {
                 url,
                 backend_keys: Object.keys(backends),
             })
