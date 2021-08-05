@@ -132,8 +132,14 @@ abstract class LokAPIAbstract extends OdooRESTAbstract {
 
 
     /**
-     * Get list of Recipients (partners that can receive money from
-     * me) matching given string filter.
+     * Get list of Recipients (contacts with an account information
+     * that can receive money from me) matching given string
+     * filter. Note that if value is empty, it'll list only all the
+     * favorites. If value is not empty, it'll filter by value in all
+     * recipient (favorites or not) and return result ordered by
+     * `favorite` and `name`.
+     *
+     * Paging is available and should be used.
      *
      * @param value The given string will be searched in name, email, phone
      *
@@ -141,16 +147,25 @@ abstract class LokAPIAbstract extends OdooRESTAbstract {
      *
      * @returns Array<t.IRecipient>
      */
-    public async searchRecipients(value: string): Promise<t.IRecipient[]> {
+    public async searchRecipients(
+        value,
+        // XXXvlab: a reflection on forcing a standard paging
+        // increment to maximize cache hit on the server should
+        // probably be done
+        opts: {
+            offset?: number
+            limit?: number
+        } = {}
+    ): Promise<t.IRecipient[]> {
         // XXXvlab: to cache with global cache decorator that allow fine control
         // of forceRefresh
-
         let backends = await this.getBackends()
-        let partners = await this.$get('/partner/partner_search', {
-            "value": value,
-            "backend_keys": Object.keys(backends),
-            // "offset": 0,
-            // "limit": 40,
+        let partners = await this.$get("/partner/search", {
+            value: value,
+            backend_keys: Object.keys(backends),
+            order: 'is_favorite desc, name',
+            ...opts,
+            ...value === "" && { is_favorite: true }
         })
         let recipients = []
         partners.rows.forEach((partnerData: any) => {

@@ -278,6 +278,11 @@ recipients.forEach(recipient => {
 })
 #+end_src
 
+Note that if you look for an empty string,
+``lokAPI.searchRecipients("")`` will return all favorite recipients.
+
+Recipients are always ordered with favorites first and by name.
+
 You can also grab recipients by url. This url is the identity
 url created by odoo. It'll return a list of recipients, one
 for each backend you can use to send money.
