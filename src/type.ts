@@ -22,6 +22,14 @@ export type coreHttpOpts = {
 }
 
 
+export type UrlParts = {
+    protocol: string
+    host: string
+    port: number
+    path: string
+}
+
+
 export type HttpRequest = (opts: coreHttpOpts) => Object
 export type Base64Encode = (s: string) => string
 

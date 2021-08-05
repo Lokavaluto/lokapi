@@ -5,7 +5,7 @@ import * as e from "./rest/exception"
 import * as t from "./type"
 
 import { BackendFactories } from "./backend"
-
+import { getHostOrUrlParts } from "./rest"
 
 // Load backends
 
@@ -192,10 +192,22 @@ abstract class LokAPIAbstract extends OdooRESTAbstract {
      */
     public async getRecipientsFromUrl(url: string): Promise<t.IRecipient[]> {
         let backends = await this.getBackends()
-        let partner
+        let urlParts = getHostOrUrlParts(url)
+        if (urlParts.protocol !== this.protocol ||
+            urlParts.host !== this.host ||
+            urlParts.port !== this.port) {
+            throw new e.UrlFromWrongServer('Url provided is not from current server')
+        }
+        let id: number
         try {
-            partner = await this.$get("/partner/get_by_url", {
-                url,
+            id = parseInt(url.split("-").slice(-1)[0])
+        } catch (err) {
+            throw new Error(`Invalid url ${url}`)
+        }
+        let partner: any
+        try {
+            partner = await this.$get(`/partner/get`, {
+                id,
                 backend_keys: Object.keys(backends),
             })
         } catch (err) {

@@ -3,6 +3,47 @@ import * as t from "../type"
 import { stringify as toQueryString } from "qs"
 
 
+export function getHostOrUrlParts(host_or_url: string): t.UrlParts {
+    let protocol: string, host: string, port: number, path: string
+    if (host_or_url.includes("://")) {
+        [protocol, host_or_url] = host_or_url.split("://")
+    } else {
+        protocol = "https"
+        host_or_url = host_or_url.replace(/\/$/, '')
+    }
+    if (host_or_url.includes("/")) {
+        const splits = host_or_url.split("/");
+        [host, path] = [splits[0], "/" + splits.slice(1).join("/")]
+    } else {  // assume host only
+        path = ""
+        host = host_or_url
+    }
+    if (host.includes(":")) {
+        const splits = host.split(":");
+        if (splits.length > 2) {
+            throw new Error(`Too many ':' to get host and port: ${host}`)
+        }
+        [host, port] = [splits[0], parseInt(splits[1])]
+
+    } else {
+        if (protocol === "http") {
+            port = 80
+        } else if (protocol === "https") {
+            port = 443
+        } else {
+            throw new Error(
+                `Could not infer port from unknown protocol ${protocol}`)
+        }
+    }
+    return {
+        protocol,
+        host,
+        port,
+        path
+    }
+}
+
+
 export abstract class JsonRESTClientAbstract {
 
     protocol: string = ""
@@ -41,40 +82,23 @@ export abstract class JsonRESTClientAbstract {
         }
     }
 
-
     constructor(host_or_url: string) {
-        if (host_or_url.includes("://")) {
-            [this.protocol, host_or_url] = host_or_url.split("://")
-        } else {
-            this.protocol = "https"
-            this.port = 443
-            host_or_url = host_or_url.replace(/\/$/, '')
-        }
-        if (host_or_url.includes("/")) {
-            const splits = host_or_url.split("/");
-            [this.host, this.path] = [splits[0], "/" + splits.slice(1).join("/")]
-        } else {  // assume host only
-            this.path = ""
-            this.host = host_or_url
-        }
-        if (this.host.includes(":")) {
-            const splits = this.host.split(":");
-            if (splits.length > 2) {
-                throw new e.InvalidConnectionDetails(`Too many ':' to get host and port: ${this.host}`)
-            }
-            [this.host, this.port] = [splits[0], parseInt(splits[1])]
+        let urlParts: t.UrlParts
 
-        } else {
-            if (this.protocol === "http") {
-                this.port = 80
-            } else if (this.protocol === "https") {
-                this.port = 443
-            } else {
-                this.port = 0
-            }
+        try {
+            urlParts = getHostOrUrlParts(host_or_url)
+        } catch (err) {
+            throw new e.InvalidConnectionDetails(err.message)
         }
+
+        this.protocol = urlParts.protocol
+        this.host = urlParts.host
+        this.path = urlParts.path
+        this.port = urlParts.port
+
         this.authHeaders = {}
     }
+
 
     public async request(path: string, opts: t.HttpOpts): Promise<any> {
         let headers = Object.assign({}, this.COMMON_HEADERS, opts.headers)
