@@ -87,7 +87,8 @@ export abstract class OdooRESTAbstract extends JsonRESTPersistentClientAbstract 
         try {
             response = await super.request(path, opts)
         } catch (err) {
-            if (err instanceof e.HttpError && err.code == 500) {
+            // XXXvlab: `err instanceof e.HttpError` is giving false
+            if (err.constructor.name === "HttpError" && err.code == 500) {
                 let errMessage: string
                 try {
                     errMessage = this.getHTMLErrorMessage(err.data)
