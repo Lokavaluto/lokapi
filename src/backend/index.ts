@@ -1,4 +1,4 @@
-import * as t from "../type"
+import * as t from '../type'
 
 /**
  * Base object to implement common API between data from
@@ -10,9 +10,9 @@ export class BridgeObject {
     // XXXvlab: TODO: define IBackend
     protected backends: { [index: string]: any }
     protected parent: any
-    protected jsonData: any   // XXXvlab: will need to put t.JsonData and data validators
+    protected jsonData: any  // XXXvlab: will need to put t.JsonData and data validators
 
-    constructor(backends: { [index: string]: any }, parent, jsonData) {
+    constructor (backends: { [index: string]: any }, parent, jsonData) {
         this.backends = backends
         this.parent = parent
         this.jsonData = jsonData
@@ -30,7 +30,7 @@ export abstract class BackendAbstract {
     protected abstract persistentStore: t.IPersistentStore
     protected abstract requestLogin(): void
 
-    constructor(backends: any, jsonData: any) {
+    constructor (backends: any, jsonData: any) {
         this.backends = backends
         this.jsonData = jsonData
     }

@@ -1,16 +1,16 @@
-import { JsonRESTPersistentClientAbstract } from "../../rest"
-import { Contact } from "./contact"
-import * as t from "../../type"
+import { JsonRESTPersistentClientAbstract } from '../../rest'
+import { Contact } from './contact'
+import * as t from '../../type'
 
-import * as e from "../../exception"
+import * as e from '../../exception'
 
 
 export abstract class OdooRESTAbstract extends JsonRESTPersistentClientAbstract {
 
     API_VERSION = 9
 
-    AUTH_HEADER = "API-KEY"
-    internalId = "odoo"
+    AUTH_HEADER = 'API-KEY'
+    internalId = 'odoo'
 
     dbName: string
 
@@ -19,38 +19,46 @@ export abstract class OdooRESTAbstract extends JsonRESTPersistentClientAbstract 
         login: string
         uid: number
     }
+
     userProfile: any
 
 
-    constructor(host: string, dbName: string) {
+    constructor (host: string, dbName: string) {
         super(host)
         this.dbName = dbName
         this.authHeaders = {}
     }
 
-    async authenticate(login: string, password: string): Promise<any> {
+    async authenticate (login: string, password: string): Promise<any> {
         try {
-            let response = await this.post(
+            const response = await this.post(
                 '/auth/authenticate',
                 {
                     api_version: this.API_VERSION,
                     db: this.dbName,
-                    params: ['lcc_app']
+                    params: ['lcc_app'],
                 },
                 {
-                    Authorization: `Basic ${this.base64Encode(`${login}:${password}`)}`,
+                    Authorization: `Basic ${this.base64Encode(
+                        `${login}:${password}`
+                    )}`,
                 }
-            );
-            if (response.status == "Error") {
-                if (response.message == "access denied")
-                    throw new e.InvalidCredentials("Access denied")
-                else
-                    throw new e.APIRequestFailed(`Could not obtain token: ${response.error}`)
+            )
+            if (response.status === 'Error') {
+                if (response.message === 'access denied') {
+                    throw new e.InvalidCredentials('Access denied')
+                } else {
+                    throw new e.APIRequestFailed(
+                        `Could not obtain token: ${response.error}`
+                    )
+                }
             }
             if (response.api_version !== this.API_VERSION) {
-                console.log("Warning: API Version Mismatch " +
-                    `between client (${this.API_VERSION}) ` +
-                    `and server (${response.api_version})`)
+                console.log(
+                    'Warning: API Version Mismatch ' +
+                        `between client (${this.API_VERSION}) ` +
+                        `and server (${response.api_version})`
+                )
             }
             this.apiToken = response.api_token
             return response
@@ -61,8 +69,8 @@ export abstract class OdooRESTAbstract extends JsonRESTPersistentClientAbstract 
         }
     }
 
-    private getHTMLErrorMessage(htmlString: string): string {
-        let parser = new DOMParser()
+    private getHTMLErrorMessage (htmlString: string): string {
+        const parser = new DOMParser()
         let htmlDoc: any
         let errMessage: any
         try {
@@ -82,23 +90,26 @@ export abstract class OdooRESTAbstract extends JsonRESTPersistentClientAbstract 
         return errMessage
     }
 
-    public async request(path: string, opts: t.HttpOpts): Promise<any> {
+    public async request (path: string, opts: t.HttpOpts): Promise<any> {
         let response: any
         try {
             response = await super.request(path, opts)
         } catch (err) {
             // XXXvlab: `err instanceof e.HttpError` is giving false
-            if (err.constructor.name === "HttpError" && err.code == 500) {
+            if (err.constructor.name === 'HttpError' && err.code === 500) {
                 let errMessage: string
                 try {
                     errMessage = this.getHTMLErrorMessage(err.data)
                 } catch (err2) {
-                    console.log('Could not get error message in HTML from request body', err2)
+                    console.log(
+                        'Could not get error message in HTML from request body',
+                        err2
+                    )
                     throw err
                 }
-                if (errMessage.startsWith("odoo.exceptions.AccessDenied")) {
+                if (errMessage.startsWith('odoo.exceptions.AccessDenied')) {
                     console.log('Authentication Required')
-                    throw new e.AuthenticationRequired("Authentication Failed")
+                    throw new e.AuthenticationRequired('Authentication Failed')
                 }
             }
             throw err
@@ -118,8 +129,8 @@ export abstract class OdooRESTAbstract extends JsonRESTPersistentClientAbstract 
      *
      * @throws {RequestFailed, APIRequestFailed, InvalidCredentials, InvalidJson}
      */
-    public async login(login: string, password: string): Promise<any> {
-        let authData = await this.authenticate(login, password)
+    public async login (login: string, password: string): Promise<any> {
+        const authData = await this.authenticate(login, password)
         this.connectionData = {
             server_api_version: authData.api_version,
             login: login,
@@ -151,16 +162,25 @@ export abstract class OdooRESTAbstract extends JsonRESTPersistentClientAbstract 
 
 
 t.httpMethods.forEach((method) => {
-    let methodLc = method.toLowerCase()
-    OdooRESTAbstract.prototype[methodLc] = function(
-        path: string, data?: any, headers?: any) {
-        return JsonRESTPersistentClientAbstract.prototype[methodLc].apply(this,
-            [`/lokavaluto_api/public${path}`, data, headers])
+    const methodLc = method.toLowerCase()
+    OdooRESTAbstract.prototype[methodLc] = function (
+        path: string,
+        data?: any,
+        headers?: any
+    ) {
+        return JsonRESTPersistentClientAbstract.prototype[methodLc].apply(
+            this,
+            [`/lokavaluto_api/public${path}`, data, headers]
+        )
     }
 
-    OdooRESTAbstract.prototype["$" + methodLc] = function(
-        path: string, data?: any, headers?: any) {
-        return JsonRESTPersistentClientAbstract.prototype['$' + methodLc].apply(this,
-            [`/lokavaluto_api/private${path}`, data, headers])
+    OdooRESTAbstract.prototype['$' + methodLc] = function (
+        path: string,
+        data?: any,
+        headers?: any
+    ) {
+        return JsonRESTPersistentClientAbstract.prototype[
+            '$' + methodLc
+        ].apply(this, [`/lokavaluto_api/private${path}`, data, headers])
     }
 })

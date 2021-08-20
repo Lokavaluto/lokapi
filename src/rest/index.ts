@@ -1,54 +1,55 @@
-import * as e from "./exception"
-import * as t from "../type"
-import { stringify as toQueryString } from "qs"
+import * as e from './exception'
+import * as t from '../type'
+import { stringify as toQueryString } from 'qs'
 
 
-export function getHostOrUrlParts(host_or_url: string): t.UrlParts {
+export function getHostOrUrlParts (HostOrUrl: string): t.UrlParts {
     let protocol: string, host: string, port: number, path: string
-    if (host_or_url.includes("://")) {
-        [protocol, host_or_url] = host_or_url.split("://")
+    if (HostOrUrl.includes('://')) {
+        ;[protocol, HostOrUrl] = HostOrUrl.split('://')
     } else {
-        protocol = "https"
-        host_or_url = host_or_url.replace(/\/$/, '')
+        protocol = 'https'
+        HostOrUrl = HostOrUrl.replace(/\/$/, '')
     }
-    if (host_or_url.includes("/")) {
-        const splits = host_or_url.split("/");
-        [host, path] = [splits[0], "/" + splits.slice(1).join("/")]
-    } else {  // assume host only
-        path = ""
-        host = host_or_url
+    if (HostOrUrl.includes('/')) {
+        const splits = HostOrUrl.split('/')
+        ;[host, path] = [splits[0], '/' + splits.slice(1).join('/')]
+    } else {
+        // assume host only
+        path = ''
+        host = HostOrUrl
     }
-    if (host.includes(":")) {
-        const splits = host.split(":");
+    if (host.includes(':')) {
+        const splits = host.split(':')
         if (splits.length > 2) {
             throw new Error(`Too many ':' to get host and port: ${host}`)
         }
-        [host, port] = [splits[0], parseInt(splits[1])]
-
+        ;[host, port] = [splits[0], parseInt(splits[1])]
     } else {
-        if (protocol === "http") {
+        if (protocol === 'http') {
             port = 80
-        } else if (protocol === "https") {
+        } else if (protocol === 'https') {
             port = 443
         } else {
             throw new Error(
-                `Could not infer port from unknown protocol ${protocol}`)
+                `Could not infer port from unknown protocol ${protocol}`
+            )
         }
     }
     return {
         protocol,
         host,
         port,
-        path
+        path,
     }
 }
 
 
 export abstract class JsonRESTClientAbstract {
 
-    protocol: string = ""
-    host: string = ""
-    path: string = ""
+    protocol: string = ''
+    host: string = ''
+    path: string = ''
     port: number
 
     protected abstract httpRequest: t.HttpRequest
@@ -58,7 +59,7 @@ export abstract class JsonRESTClientAbstract {
 
     COMMON_HEADERS = {
         'Content-Type': 'application/json',
-        'Accept': 'application/json',
+        Accept: 'application/json',
     }
 
 
@@ -74,7 +75,7 @@ export abstract class JsonRESTClientAbstract {
      *
      * @returns void
      */
-    setAuthHeader(name: string, value: string) {
+    setAuthHeader (name: string, value: string) {
         if (value) {
             this.authHeaders[name] = value
         } else {
@@ -82,11 +83,11 @@ export abstract class JsonRESTClientAbstract {
         }
     }
 
-    constructor(host_or_url: string) {
+    constructor (HostOrUrl: string) {
         let urlParts: t.UrlParts
 
         try {
-            urlParts = getHostOrUrlParts(host_or_url)
+            urlParts = getHostOrUrlParts(HostOrUrl)
         } catch (err) {
             throw new e.InvalidConnectionDetails(err.message)
         }
@@ -100,45 +101,52 @@ export abstract class JsonRESTClientAbstract {
     }
 
 
-    public async request(path: string, opts: t.HttpOpts): Promise<any> {
-        let headers = Object.assign({}, this.COMMON_HEADERS, opts.headers)
+    public async request (path: string, opts: t.HttpOpts): Promise<any> {
+        const headers = Object.assign({}, this.COMMON_HEADERS, opts.headers)
         let rawData: any
-        let qs = ""
-        if (opts.method === "GET" && Object.keys(opts.data).length != 0) {
+        let qs = ''
+        if (opts.method === 'GET' && Object.keys(opts.data).length !== 0) {
             qs = toQueryString(opts.data, { allowDots: true })
         }
         try {
             rawData = await this.httpRequest({
                 protocol: this.protocol,
                 host: this.host,
-                path: `${this.path}/${path.replace(/^\//, '')}` + (qs ? `?${qs}` : ""),
+                path:
+                    `${this.path}/${path.replace(/^\//, '')}` +
+                    (qs ? `?${qs}` : ''),
                 headers: headers,
                 method: opts.method,
-                ...!qs && { data: opts.data },
-                ...this.port && { port: this.port },
+                ...(!qs && { data: opts.data }),
+                ...(this.port && { port: this.port }),
             })
         } catch (err) {
-            console.log(`Failed ${opts.method} request to ${path} (Host: ${this.host})`)
+            console.log(
+                `Failed ${opts.method} request to ${path} (Host: ${this.host})`
+            )
             throw err
         }
         let parsedData: any
         try {
-            parsedData = JSON.parse(rawData);
+            parsedData = JSON.parse(rawData)
         } catch (err) {
-            const printableData = rawData.length > 200 ? `${rawData.slice(0, 200)}..` : rawData
-            throw new e.InvalidJson(`Data is not parseable JSON: ${printableData}`)
+            const printableData =
+                rawData.length > 200 ? `${rawData.slice(0, 200)}..` : rawData
+            throw new e.InvalidJson(
+                `Data is not parseable JSON: ${printableData}`
+            )
         }
         return parsedData
     }
 
 
-    protected requireAuth(): void {
-        if (Object.keys(this.authHeaders).length == 0) {
-            throw new e.AuthenticationRequired("Authentication required")
+    protected requireAuth (): void {
+        if (Object.keys(this.authHeaders).length === 0) {
+            throw new e.AuthenticationRequired('Authentication required')
         }
     }
 
-    public async authRequest(path: string, opts: t.HttpOpts): Promise<any> {
+    public async authRequest (path: string, opts: t.HttpOpts): Promise<any> {
         this.requireAuth()
         opts.headers = Object.assign({}, this.authHeaders, opts.headers)
         return this.request(path, opts)
@@ -160,10 +168,13 @@ export abstract class JsonRESTClientAbstract {
 }
 
 
-t.httpMethods.forEach(method => {
-    JsonRESTClientAbstract.prototype[method.toLowerCase()] = async function(
-        path: string, data?: any, headers?: any) {
-        let opts: t.HttpOpts = {
+t.httpMethods.forEach((method) => {
+    JsonRESTClientAbstract.prototype[method.toLowerCase()] = async function (
+        path: string,
+        data?: any,
+        headers?: any
+    ) {
+        const opts: t.HttpOpts = {
             method: method,
             headers: headers || {},
             data: data || {},
@@ -171,9 +182,10 @@ t.httpMethods.forEach(method => {
         return this.request(path, opts)
     }
 
-    JsonRESTClientAbstract.prototype["$" + method.toLowerCase()] = async function(
-        path: string, data?: any, headers?: any) {
-        let opts: t.HttpOpts = {
+    JsonRESTClientAbstract.prototype[
+        '$' + method.toLowerCase()
+    ] = async function (path: string, data?: any, headers?: any) {
+        const opts: t.HttpOpts = {
             method: method,
             headers: headers || {},
             data: data || {},
@@ -188,11 +200,11 @@ export abstract class JsonRESTSessionClientAbstract extends JsonRESTClientAbstra
     abstract AUTH_HEADER: string
 
     private _apiToken: string
-    get apiToken(): string {
+    get apiToken (): string {
         return this._apiToken
     }
 
-    set apiToken(value: string) {
+    set apiToken (value: string) {
         this._apiToken = value
         this.onSetToken(value)
     }
@@ -204,7 +216,7 @@ export abstract class JsonRESTSessionClientAbstract extends JsonRESTClientAbstra
      *
      * @param apiToken  The new token string that was set.
      */
-    protected onSetToken(apiToken: string) {
+    protected onSetToken (apiToken: string) {
         this.setAuthHeader(this.AUTH_HEADER, apiToken)
     }
 
@@ -212,17 +224,19 @@ export abstract class JsonRESTSessionClientAbstract extends JsonRESTClientAbstra
     // Abstract classes implementation do not allow to play well with
     // implemented properties. We need this to avoid having issues when
     // setting token in constructors.
-    protected lazySetApiToken(value) {
+    protected lazySetApiToken (value) {
         this._apiToken = value
     }
 
-    protected requireAuth(): void {
-        if (Object.keys(this.authHeaders).length == 0) {
-            let apiToken = this.apiToken
+    protected requireAuth (): void {
+        if (Object.keys(this.authHeaders).length === 0) {
+            const apiToken = this.apiToken
             if (apiToken) {
                 this.onSetToken(apiToken)
             } else {
-                throw new e.AuthenticationRequired("Authentication required: No token set")
+                throw new e.AuthenticationRequired(
+                    'Authentication required: No token set'
+                )
             }
         }
     }
@@ -234,7 +248,7 @@ export abstract class JsonRESTPersistentClientAbstract extends JsonRESTSessionCl
 
     protected abstract internalId: string
     protected abstract persistentStore: t.IPersistentStore
-    protected abstract requestLogin(): void
+    protected abstract requestLogin (): void
 
 
     /**
@@ -242,8 +256,8 @@ export abstract class JsonRESTPersistentClientAbstract extends JsonRESTSessionCl
      * any character that needs encoding. Used in IPersistentStore
      * to lower down constraints on these stores.
      */
-    private get simpleId(): string {
-        return this.base64Encode(this.internalId).replace(/=/g, "")
+    private get simpleId (): string {
+        return this.base64Encode(this.internalId).replace(/=/g, '')
     }
 
     /**
@@ -252,18 +266,21 @@ export abstract class JsonRESTPersistentClientAbstract extends JsonRESTSessionCl
      *
      * @param apiToken  The new token string that was set.
      */
-    protected onSetToken(apiToken: string) {
+    protected onSetToken (apiToken: string) {
         super.onSetToken(apiToken)
-        if (!!apiToken) {
+        if (apiToken) {
             this.persistentStore.set(`token_${this.simpleId}`, apiToken)
         } else {
             this.persistentStore.del(`token_${this.simpleId}`)
         }
     }
 
-    protected requireAuth(): void {
+    protected requireAuth (): void {
         if (!this.apiToken) {
-            let persistentToken = this.persistentStore.get(`token_${this.simpleId}`, null)
+            const persistentToken = this.persistentStore.get(
+                `token_${this.simpleId}`,
+                null
+            )
             if (persistentToken) {
                 super.apiToken = persistentToken
             }
@@ -271,16 +288,16 @@ export abstract class JsonRESTPersistentClientAbstract extends JsonRESTSessionCl
         super.requireAuth()
     }
 
-    public async authRequest(path: string, opts: t.HttpOpts): Promise<any> {
+    public async authRequest (path: string, opts: t.HttpOpts): Promise<any> {
         try {
             return await super.authRequest(path, opts)
         } catch (err) {
             // XXXvlab: err instanceof e.AuthenticationRequired is giving false
             // despite it seeming to be perfectly valid.
             //if (err instanceof e.AuthenticationRequired) {
-            if (err.constructor.name === "AuthenticationRequired") {
+            if (err.constructor.name === 'AuthenticationRequired') {
                 this.apiToken = null
-                if (!!this.requestLogin) {
+                if (this.requestLogin) {
                     this.requestLogin()
                 }
             }
@@ -294,7 +311,7 @@ export abstract class JsonRESTPersistentClientAbstract extends JsonRESTSessionCl
      * @returns void
      *
      */
-    async logout(): Promise<void> {
+    async logout (): Promise<void> {
         this.apiToken = null
     }
 

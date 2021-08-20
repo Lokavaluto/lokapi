@@ -1,11 +1,11 @@
 
 export const httpMethods = [
-    "GET",
-    "POST",
-    "PUT",
-    "DELETE",
-    "PATCH",
-    "HEAD"
+    'GET',
+    'POST',
+    'PUT',
+    'DELETE',
+    'PATCH',
+    'HEAD'
 ] as const
 
 export type httpMethod = typeof httpMethods[number]
@@ -36,10 +36,15 @@ export type Base64Encode = (s: string) => string
 export type restMethod = (path: string, data?: any, headers?: any) => any
 
 
+export interface JsonData {
+    [index: string]: string | number | JsonData | JsonData[]
+}
+
+
 export type HttpOpts = {
     method: httpMethod
     headers?: {}
-    data?: {}
+    data?: JsonData | [string, JsonData][]
 }
 
 export interface IPersistentStore {
@@ -47,9 +52,6 @@ export interface IPersistentStore {
     set(key: string, value: string): void
     del(key: string): void
 }
-
-
-export interface JsonData { [index: string]: string | number | JsonData | JsonData[] }
 
 
 export interface IBackend {
@@ -87,16 +89,6 @@ export interface ITransaction extends IBridge {
     relatedUser: string
 }
 
-
-export interface IAccount extends IBridge {
-
-    getBalance(): Promise<string>
-    getSymbol(): Promise<string>
-
-    transfer(recipient: IRecipient, amount: number, description: string): Promise<IPayment>
-}
-
-
 export interface IContact extends IBridge {
 
     /**
@@ -120,10 +112,18 @@ export interface IContact extends IBridge {
 
 }
 
-export interface IRecipient extends IContact {
 
+export interface IRecipient extends IContact {
     transfer(amount: number, description): Promise<IPayment>
 }
 
 
+export interface IAccount extends IBridge {
 
+    getBalance(): Promise<string>
+    getSymbol(): Promise<string>
+
+    transfer(recipient: IRecipient,
+             amount: number,
+             description: string): Promise<IPayment>
+}
