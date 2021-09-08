@@ -3,8 +3,8 @@
 <head>
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
-	<title>LokAPI - v0.0.16-alpha.202109081429</title>
-	<meta name="description" content="Documentation for LokAPI - v0.0.16-alpha.202109081429">
+	<title>LokAPI - v0.0.16-alpha.202109081430</title>
+	<meta name="description" content="Documentation for LokAPI - v0.0.16-alpha.202109081430">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<link rel="stylesheet" href="assets/css/main.css">
 	<script async src="assets/js/search.js" id="search-script"></script>
@@ -23,7 +23,7 @@
 						<li class="state loading">Preparing search index...</li>
 						<li class="state failure">The search index is not available</li>
 					</ul>
-					<a href="index.html" class="title">LokAPI - v0.0.16-alpha.202109081429</a>
+					<a href="index.html" class="title">LokAPI - v0.0.16-alpha.202109081430</a>
 				</div>
 				<div class="table-cell" id="tsd-widgets">
 					<div id="tsd-filter">
@@ -50,7 +50,7 @@
 	</div>
 	<div class="tsd-page-title">
 		<div class="container">
-			<h1>LokAPI - v0.0.16-alpha.202109081429</h1>
+			<h1>LokAPI - v0.0.16-alpha.202109081430</h1>
 		</div>
 	</div>
 </header>
@@ -399,6 +399,297 @@
 					and usage than other function and do not require you to build a query
 					string as it&#39;ll encode in the URL as a querystring the data you&#39;ve
 				provided.</p>
+				<a href="#changelog" id="changelog" style="color: inherit; text-decoration: none;">
+					<h1>Changelog</h1>
+				</a>
+				<a href="#0016-2021-09-08" id="0016-2021-09-08" style="color: inherit; text-decoration: none;">
+					<h2>0.0.16 (2021-09-08)</h2>
+				</a>
+				<a href="#new" id="new" style="color: inherit; text-decoration: none;">
+					<h3>New</h3>
+				</a>
+				<ul>
+					<li><p>Add <code>.searchProRecipients()</code> and fix <code>.searchRecipients()</code> [Valentin Lab]</p>
+						<p>These both function are temporarily provided to search on professional
+							and non-professional recipients. Note that the internal logic is
+						currently taken to the odoo side. Paging is temporarily disabled.</p>
+					</li>
+				</ul>
+				<a href="#changes" id="changes" style="color: inherit; text-decoration: none;">
+					<h3>Changes</h3>
+				</a>
+				<ul>
+					<li><p>Upgrade to <code>lokAPI.searchRecipients()</code> [Valentin Lab]</p>
+						<p>It&#39;ll:</p>
+						<ul>
+							<li>return all favorite recipients if search string is empty</li>
+							<li>always sort results by putting favorite first</li>
+						</ul>
+					</li>
+				</ul>
+				<a href="#fix" id="fix" style="color: inherit; text-decoration: none;">
+					<h3>Fix</h3>
+				</a>
+				<ul>
+					<li><p>Catch odoo unauthorized HTML <code>HttpErrors</code> as expected. [Valentin Lab]</p>
+					</li>
+					<li><p><code>lokAPI.{,$}get(..)</code> query-string management support for objects. [Valentin Lab]</p>
+					</li>
+				</ul>
+				<a href="#0014-2021-08-04" id="0014-2021-08-04" style="color: inherit; text-decoration: none;">
+					<h2>0.0.14 (2021-08-04)</h2>
+				</a>
+				<a href="#new-1" id="new-1" style="color: inherit; text-decoration: none;">
+					<h3>New</h3>
+				</a>
+				<ul>
+					<li><p>Add <code>lokAPI.getRecipientsFromUrl(..)</code> support. [Valentin Lab]</p>
+					</li>
+					<li><p>Add <code>.getCreditUrl()</code> support to accounts. [Valentin Lab]</p>
+					</li>
+				</ul>
+				<a href="#changes-1" id="changes-1" style="color: inherit; text-decoration: none;">
+					<h3>Changes</h3>
+				</a>
+				<ul>
+					<li>Using new api GET instead of POST for <code>partner_search</code> [Valentin Lab]</li>
+				</ul>
+				<a href="#fix-1" id="fix-1" style="color: inherit; text-decoration: none;">
+					<h3>Fix</h3>
+				</a>
+				<ul>
+					<li><p>Request login when cyclos backend&#39;s token incorrect also. [Valentin Lab]</p>
+					</li>
+					<li><p><code>.{,$}get(..)</code> support for array data values. [Valentin Lab]</p>
+					</li>
+				</ul>
+				<a href="#0013-2021-07-24" id="0013-2021-07-24" style="color: inherit; text-decoration: none;">
+					<h2>0.0.13 (2021-07-24)</h2>
+				</a>
+				<a href="#new-2" id="new-2" style="color: inherit; text-decoration: none;">
+					<h3>New</h3>
+				</a>
+				<ul>
+					<li><p>API changes around object-like usage. [Valentin Lab]</p>
+						<p>Please note that:</p>
+						<ul>
+							<li><p><code>lokAPI.searchRecipient()</code> was renamed
+								<code>lokAPI.searchRecipients()</code> (added an &#39;s&#39;)</p>
+							</li>
+							<li><p><code>lokAPI.getUserInfo()</code> was renamed <code>lokAPI.getMyContact()</code></p>
+								<p>This method doesn&#39;t take any argument anymore. We&#39;ll introduce a
+								<code>lokAPI.getContact()</code> when it&#39;ll appears in user stories.</p>
+							</li>
+							<li><p><code>lokAPI.transfer(recipient, amount, desc)</code> was moved to
+								<code>recipient.transfer(amount, desc)</code></p>
+								<p>Note that an <code>IRecipient</code> is an <code>IContact</code>, but not the reverse,
+								so you can use <code>.transfer()</code> only on <code>IRecipient</code>&#39;s object.</p>
+							</li>
+							<li><p><code>lokAPI.{set,unset,toggle}Favorite(contact)</code> were moved to
+								<code>contact.{set,unset,toggle}Favorite()</code>.</p>
+								<p>Note that an <code>IRecipient</code> is an <code>IContact</code>, so you can use these
+								on both objects.</p>
+							</li>
+						</ul>
+					</li>
+				</ul>
+				<a href="#0012-2021-07-23" id="0012-2021-07-23" style="color: inherit; text-decoration: none;">
+					<h2>0.0.12 (2021-07-23)</h2>
+				</a>
+				<a href="#new-3" id="new-3" style="color: inherit; text-decoration: none;">
+					<h3>New</h3>
+				</a>
+				<ul>
+					<li><p><code>lokAPI.{unset,set,toggle}Favorite()</code> implemented with API 3. [Valentin Lab]</p>
+						<p>This API is more efficient and allow to force set/unset. We are keeping
+						the <code>toggle</code> for lib users.</p>
+					</li>
+					<li><p>Add <code>http</code> support and port specification. [Valentin Lab]</p>
+					</li>
+				</ul>
+				<a href="#0011-2021-07-21" id="0011-2021-07-21" style="color: inherit; text-decoration: none;">
+					<h2>0.0.11 (2021-07-21)</h2>
+				</a>
+				<a href="#new-4" id="new-4" style="color: inherit; text-decoration: none;">
+					<h3>New</h3>
+				</a>
+				<ul>
+					<li>Add ``lokapi.toggleFavorite(..)` [Valentin Lab]</li>
+				</ul>
+				<a href="#changes-2" id="changes-2" style="color: inherit; text-decoration: none;">
+					<h3>Changes</h3>
+				</a>
+				<ul>
+					<li><p>Make <code>.getUserInfo()</code> without argument return currently logged in user info. [Valentin Lab]</p>
+						<p>This will get important when using only the session token and needing
+						to get back some information. We don&#39;t have our own <code>userId</code>.</p>
+					</li>
+				</ul>
+				<a href="#0010-2021-07-08" id="0010-2021-07-08" style="color: inherit; text-decoration: none;">
+					<h2>0.0.10 (2021-07-08)</h2>
+				</a>
+				<a href="#changes-3" id="changes-3" style="color: inherit; text-decoration: none;">
+					<h3>Changes</h3>
+				</a>
+				<ul>
+					<li>Add doc for <code>getTransactions()</code> [Valentin Lab]</li>
+				</ul>
+				<a href="#009-2021-07-08" id="009-2021-07-08" style="color: inherit; text-decoration: none;">
+					<h2>0.0.9 (2021-07-08)</h2>
+				</a>
+				<a href="#new-5" id="new-5" style="color: inherit; text-decoration: none;">
+					<h3>New</h3>
+				</a>
+				<ul>
+					<li>Add <code>.getTransactions()</code> with cyclos implementation. [Valentin Lab]</li>
+				</ul>
+				<a href="#008-2021-07-08" id="008-2021-07-08" style="color: inherit; text-decoration: none;">
+					<h2>0.0.8 (2021-07-08)</h2>
+				</a>
+				<a href="#new-6" id="new-6" style="color: inherit; text-decoration: none;">
+					<h3>New</h3>
+				</a>
+				<ul>
+					<li><p>Add <code>lokAPI.transfer(..)</code> to management payment. [Valentin Lab]</p>
+					</li>
+					<li><p>Add <code>LokAPI.searchRecipient(..)</code> [Valentin Lab]</p>
+					</li>
+				</ul>
+				<a href="#007-2021-07-08" id="007-2021-07-08" style="color: inherit; text-decoration: none;">
+					<h2>0.0.7 (2021-07-08)</h2>
+				</a>
+				<a href="#new-7" id="new-7" style="color: inherit; text-decoration: none;">
+					<h3>New</h3>
+				</a>
+				<ul>
+					<li><p>Compatibility with odoo server version 2. [Valentin Lab]</p>
+					</li>
+					<li><p>Catch HTML dev errors of odoo API. [Valentin Lab]</p>
+					</li>
+					<li><p>Add persistent session management. [Valentin Lab]</p>
+					</li>
+					<li><p><code>JsonRESTClientAbstract</code> support passing data as querystring when using <code>GET</code> method. [Valentin Lab]</p>
+					</li>
+				</ul>
+				<a href="#changes-4" id="changes-4" style="color: inherit; text-decoration: none;">
+					<h3>Changes</h3>
+				</a>
+				<ul>
+					<li>Refactor down the <code>apiToken</code> mecanism. [Valentin Lab]</li>
+				</ul>
+				<a href="#fix-2" id="fix-2" style="color: inherit; text-decoration: none;">
+					<h3>Fix</h3>
+				</a>
+				<ul>
+					<li>Authentication state incorrectly checked. [Valentin Lab]</li>
+				</ul>
+				<a href="#006-2021-07-05" id="006-2021-07-05" style="color: inherit; text-decoration: none;">
+					<h2>0.0.6 (2021-07-05)</h2>
+				</a>
+				<a href="#changes-5" id="changes-5" style="color: inherit; text-decoration: none;">
+					<h3>Changes</h3>
+				</a>
+				<ul>
+					<li>Prefer <code>getMethod()</code> syntax to getters as those will be promises. [Valentin Lab]</li>
+				</ul>
+				<a href="#fix-3" id="fix-3" style="color: inherit; text-decoration: none;">
+					<h3>Fix</h3>
+				</a>
+				<ul>
+					<li>Add example with arguments in documents. [Valentin Lab]</li>
+				</ul>
+				<a href="#005-2021-07-05" id="005-2021-07-05" style="color: inherit; text-decoration: none;">
+					<h2>0.0.5 (2021-07-05)</h2>
+				</a>
+				<a href="#new-8" id="new-8" style="color: inherit; text-decoration: none;">
+					<h3>New</h3>
+				</a>
+				<ul>
+					<li><p>Provide advanced <code>get</code>, <code>post</code>, <code>put</code>, <code>delete</code> helpers on <code>OdooRESTAbstract</code> with doc. [Valentin Lab]</p>
+					</li>
+					<li><p>Can set token directly to access authenticated endpoints. [Valentin Lab]</p>
+						<p>This will allow to authenticate without login and password, but
+						using only the =apiToken=.</p>
+					</li>
+					<li><p>Ignore but log attempts to load a missing backend. [Valentin Lab]</p>
+					</li>
+				</ul>
+				<a href="#changes-6" id="changes-6" style="color: inherit; text-decoration: none;">
+					<h3>Changes</h3>
+				</a>
+				<ul>
+					<li>Provide convenience method to request on all backends. [Valentin Lab]</li>
+				</ul>
+				<a href="#fix-4" id="fix-4" style="color: inherit; text-decoration: none;">
+					<h3>Fix</h3>
+				</a>
+				<ul>
+					<li>Move level of headings up one. [Valentin Lab]</li>
+				</ul>
+				<a href="#004-2021-07-01" id="004-2021-07-01" style="color: inherit; text-decoration: none;">
+					<h2>0.0.4 (2021-07-01)</h2>
+				</a>
+				<a href="#new-9" id="new-9" style="color: inherit; text-decoration: none;">
+					<h3>New</h3>
+				</a>
+				<ul>
+					<li><p>Ignore but log attempts to load a missing backend. [Valentin Lab]</p>
+					</li>
+					<li><p>Manage API version information. [Valentin Lab]</p>
+						<p>For now, we&#39;ll only issue a warning in console</p>
+					</li>
+					<li><p>Updated to new api version 1. [Valentin Lab]</p>
+					</li>
+				</ul>
+				<a href="#changes-7" id="changes-7" style="color: inherit; text-decoration: none;">
+					<h3>Changes</h3>
+				</a>
+				<ul>
+					<li>Changing from mixin to abstract class model. [Valentin Lab]</li>
+				</ul>
+				<a href="#fix-5" id="fix-5" style="color: inherit; text-decoration: none;">
+					<h3>Fix</h3>
+				</a>
+				<ul>
+					<li><p>Still need <code>apiToken</code> [Valentin Lab]</p>
+						<p>We&#39;ll be able to remove <code>apiToken</code> when client will not
+						need to use it.</p>
+					</li>
+				</ul>
+				<a href="#003-2021-06-30" id="003-2021-06-30" style="color: inherit; text-decoration: none;">
+					<h2>0.0.3 (2021-06-30)</h2>
+				</a>
+				<a href="#new-10" id="new-10" style="color: inherit; text-decoration: none;">
+					<h3>New</h3>
+				</a>
+				<ul>
+					<li><p>Manage API version information. [Valentin Lab]</p>
+						<p>For now, we&#39;ll only issue a warning in console</p>
+					</li>
+					<li><p>Updated to new api version 1. [Valentin Lab]</p>
+					</li>
+				</ul>
+				<a href="#fix-6" id="fix-6" style="color: inherit; text-decoration: none;">
+					<h3>Fix</h3>
+				</a>
+				<ul>
+					<li><p><code>odoo</code> property should be public. [Valentin Lab]</p>
+						<p>As we removed delegations to odoo, we expect API client to use this
+						attribute.</p>
+					</li>
+				</ul>
+				<a href="#002-2021-06-27" id="002-2021-06-27" style="color: inherit; text-decoration: none;">
+					<h2>0.0.2 (2021-06-27)</h2>
+				</a>
+				<a href="#new-11" id="new-11" style="color: inherit; text-decoration: none;">
+					<h3>New</h3>
+				</a>
+				<ul>
+					<li><p>Add backends, accounts, balance and symbol. [Valentin Lab]</p>
+					</li>
+					<li><p>Store <code>accounts</code> information upon authenticate. [Valentin Lab]</p>
+					</li>
+				</ul>
 			</div>
 		</div>
 		<div class="col-4 col-menu menu-sticky-wrap menu-highlight">
