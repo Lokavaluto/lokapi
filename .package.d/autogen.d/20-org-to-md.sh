@@ -5,8 +5,8 @@ depends org-ruby
 ##
 ## This conversion is done so that `npm publish` can display
 ## the content of the `README.org` correctly. Note that github
-## supports `.org`. And the API http page will support its own
-## convertion in ``.github/workflows/publish-doc`
+## supports `.org`. Notice that the API http page relies also
+## on this.
 ##
 org-ruby --translate markdown README.org > README.md
 rm README.org
