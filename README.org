@@ -323,7 +323,7 @@ your own information.:
 #+begin_src typescript
 
 // My own information
-let me = await lokAPI.getContact()
+let me = await lokAPI.getMyContact()
 console.log(`My user name: ${me.name}`)
 
 #+end_src
