@@ -19,6 +19,7 @@ export type coreHttpOpts = {
     headers?: {}
     port?: number
     data?: {}
+    responseHeaders?: {[k: string]: any}
 }
 
 
@@ -33,7 +34,13 @@ export type UrlParts = {
 export type HttpRequest = (opts: coreHttpOpts) => Object
 export type Base64Encode = (s: string) => string
 
-export type restMethod = (path: string, data?: any, headers?: any) => any
+
+export type restMethod = (
+    path: string,
+    data?: any,
+    headers?: any,
+    responseHeaders?: {[k: string]: any}
+) => any
 
 
 export interface JsonData {
@@ -45,6 +52,7 @@ export type HttpOpts = {
     method: httpMethod
     headers?: {}
     data?: JsonData | [string, JsonData][]
+    responseHeaders?: {[k: string]: any}
 }
 
 export interface IPersistentStore {

@@ -166,21 +166,23 @@ t.httpMethods.forEach((method) => {
     OdooRESTAbstract.prototype[methodLc] = function (
         path: string,
         data?: any,
-        headers?: any
+        headers?: any,
+        responseHeaders?: {[k: string]: any}
     ) {
         return JsonRESTPersistentClientAbstract.prototype[methodLc].apply(
             this,
-            [`/lokavaluto_api/public${path}`, data, headers]
+            [`/lokavaluto_api/public${path}`, data, headers, responseHeaders]
         )
     }
 
     OdooRESTAbstract.prototype['$' + methodLc] = function (
         path: string,
         data?: any,
-        headers?: any
+        headers?: any,
+        responseHeaders?: {[k: string]: any}
     ) {
         return JsonRESTPersistentClientAbstract.prototype[
             '$' + methodLc
-        ].apply(this, [`/lokavaluto_api/private${path}`, data, headers])
+        ].apply(this, [`/lokavaluto_api/private${path}`, data, headers, responseHeaders])
     }
 })

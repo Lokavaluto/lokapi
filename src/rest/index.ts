@@ -117,6 +117,7 @@ export abstract class JsonRESTClientAbstract {
                     (qs ? `?${qs}` : ''),
                 headers: headers,
                 method: opts.method,
+                responseHeaders: opts.responseHeaders,
                 ...(!qs && { data: opts.data }),
                 ...(this.port && { port: this.port }),
             })
@@ -171,23 +172,31 @@ t.httpMethods.forEach((method) => {
     JsonRESTClientAbstract.prototype[method.toLowerCase()] = async function (
         path: string,
         data?: any,
-        headers?: any
+        headers?: any,
+        responseHeaders?: {[k: string]: any}
     ) {
         const opts: t.HttpOpts = {
             method: method,
             headers: headers || {},
             data: data || {},
+            responseHeaders
         }
         return this.request(path, opts)
     }
 
     JsonRESTClientAbstract.prototype[
         '$' + method.toLowerCase()
-    ] = async function (path: string, data?: any, headers?: any) {
+    ] = async function (
+        path: string,
+        data?: any,
+        headers?: any,
+        responseHeaders?: {[k: string]: any}
+    ) {
         const opts: t.HttpOpts = {
             method: method,
             headers: headers || {},
             data: data || {},
+            responseHeaders
         }
         return this.authRequest(path, opts)
     }

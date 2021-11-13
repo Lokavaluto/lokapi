@@ -117,6 +117,11 @@ class NodeLokAPI extends LokApiAbstract {
                         reject(new LokAPIExc.HttpError(statusCode, res.statusMessage, rawData, res))
                         return
                     } else {
+                        if (opts.responseHeaders) {
+                            for (const header in res.headers) {
+                                opts.responseHeaders[header] = res.headers[header]
+                            }
+                        }
                         resolve(rawData)
                     }
                 })
@@ -161,6 +166,8 @@ var lokAPI = new LokAPI(
 
 Using =@nativescript-community/https= as HTTP request implementation:
 
+Note that this example couldn't be thoroughly tested as much as
+it should. Use with caution.
 
 #+begin_src typescript
   import * as https from '@nativescript-community/https';
@@ -179,7 +186,7 @@ Using =@nativescript-community/https= as HTTP request implementation:
         setString("lokapi_" + key, value)
       }
       del(key: string): void {
-          removeSetting(key)
+          removeSetting("lokapi_" + key)
       }
   }
 
@@ -208,6 +215,12 @@ Using =@nativescript-community/https= as HTTP request implementation:
 
           if (!statusCode || statusCode.toString().slice(0, 1) !== '2') {
               throw new LokAPIExc.HttpError(statusCode, response.reason, "", response)
+          }
+
+          if (opts.responseHeaders) {
+              for (const header in response.headers) {
+                  opts.responseHeaders[header] = response.headers[header]
+              }
           }
 
           return rawData
