@@ -151,10 +151,10 @@ export abstract class JsonRESTClientAbstract {
         opts.headers = Object.assign({}, this.authHeaders, opts.headers)
         return this.request(path, opts)
     }
+}
 
 
-    // Make typescript happy
-
+export interface JsonRESTClientAbstract {
     get: t.restMethod
     post: t.restMethod
     delete: t.restMethod
@@ -164,7 +164,6 @@ export abstract class JsonRESTClientAbstract {
     $post: t.restMethod
     $delete: t.restMethod
     $put: t.restMethod
-
 }
 
 
