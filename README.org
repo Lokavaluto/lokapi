@@ -122,8 +122,11 @@ class NodeLokAPI extends LokApiAbstract {
                 })
             })
 
-            if (opts.data) req.write(JSON.stringify(opts.data))
-
+            if (opts.data) {
+                if (typeof opts.data !== "string")
+                    opts.data = JSON.stringify(opts.data)
+                req.write(opts.data)
+            }
             req.end()
             req.on('error', (err: any) => {
                 console.error(`Encountered an error trying to make a request: ${err.message}`);
