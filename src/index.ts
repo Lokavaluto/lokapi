@@ -45,13 +45,18 @@ abstract class LokAPIAbstract extends OdooRESTAbstract {
         // decorator to allow fine control of when we required a
         // fetch.
         if (!this._backendCredentials) {
-            this._backendCredentials = await this.$post(
-                '/partner/backend_credentials'
-            )
+            if (!this._backendCredentialsPromise) {
+                this._backendCredentialsPromise = this.$post(
+                    '/partner/backend_credentials'
+                )
+            }
+            this._backendCredentials = await this._backendCredentialsPromise
+            this._backendCredentialsPromise = null
         }
         return this._backendCredentials
     }
 
+    private _backendCredentialsPromise: any
     private _backendCredentials: any
 
 
@@ -67,12 +72,20 @@ abstract class LokAPIAbstract extends OdooRESTAbstract {
         // decorator to allow fine control of when we required a
         // fetch.
         if (!this._backends) {
-            const backendCredentials = await this.getBackendCredentials()
-            this._backends = this.makeBackends(backendCredentials)
+            if (!this._backendsPromise) {
+                const self = this
+                this._backendsPromise = (async function () {
+                    const backendCredentials = await self.getBackendCredentials()
+                    return self.makeBackends(backendCredentials)
+                })()
+            }
+            this._backends = await this._backendsPromise
+            this._backendsPromise = null
         }
         return this._backends
     }
 
+    private _backendsPromise: any
     private _backends: any
 
     private makeBackends (backendCredentials: any): any {
