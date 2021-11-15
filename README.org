@@ -213,8 +213,8 @@ it should. Use with caution.
               response = await https.request(nativeRequestOpts)
           } catch (err) {
               console.error(
-                  `Encountered an error trying to make a request: ${err.message}`);
-              reject(new LokAPIExc.RequestFailed(err.message))
+                  `Encountered an error trying to make a request: ${err.message}`)
+              throw new LokAPIExc.RequestFailed(err.message)
           }
 
           const statusCode = response.statusCode;
