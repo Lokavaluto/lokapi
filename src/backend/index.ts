@@ -50,6 +50,3 @@ export abstract class BackendAbstract {
     }
 }
 
-
-export var BackendFactories = {}
-

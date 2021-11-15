@@ -35,6 +35,7 @@ environment, you might have different way to implement these.
 To inject these exchangeable dependency, you are invited to subclass
 LokAPIAbstract and define these objects:
 
+- BackendFactories :: A mapping of currency backends loaded
 - httpRequest :: an implementation of =HTTPRequest=
 - base64Encode :: a function to encode a string to base64
 - persistentStore :: an object implementing this interface:
@@ -73,6 +74,8 @@ import https from "https"
 import { VueCookieNext } from 'vue-cookie-next'
 import { LokAPIAbstract, e as LokAPIExc, t as LokAPIType } from "lokapi"
 
+import cyclos from 'lokapi-backend-cyclos'
+
 
 class cookieStore implements LokAPIType.IPersistentStore {
   constructor() {
@@ -98,6 +101,10 @@ class cookieStore implements LokAPIType.IPersistentStore {
 const requesters: any = { http, https }
 
 class NodeLokAPI extends LokApiAbstract {
+
+    BackendFactories = {
+        cyclos,
+    }
 
     httpRequest = (opts: LokAPIType.coreHttpOpts) => {
         const httpsOpts = {
@@ -181,8 +188,9 @@ it should. Use with caution.
 
   import { LokAPIAbstract, e as LokAPIExc, t as LokAPIType } from "lokapi"
 
-
   import { getString, remove as removeSetting, setString } from '@nativescript/core/application-settings';
+
+  import cyclos from 'lokapi-backend-cyclos'
 
 
   class applicationSetting implements LokAPIType.IPersistentStore {
@@ -199,6 +207,10 @@ it should. Use with caution.
 
 
   class NativeLokAPI extends LokAPIAbstract {
+
+      BackendFactories = {
+          cyclos,
+      }
 
       httpRequest = async (opts: LokAPIType.coreHttpOpts) => {
           const nativeRequestOpts = {

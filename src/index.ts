@@ -6,15 +6,14 @@ import * as t from './type'
 
 import { mux } from './generator'
 
-import { BackendFactories, BackendAbstract } from './backend'
+import { BackendAbstract } from './backend'
 import { getHostOrUrlParts } from './rest'
-
-// Load backends
-
-import './backend/cyclos'
 
 
 abstract class LokAPIAbstract extends OdooRESTAbstract {
+
+    abstract BackendFactories: { [k:string]: any }
+
 
     /**
      * Log in to Lokavaluto Odoo server target API.
@@ -91,10 +90,11 @@ abstract class LokAPIAbstract extends OdooRESTAbstract {
     private _backends: any
 
     private makeBackends (backendCredentials: any): any {
+        const self = this
         const backends = {}
         const { httpRequest, base64Encode, persistentStore, requestLogin } = this
         backendCredentials.forEach((backendData: any) => {
-            const BackendClassAbstract = BackendFactories[backendData.type]
+            const BackendClassAbstract = <any>self.BackendFactories[backendData.type]
             if (!BackendClassAbstract) {
                 console.log(
                     `Data received for unknown backend ${backendData.type}`
