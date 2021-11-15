@@ -78,7 +78,13 @@ class cookieStore implements LokAPIType.IPersistentStore {
     VueCookieNext.config({ expire: '7d' })
   }
   get(key: string, defaultValue?: string): string {
-    return VueCookieNext.getCookie("lokapi_" + key)
+    let value = VueCookieNext.getCookie("lokapi_" + key)
+    // XXXvlab: CookieViewNext is JSON.parsing string sometimes and this
+    // breaks interface !
+    if (value !== null && typeof value === "object") {
+        return JSON.stringify(value)
+    }
+    return value
   }
   set(key: string, value: string): void {
     VueCookieNext.setCookie("lokapi_" + key, value)
