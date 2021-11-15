@@ -86,16 +86,15 @@ export interface IPayment extends IBridge {
 
 
 export interface ITransaction extends IBridge {
-    amount: number
+    amount: string      // Don't want fancy rounding issues
     currency: string
-    date: string
+    date: Date
     description: string
     id: string
-    kind: string
     related: string
-    relatedKind: string
-    relatedUser: string
+    relatedUser: {[index: string]: any}
 }
+
 
 export interface IContact extends IBridge {
 

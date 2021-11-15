@@ -14,7 +14,7 @@ export class CyclosTransaction extends BridgeObject implements t.ITransaction {
     }
 
     get date () {
-        return this.jsonData.cyclos.date
+        return new Date(this.jsonData.cyclos.date)
     }
 
     get description () {
@@ -25,16 +25,8 @@ export class CyclosTransaction extends BridgeObject implements t.ITransaction {
         return this.jsonData.cyclos.id
     }
 
-    get kind () {
-        return this.jsonData.cyclos.kind
-    }
-
     get related () {
         return this.jsonData.cyclos.related
-    }
-
-    get relatedKind () {
-        return this.jsonData.cyclos.relatedKind
     }
 
     get relatedUser () {
