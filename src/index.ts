@@ -173,6 +173,7 @@ abstract class LokAPIAbstract extends OdooRESTAbstract {
             order: 'is_favorite desc, name',
         })
         const recipients = []
+        const markBackend = Object.keys(backends).length > 1
         partners.rows.forEach((partnerData: any) => {
             Object.keys(partnerData.monujo_backends).forEach(
                 (backendId: string) => {
@@ -180,6 +181,7 @@ abstract class LokAPIAbstract extends OdooRESTAbstract {
                         partnerData
                     )
                     backendRecipients.forEach((recipient: any) => {
+                        recipient.markBackend = markBackend
                         recipients.push(recipient)
                     })
                 }
