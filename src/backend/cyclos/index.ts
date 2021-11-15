@@ -4,6 +4,8 @@ import { JsonRESTPersistentClientAbstract } from '../../rest'
 import * as e from '../../exception'
 import * as t from '../../type'
 
+import { mux } from '../../generator'
+
 import { CyclosAccount } from './account'
 import { CyclosRecipient } from './recipient'
 import { CyclosTransaction } from './transaction'
@@ -118,17 +120,12 @@ export abstract class CyclosBackendAbstract extends BackendAbstract {
     }
 
 
-    public async getTransactions (): Promise<any> {
-        const backendTransactions = []
-        for (const id in this.userAccounts) {
-            const userAccount = this.userAccounts[id]
-            // XXXvlab: these promises should be awaited in parallel
-            const transactions = await userAccount.getTransactions()
-            transactions.forEach((transaction: any) => {
-                backendTransactions.push(transaction)
-            })
-        }
-        return backendTransactions
+    public async * getTransactions (order): AsyncGenerator {
+        yield * mux(
+            Object.values(this.userAccounts).map(
+                (u: CyclosUserAccountAbstract) => u.getTransactions(order)),
+            order
+        )
     }
 
 }
@@ -165,21 +162,29 @@ export abstract class CyclosUserAccountAbstract extends JsonRESTPersistentClient
         return `cyclos:${this.ownerId}@${this.host}`
     }
 
-    public async getTransactions (): Promise<any> {
-        const jsonTransactions = await this.$get(
-            `/${this.ownerId}/transactions`
-        )
-        const transactions = []
-        jsonTransactions.forEach((jsonTransactionData: any) => {
-            transactions.push(
-                new CyclosTransaction(
+    public async * getTransactions (order): AsyncGenerator {
+        let responseHeaders: {[k:string]: string}
+        let page = 0
+        let jsonTransactions: any
+
+        while (true) {
+            responseHeaders = {}
+            jsonTransactions = await this.$get(
+                `/${this.ownerId}/transactions`, { page },
+                {}, responseHeaders
+            )
+            for (let idx = 0; idx < jsonTransactions.length; idx++) {
+                yield new CyclosTransaction(
                     { cyclos: this, ...this.backends },
                     this,
-                    { cyclos: jsonTransactionData }
+                    { cyclos: jsonTransactions[idx] }
                 )
-            )
-        })
-        return transactions
+            }
+            if (responseHeaders['x-has-next-page'] === 'false') {
+                return
+            }
+            page++
+        }
     }
 
     public async request (path: string, opts: t.HttpOpts): Promise<any> {

@@ -383,9 +383,9 @@ List past transactions for the current logged in user.
 #+begin_src typescript
 let transactions = await $lokapi.getTransactions()
 
-transactions.forEach((tr:any) => {
+for (const tr of transactions) {
     console.log(`  ${tr.date} ${tr.amount} ${tr.currency}`)
-})
+}
 #+end_src
 
 

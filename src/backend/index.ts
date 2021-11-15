@@ -35,7 +35,21 @@ export abstract class BackendAbstract {
         this.jsonData = jsonData
     }
 
+    /**
+     * By using a AsyncGenerator, getTransactions() allows :
+     * - client app to request the amount of transaction they need at the pace
+     *   they need.
+     * - the backend implementation to make http request by batches of the size
+     *   they want to optimize caching of server or other consideration.
+     * It is also a constraint that is required to solve ordering issues when
+     * several sources of transactions are to be re-ordered without asking all
+     * transactions at once.
+     */
+    public async * getTransactions (order: any): AsyncGenerator {
+        throw new Error('Backend does not implement `.getTransactions()` yet.')
+    }
 }
+
 
 export var BackendFactories = {}
 

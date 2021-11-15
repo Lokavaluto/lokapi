@@ -4,7 +4,9 @@ import { OdooRESTAbstract } from './backend/odoo'
 import * as e from './rest/exception'
 import * as t from './type'
 
-import { BackendFactories } from './backend'
+import { mux } from './generator'
+
+import { BackendFactories, BackendAbstract } from './backend'
 import { getHostOrUrlParts } from './rest'
 
 // Load backends
@@ -279,24 +281,27 @@ abstract class LokAPIAbstract extends OdooRESTAbstract {
 
 
     /**
-     * Get history of transactions on all backends for currently logged in user.
+     * Get history of transactions on all backends for currently
+     * logged in user. Transactions will be sorted from smaller to
+     * greater according to ``order`` function.
+     *
+     * @param order A function taking 2 transactions t1, t2 and
+     *              returning a number. If return value is < 0 then t1
+     *              < t2, if return value is 0, then t1 == t2, and
+     *              otherwise, t1 > t2.
      *
      * @throws {RequestFailed, APIRequestFailed, InvalidCredentials, InvalidJson}
      *
-     * @returns Object
+     * @returns AsyncGenerator
      */
-    public async getTransactions (): Promise<any> {
+    public async * getTransactions (order?: (x: any, y: any) => number): AsyncGenerator {
+        order = order || ((x: any, y: any) => y.date.getTime() - x.date.getTime())
         const backends = await this.getBackends()
-        const lokapiTransactions = []
-        for (const id in backends) {
-            const backend = backends[id]
-            // XXXvlab: should go for parallel waits
-            const transactions = await backend.getTransactions()
-            transactions.forEach((transaction: any) => {
-                lokapiTransactions.push(transaction)
-            })
-        }
-        return lokapiTransactions
+        yield * mux(
+            Object.values(backends).map(
+                (b: BackendAbstract) => b.getTransactions(order)),
+            order
+        )
     }
 
 }
