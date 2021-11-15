@@ -70,6 +70,7 @@ Using node's core =https= as HTTP requestion implementation:
 import http from "http"
 import https from "https"
 
+import { VueCookieNext } from 'vue-cookie-next'
 import { LokAPIAbstract, e as LokAPIExc, t as LokAPIType } from "lokapi"
 
 
