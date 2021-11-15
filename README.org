@@ -180,10 +180,10 @@ it should. Use with caution.
 
   class applicationSetting implements LokAPIType.IPersistentStore {
       get(key: string, defaultValue?: string): string {
-        return getString("lokapi_" + key, defaultValue)
+          return getString("lokapi_" + key, defaultValue)
       }
       set(key: string, value: string): void {
-        setString("lokapi_" + key, value)
+          setString("lokapi_" + key, value)
       }
       del(key: string): void {
           removeSetting("lokapi_" + key)
@@ -286,12 +286,12 @@ console.log(`I need to follow instructions on $url ` +
 ** Looking for recipients
 
 Recipients are possible receiving end of a transfer of
-money. These are connected to contacts in ``lokapi``.
+money. These are connected to contacts in =lokapi=.
 
 We have Pro Recipients which are used for company. And normal
-Recipient, any contact non-professional contact. We make 
-separate search through ``lokAPI.searchRecipients(..)`` or
-``lokAPI.searchProRecipients(..)``.
+Recipient, any contact non-professional contact. We make
+separate search through =lokAPI.searchRecipients(..)= or
+=lokAPI.searchProRecipients(..)=.
 
 #+begin_src typescript
 let recipients = await lokAPI.searchRecipients("Alain")
@@ -302,7 +302,7 @@ recipients.forEach(recipient => {
 #+end_src
 
 Note that if you look for an empty string,
-``lokAPI.search{,Pro}Recipients("")`` will return all favorite recipients.
+=lokAPI.search{,Pro}Recipients("")= will return all favorite recipients.
 
 Recipients are always ordered with favorites first and by name.
 
@@ -330,7 +330,7 @@ to a recipient:
 // Fetch recipients named 'Alain'
 let recipients = await lokAPI.searchRecipients("Alain")
 
-await recipients.transfer("12", "Dinner Party participation")
+await recipients[0].transfer("12", "Dinner Party participation")
 #+end_src
 
 ** Requesting contact info on current logged in user
@@ -352,7 +352,7 @@ You can set or unset the "favorite" state of a given contact with the
 =lokAPI.setFavorite(..)=, =lokAPI.unsetFavorite(..)=, or
 =lokAPI.toggleFavorite(..)= method. This can be used on a recipient
 (from =.searchRecipients()=) or a contact (but for now, only
-=.getMyContact()= is outputting a contact, and it doesn't make 
+=.getMyContact()= is outputting a contact, and it doesn't make
 sense to be your own favorite, does it ?).
 
 It'll not return any value, but the contact will be updated
@@ -411,7 +411,7 @@ lokAPI.$get(`/partner/partner_search`, {
 })
 #+end_src
 
-Please note that ``.get(..)`` and ``.$get(..)`` have same prototype
+Please note that =.get(..)= and =.$get(..)= have same prototype
 and usage than other function and do not require you to build a query
 string as it'll encode in the URL as a querystring the data you've
 provided.
