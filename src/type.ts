@@ -8,6 +8,7 @@ export const httpMethods = [
     'HEAD'
 ] as const
 
+
 export type httpMethod = typeof httpMethods[number]
 
 
@@ -55,6 +56,7 @@ export type HttpOpts = {
     responseHeaders?: {[k: string]: any}
 }
 
+
 export interface IPersistentStore {
     get(key: string, defaultValue?: string): string
     set(key: string, value: string): void
@@ -74,6 +76,7 @@ export interface IBackend {
 
 export interface IBridge {
 }
+
 
 export interface IPayment extends IBridge {
     amount: number

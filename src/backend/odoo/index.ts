@@ -174,7 +174,6 @@ t.httpMethods.forEach((method) => {
             [`/lokavaluto_api/public${path}`, data, headers, responseHeaders]
         )
     }
-
     OdooRESTAbstract.prototype['$' + methodLc] = function (
         path: string,
         data?: any,

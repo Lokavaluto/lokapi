@@ -92,6 +92,7 @@ abstract class LokAPIAbstract extends OdooRESTAbstract {
     private _backendsPromise: any
     private _backends: any
 
+
     private makeBackends (backendCredentials: any): any {
         const self = this
         const backends = {}
