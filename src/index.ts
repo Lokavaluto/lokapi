@@ -14,6 +14,9 @@ abstract class LokAPIAbstract extends OdooRESTAbstract {
 
     abstract BackendFactories: { [k:string]: any }
 
+    async requestLocalPassword (state: string): Promise<any> {
+        throw new Error('No `.requestLocalPassword(..)` method provided')
+    }
 
     /**
      * Log in to Lokavaluto Odoo server target API.
@@ -92,7 +95,10 @@ abstract class LokAPIAbstract extends OdooRESTAbstract {
     private makeBackends (backendCredentials: any): any {
         const self = this
         const backends = {}
-        const { httpRequest, base64Encode, persistentStore, requestLogin } = this
+        const {
+            httpRequest, base64Encode, persistentStore,
+            requestLogin, requestLocalPassword
+        } = this
         backendCredentials.forEach((backendData: any) => {
             const BackendClassAbstract = <any>self.BackendFactories[backendData.type]
             if (!BackendClassAbstract) {
@@ -106,6 +112,7 @@ abstract class LokAPIAbstract extends OdooRESTAbstract {
                 base64Encode = base64Encode
                 persistentStore = persistentStore
                 requestLogin = requestLogin
+                requestLocalPassword = requestLocalPassword
 
                 // This function declaration seems necessary for typescript
                 // to avoid having issues with this dynamic abstract class

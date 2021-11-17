@@ -48,8 +48,16 @@ LokAPIAbstract and define these objects:
     }
     #+end_src
 
-- (optional) requestLogin :: a function to trigger a login screen on
-  authorization failed.
+- (optional) requestLogin :: a function to trigger a login screen when
+  automatic authorization fails or when no automatic autorization data
+  exists. This will be triggered only if a protected request is made
+  on the backend side.
+- (optional) requestLocalPassword :: a function for backends to
+  trigger a request to the user for a password that is meant
+  to be kept locally on the device. This is typically used before
+  payment with some backends (to see an example see package
+  =lokapi-backend-comchain=), or administrative tasks. And takes
+  usually the form of a popup.
 
 ** Instanciating lokapi
 
