@@ -1,5 +1,5 @@
 {
-    "name": "lokapi",
+    "name": "@lokavaluto/lokapi",
     "version": "%%version%%",
     "description": "Lokavaluto API",
     "main": "build/index.js",

@@ -1,4 +1,4 @@
-NAME="lokapi"
+NAME="@lokavaluto/lokapi"
 DESCRIPTION="Lokavaluto currency client library"
 EMAIL="valentin.lab@kalysto.org"
 AUTHOR="Valentin LAB"
