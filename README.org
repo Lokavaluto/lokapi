@@ -12,10 +12,10 @@ lokavaluto's server.
 From the root of your project:
 
 #+begin_src sh
-npm install --save lokapi
+npm install --save @lokavaluto/lokapi
 #+end_src
 
-Or better, as =lokapi= is still in early release,
+Or better, as =@lokavaluto/lokapi= is still in early release,
 
 #+begin_src sh
 npm install --save Lokavaluto/lokapi#master
@@ -80,9 +80,9 @@ import http from "http"
 import https from "https"
 
 import { VueCookieNext } from 'vue-cookie-next'
-import { LokAPIAbstract, e as LokAPIExc, t as LokAPIType } from "lokapi"
+import { LokAPIAbstract, e as LokAPIExc, t as LokAPIType } from "@lokavaluto/lokapi"
 
-import cyclos from 'lokapi-backend-cyclos'
+import cyclos from '@lokavaluto/lokapi-backend-cyclos'
 
 
 class cookieStore implements LokAPIType.IPersistentStore {
@@ -194,11 +194,11 @@ it should. Use with caution.
 #+begin_src typescript
   import * as https from '@nativescript-community/https';
 
-  import { LokAPIAbstract, e as LokAPIExc, t as LokAPIType } from "lokapi"
+  import { LokAPIAbstract, e as LokAPIExc, t as LokAPIType } from "@lokavaluto/lokapi"
 
   import { getString, remove as removeSetting, setString } from '@nativescript/core/application-settings';
 
-  import cyclos from 'lokapi-backend-cyclos'
+  import cyclos from '@lokavaluto/lokapi-backend-cyclos'
 
 
   class applicationSetting implements LokAPIType.IPersistentStore {
