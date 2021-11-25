@@ -28,6 +28,12 @@ whenever you want to update.
 
 ** Subclassing main LokAPIAbstract
 
+Please note that an important part of the following is already
+packaged in package =@lokavaluto/lokapi-browser= (for node and browser
+support), and thus allow you to quick-start your projects with less
+code. Here's a link to the project page of
+[[https://github.com/Lokavaluto/lokapi-browser][lokapi-browser]] and how to use it, with an example.
+
 Lokapi will require a way to make HTTP request, access to a permanent
 store, or various other tasks. Depending on your platform or
 environment, you might have different way to implement these.
