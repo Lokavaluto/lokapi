@@ -187,6 +187,9 @@ abstract class LokAPIAbstract extends OdooRESTAbstract {
         partners.rows.forEach((partnerData: any) => {
             Object.keys(partnerData.monujo_backends).forEach(
                 (backendId: string) => {
+                    if (!backends[backendId].jsonData.accounts.length) {
+                        return  // don't have this backend anyway
+                    }
                     const backendRecipients = backends[backendId].makeRecipients(
                         partnerData
                     )
