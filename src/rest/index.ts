@@ -143,7 +143,7 @@ export abstract class JsonRESTClientAbstract {
 
     protected requireAuth (): void {
         if (Object.keys(this.authHeaders).length === 0) {
-            throw new e.AuthenticationRequired('Authentication required')
+            throw new e.TokenRequired('Authentication required')
         }
     }
 
@@ -242,8 +242,9 @@ export abstract class JsonRESTSessionClientAbstract extends JsonRESTClientAbstra
             if (apiToken) {
                 this.onSetToken(apiToken)
             } else {
-                throw new e.AuthenticationRequired(
-                    'Authentication required: No token set'
+                throw new e.TokenRequired(
+                    'Authentication required: No token set for ' +
+                        `${this.protocol}://${this.host}:${this.port}/${this.path}`
                 )
             }
         }
@@ -300,10 +301,8 @@ export abstract class JsonRESTPersistentClientAbstract extends JsonRESTSessionCl
         try {
             return await super.authRequest(path, opts)
         } catch (err) {
-            // XXXvlab: err instanceof e.AuthenticationRequired is giving false
-            // despite it seeming to be perfectly valid.
-            //if (err instanceof e.AuthenticationRequired) {
-            if (err.constructor.name === 'AuthenticationRequired') {
+            if (err instanceof e.AuthenticationRequired ||
+                err instanceof e.TokenRequired) {
                 this.apiToken = null
                 if (this.requestLogin) {
                     this.requestLogin()

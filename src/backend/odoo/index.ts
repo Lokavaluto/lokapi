@@ -2,7 +2,7 @@ import { JsonRESTPersistentClientAbstract } from '../../rest'
 import { Contact } from './contact'
 import * as t from '../../type'
 
-import * as e from '../../exception'
+import * as e from '../../rest/exception'
 
 
 export abstract class OdooRESTAbstract extends JsonRESTPersistentClientAbstract {
@@ -45,7 +45,7 @@ export abstract class OdooRESTAbstract extends JsonRESTPersistentClientAbstract 
                 }
             )
             if (response.status === 'Error') {
-                if (response.message === 'access denied') {
+                if (response.error === 'Access denied') {
                     throw new e.InvalidCredentials('Access denied')
                 } else {
                     throw new e.APIRequestFailed(
@@ -63,7 +63,7 @@ export abstract class OdooRESTAbstract extends JsonRESTPersistentClientAbstract 
             this.apiToken = response.api_token
             return response
         } catch (err) {
-            console.log('authenticate failed: ', err.message)
+            console.log('Odoo Authentication Failed:', err.message)
             this.apiToken = undefined
             throw err
         }
@@ -95,22 +95,12 @@ export abstract class OdooRESTAbstract extends JsonRESTPersistentClientAbstract 
         try {
             response = await super.request(path, opts)
         } catch (err) {
-            // XXXvlab: `err instanceof e.HttpError` is giving false
-            if (err.constructor.name === 'HttpError' && err.code === 500) {
-                let errMessage: string
-                try {
-                    errMessage = this.getHTMLErrorMessage(err.data)
-                } catch (err2) {
-                    console.log(
-                        'Could not get error message in HTML from request body',
-                        err2
-                    )
-                    throw err
-                }
-                if (errMessage.startsWith('odoo.exceptions.AccessDenied')) {
-                    console.log('Authentication Required')
-                    throw new e.AuthenticationRequired('Authentication Failed')
-                }
+            if (err instanceof e.HttpError && (err.code === 401 || err.code === 403)) {
+                console.log('Odoo AccessDenied: Authentication Required')
+                throw new e.AuthenticationRequired(
+                    err.code, 'Authentication Failed',
+                    err.data, err.response
+                )
             }
             throw err
         }

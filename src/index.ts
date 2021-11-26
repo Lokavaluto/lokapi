@@ -1,7 +1,8 @@
 
 import { OdooRESTAbstract } from './backend/odoo'
 
-import * as e from './rest/exception'
+import * as e from './exception'
+import * as RestExc from './rest/exception'
 import * as t from './type'
 
 import { mux } from './generator'
@@ -276,7 +277,7 @@ abstract class LokAPIAbstract extends OdooRESTAbstract {
                 backend_keys: Object.keys(backends),
             })
         } catch (err) {
-            if (err instanceof e.HttpError && err.code === 404) {
+            if (err instanceof RestExc.HttpError && err.code === 404) {
                 return []
             }
         }
@@ -318,4 +319,4 @@ abstract class LokAPIAbstract extends OdooRESTAbstract {
 }
 
 
-export { LokAPIAbstract, e, t }
+export { LokAPIAbstract, e, t, RestExc }

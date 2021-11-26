@@ -1,34 +1,32 @@
 
-// Exceptions
-
 export class RequestFailed extends Error {
-    constructor (message) {
+    constructor (message: string) {
         super(message)
-        this.name = this.constructor.name
+        this.name = 'RequestFailed'
     }
 }
 
 
 export class APIRequestFailed extends Error {
-    constructor (message) {
+    constructor (message: string) {
         super(message)
-        this.name = this.constructor.name
+        this.name = 'APIRequestFailed'
     }
 }
 
 
 export class InvalidConnectionDetails extends Error {
-    constructor (message) {
+    constructor (message: string) {
         super(message)
-        this.name = this.constructor.name
+        this.name = 'InvalidConnectionDetails'
     }
 }
 
 
 export class InvalidCredentials extends Error {
-    constructor (message) {
+    constructor (message: string) {
         super(message)
-        this.name = this.constructor.name
+        this.name = 'InvalidCredentials'
     }
 }
 
@@ -37,35 +35,35 @@ export class HttpError extends Error {
     code: number
     data: string
     response: any
-    constructor (code, message, data, response) {
+    constructor (code: number, message: string, data: string, response: any) {
         super(message)
         this.code = code
         this.data = data
         this.response = response
-        this.name = this.constructor.name
+        this.name = 'HttpError'
     }
 }
 
 
 export class InvalidJson extends Error {
-    constructor (message) {
+    constructor (message: string) {
         super(message)
-        this.name = this.constructor.name
+        this.name = 'InvalidJson'
     }
 }
 
 
-export class AuthenticationRequired extends Error {
-    constructor (message) {
-        super(message)
-        this.name = this.constructor.name
+export class AuthenticationRequired extends HttpError {
+    constructor (code: number, message: string, data: string, response: any) {
+        super(code, message, data, response)
+        this.name = 'AuthenticationRequired'
     }
 }
 
 
-export class UrlFromWrongServer extends Error {
-    constructor (message) {
+export class TokenRequired extends Error {
+    constructor (message: string) {
         super(message)
-        this.name = this.constructor.name
+        this.name = 'TokenRequired'
     }
 }
