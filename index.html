@@ -1,4 +1,4 @@
-<!DOCTYPE html><html class="default"><head><meta charSet="utf-8"/><meta http-equiv="x-ua-compatible" content="IE=edge"/><title>LokAPI - v0.0.19-alpha.202111240733</title><meta name="description" content="Documentation for LokAPI - v0.0.19-alpha.202111240733"/><meta name="viewport" content="width=device-width, initial-scale=1"/><link rel="stylesheet" href="assets/style.css"/><link rel="stylesheet" href="assets/highlight.css"/><script async src="assets/search.js" id="search-script"></script></head><body><script>document.body.classList.add(localStorage.getItem("tsd-theme") || "os")</script><header><div class="tsd-page-toolbar"><div class="container"><div class="table-wrap"><div class="table-cell" id="tsd-search" data-base="."><div class="field"><label for="tsd-search-field" class="tsd-widget search no-caption">Search</label><input type="text" id="tsd-search-field"/></div><ul class="results"><li class="state loading">Preparing search index...</li><li class="state failure">The search index is not available</li></ul><a href="index.html" class="title">LokAPI - v0.0.19-alpha.202111240733</a></div><div class="table-cell" id="tsd-widgets"><div id="tsd-filter"><a href="#" class="tsd-widget options no-caption" data-toggle="options">Options</a><div class="tsd-filter-group"><div class="tsd-select" id="tsd-filter-visibility"><span class="tsd-select-label">All</span><ul class="tsd-select-list"><li data-value="public">Public</li><li data-value="protected">Public/Protected</li><li data-value="private" class="selected">All</li></ul></div> <input type="checkbox" id="tsd-filter-inherited" checked/><label class="tsd-widget" for="tsd-filter-inherited">Inherited</label><input type="checkbox" id="tsd-filter-externals" checked/><label class="tsd-widget" for="tsd-filter-externals">Externals</label></div></div><a href="#" class="tsd-widget menu no-caption" data-toggle="menu">Menu</a></div></div></div></div><div class="tsd-page-title"><div class="container"><h1>LokAPI - v0.0.19-alpha.202111240733</h1></div></div></header><div class="container container-main"><div class="row"><div class="col-8 col-content"><div class="tsd-panel tsd-typography"><p>LokAPI is a javascript library intended to be used in mobile
+<!DOCTYPE html><html class="default"><head><meta charSet="utf-8"/><meta http-equiv="x-ua-compatible" content="IE=edge"/><title>LokAPI - v0.0.19-alpha.202111261758</title><meta name="description" content="Documentation for LokAPI - v0.0.19-alpha.202111261758"/><meta name="viewport" content="width=device-width, initial-scale=1"/><link rel="stylesheet" href="assets/style.css"/><link rel="stylesheet" href="assets/highlight.css"/><script async src="assets/search.js" id="search-script"></script></head><body><script>document.body.classList.add(localStorage.getItem("tsd-theme") || "os")</script><header><div class="tsd-page-toolbar"><div class="container"><div class="table-wrap"><div class="table-cell" id="tsd-search" data-base="."><div class="field"><label for="tsd-search-field" class="tsd-widget search no-caption">Search</label><input type="text" id="tsd-search-field"/></div><ul class="results"><li class="state loading">Preparing search index...</li><li class="state failure">The search index is not available</li></ul><a href="index.html" class="title">LokAPI - v0.0.19-alpha.202111261758</a></div><div class="table-cell" id="tsd-widgets"><div id="tsd-filter"><a href="#" class="tsd-widget options no-caption" data-toggle="options">Options</a><div class="tsd-filter-group"><div class="tsd-select" id="tsd-filter-visibility"><span class="tsd-select-label">All</span><ul class="tsd-select-list"><li data-value="public">Public</li><li data-value="protected">Public/Protected</li><li data-value="private" class="selected">All</li></ul></div> <input type="checkbox" id="tsd-filter-inherited" checked/><label class="tsd-widget" for="tsd-filter-inherited">Inherited</label><input type="checkbox" id="tsd-filter-externals" checked/><label class="tsd-widget" for="tsd-filter-externals">Externals</label></div></div><a href="#" class="tsd-widget menu no-caption" data-toggle="menu">Menu</a></div></div></div></div><div class="tsd-page-title"><div class="container"><h1>LokAPI - v0.0.19-alpha.202111261758</h1></div></div></header><div class="container container-main"><div class="row"><div class="col-8 col-content"><div class="tsd-panel tsd-typography"><p>LokAPI is a javascript library intended to be used in mobile
 applications or web application to abstract all logics with
 lokavaluto&#39;s server.</p>
 
@@ -21,6 +21,11 @@ whenever you want to update.</p>
 <a href="#subclassing-main-lokapiabstract" id="subclassing-main-lokapiabstract" style="color: inherit; text-decoration: none;">
   <h2>Subclassing main LokAPIAbstract</h2>
 </a>
+<p>Please note that an important part of the following is already
+packaged in package <code>@lokavaluto/lokapi-browser</code> (for node and browser
+support), and thus allow you to quick-start your projects with less
+code. Here&#39;s a link to the project page of
+<a href="https://github.com/Lokavaluto/lokapi-browser">lokapi-browser</a> and how to use it, with an example.</p>
 <p>Lokapi will require a way to make HTTP request, access to a permanent
 store, or various other tasks. Depending on your platform or
 environment, you might have different way to implement these.</p>
@@ -157,7 +162,23 @@ accordingly.</p>
   <h2>List transactions</h2>
 </a>
 <p>List past transactions for the current logged in user.</p>
-<pre><code class="language-typescript"><span class="hl-2">let</span><span class="hl-0"> </span><span class="hl-5">transactions</span><span class="hl-0"> = </span><span class="hl-1">await</span><span class="hl-0"> </span><span class="hl-5">$lokapi</span><span class="hl-0">.</span><span class="hl-4">getTransactions</span><span class="hl-0">()</span><br/><br/><span class="hl-1">for</span><span class="hl-0"> (</span><span class="hl-2">const</span><span class="hl-0"> </span><span class="hl-8">tr</span><span class="hl-0"> </span><span class="hl-2">of</span><span class="hl-0"> </span><span class="hl-5">transactions</span><span class="hl-0">) {</span><br/><span class="hl-0">    </span><span class="hl-5">console</span><span class="hl-0">.</span><span class="hl-4">log</span><span class="hl-0">(</span><span class="hl-6">`  </span><span class="hl-2">${</span><span class="hl-5">tr</span><span class="hl-9">.</span><span class="hl-5">date</span><span class="hl-2">}</span><span class="hl-6"> </span><span class="hl-2">${</span><span class="hl-5">tr</span><span class="hl-9">.</span><span class="hl-5">amount</span><span class="hl-2">}</span><span class="hl-6"> </span><span class="hl-2">${</span><span class="hl-5">tr</span><span class="hl-9">.</span><span class="hl-5">currency</span><span class="hl-2">}</span><span class="hl-6">`</span><span class="hl-0">)</span><br/><span class="hl-0">}</span>
+<pre><code class="language-typescript"><span class="hl-2">let</span><span class="hl-0"> </span><span class="hl-5">transactions</span><span class="hl-0"> = </span><span class="hl-1">await</span><span class="hl-0"> </span><span class="hl-5">lokAPI</span><span class="hl-0">.</span><span class="hl-4">getTransactions</span><span class="hl-0">()</span><br/><br/><span class="hl-1">for</span><span class="hl-0"> (</span><span class="hl-2">const</span><span class="hl-0"> </span><span class="hl-8">tr</span><span class="hl-0"> </span><span class="hl-2">of</span><span class="hl-0"> </span><span class="hl-5">transactions</span><span class="hl-0">) {</span><br/><span class="hl-0">    </span><span class="hl-5">console</span><span class="hl-0">.</span><span class="hl-4">log</span><span class="hl-0">(</span><span class="hl-6">`  </span><span class="hl-2">${</span><span class="hl-5">tr</span><span class="hl-9">.</span><span class="hl-5">date</span><span class="hl-2">}</span><span class="hl-6"> </span><span class="hl-2">${</span><span class="hl-5">tr</span><span class="hl-9">.</span><span class="hl-5">amount</span><span class="hl-2">}</span><span class="hl-6"> </span><span class="hl-2">${</span><span class="hl-5">tr</span><span class="hl-9">.</span><span class="hl-5">currency</span><span class="hl-2">}</span><span class="hl-6">`</span><span class="hl-0">)</span><br/><span class="hl-0">}</span>
+</code></pre>
+
+<a href="#get-the-backend-list" id="get-the-backend-list" style="color: inherit; text-decoration: none;">
+  <h2>get the backend list</h2>
+</a>
+<p>You can query the <code>lokapi</code> to get the backend list available on the
+administration backend side. A Backend instance is the main object
+whose instance is responsible for a currency domain. You have a
+Backend per currency. So in short, <code>.getBackends()</code> will give you
+the available currencies available.</p>
+<p>This function is cached, so it doesn&#39;t get updated if you happen
+to add a new currency backend in the administration backend.</p>
+<p><code>.getBackends()</code> returns an Object mapping a string identifier for the
+backend (ie: <code>cyclos:cyclos.example.com</code>, <code>comchain:Lemanopolis</code>, ...), and
+the Backend object instance.</p>
+<pre><code class="language-typescript"><span class="hl-2">let</span><span class="hl-0"> </span><span class="hl-5">backends</span><span class="hl-0"> = </span><span class="hl-1">await</span><span class="hl-0"> </span><span class="hl-5">lokAPI</span><span class="hl-0">.</span><span class="hl-4">getBackends</span><span class="hl-0">()</span><br/><br/><span class="hl-1">for</span><span class="hl-0"> (</span><span class="hl-2">const</span><span class="hl-0"> </span><span class="hl-8">b</span><span class="hl-0"> </span><span class="hl-2">in</span><span class="hl-0"> </span><span class="hl-5">backends</span><span class="hl-0">) {</span><br/><span class="hl-0">    </span><span class="hl-5">console</span><span class="hl-0">.</span><span class="hl-4">log</span><span class="hl-0">(</span><span class="hl-6">`  Backend </span><span class="hl-2">${</span><span class="hl-5">b</span><span class="hl-2">}</span><span class="hl-6">:`</span><span class="hl-0">, </span><span class="hl-5">backends</span><span class="hl-0">[</span><span class="hl-5">b</span><span class="hl-0">])</span><br/><span class="hl-0">}</span>
 </code></pre>
 
 <a href="#direct-request-to-odoo-api" id="direct-request-to-odoo-api" style="color: inherit; text-decoration: none;">
@@ -177,22 +198,41 @@ provided.</p>
   <h1>Changelog</h1>
 </a>
 
-<a href="#0019-alpha202111240733" id="0019-alpha202111240733" style="color: inherit; text-decoration: none;">
-  <h2>0.0.19-alpha.202111240733</h2>
+<a href="#0019-alpha202111261758" id="0019-alpha202111261758" style="color: inherit; text-decoration: none;">
+  <h2>0.0.19-alpha.202111261758</h2>
 </a>
+
+<a href="#new" id="new" style="color: inherit; text-decoration: none;">
+  <h3>New</h3>
+</a>
+<ul>
+<li><p><code>LokAPI.getBackends(..)</code> is now public. [Valentin Lab]</p>
+<p>This is now required as <code>Backend</code> direct access is required to
+<code>Backend.createAccount(..)</code> and other <code>Backend</code> level features.</p>
+</li>
+<li><p>New: doc: add a reference to <code>@lokavaluto/lokapi-browser</code>&#39;s help. [Valentin Lab]</p>
+</li>
+</ul>
 
 <a href="#fix" id="fix" style="color: inherit; text-decoration: none;">
   <h3>Fix</h3>
 </a>
 <ul>
-<li>Reflect package name change. [Valentin Lab]</li>
+<li><p><code>.requestLogin()</code> was not called as expected on minified builds. [Valentin Lab]</p>
+<p>When code is minified detection of exception using the
+<code>constructor.name</code> is deemed to fail.</p>
+</li>
+<li><p>Avoid exception when trying to <code>.makeRecipients()</code> in a backend where we don&#39;t have an account. [Valentin Lab]</p>
+</li>
+<li><p>Reflect package name change. [Valentin Lab]</p>
+</li>
 </ul>
 
 <a href="#0017-2021-11-17" id="0017-2021-11-17" style="color: inherit; text-decoration: none;">
   <h2>0.0.17 (2021-11-17)</h2>
 </a>
 
-<a href="#new" id="new" style="color: inherit; text-decoration: none;">
+<a href="#new-1" id="new-1" style="color: inherit; text-decoration: none;">
   <h3>New</h3>
 </a>
 <ul>
@@ -261,7 +301,7 @@ starts with a <code>{</code> . This breaks expectation of current
   <h2>0.0.16 (2021-09-08)</h2>
 </a>
 
-<a href="#new-1" id="new-1" style="color: inherit; text-decoration: none;">
+<a href="#new-2" id="new-2" style="color: inherit; text-decoration: none;">
   <h3>New</h3>
 </a>
 <ul>
@@ -299,7 +339,7 @@ currently taken to the odoo side. Paging is temporarily disabled.</p>
   <h2>0.0.14 (2021-08-04)</h2>
 </a>
 
-<a href="#new-2" id="new-2" style="color: inherit; text-decoration: none;">
+<a href="#new-3" id="new-3" style="color: inherit; text-decoration: none;">
   <h3>New</h3>
 </a>
 <ul>
@@ -330,7 +370,7 @@ currently taken to the odoo side. Paging is temporarily disabled.</p>
   <h2>0.0.13 (2021-07-24)</h2>
 </a>
 
-<a href="#new-3" id="new-3" style="color: inherit; text-decoration: none;">
+<a href="#new-4" id="new-4" style="color: inherit; text-decoration: none;">
   <h3>New</h3>
 </a>
 <ul>
@@ -362,7 +402,7 @@ on both objects.</p>
   <h2>0.0.12 (2021-07-23)</h2>
 </a>
 
-<a href="#new-4" id="new-4" style="color: inherit; text-decoration: none;">
+<a href="#new-5" id="new-5" style="color: inherit; text-decoration: none;">
   <h3>New</h3>
 </a>
 <ul>
@@ -378,7 +418,7 @@ the <code>toggle</code> for lib users.</p>
   <h2>0.0.11 (2021-07-21)</h2>
 </a>
 
-<a href="#new-5" id="new-5" style="color: inherit; text-decoration: none;">
+<a href="#new-6" id="new-6" style="color: inherit; text-decoration: none;">
   <h3>New</h3>
 </a>
 <ul>
@@ -410,7 +450,7 @@ to get back some information. We don&#39;t have our own <code>userId</code>.</p>
   <h2>0.0.9 (2021-07-08)</h2>
 </a>
 
-<a href="#new-6" id="new-6" style="color: inherit; text-decoration: none;">
+<a href="#new-7" id="new-7" style="color: inherit; text-decoration: none;">
   <h3>New</h3>
 </a>
 <ul>
@@ -421,7 +461,7 @@ to get back some information. We don&#39;t have our own <code>userId</code>.</p>
   <h2>0.0.8 (2021-07-08)</h2>
 </a>
 
-<a href="#new-7" id="new-7" style="color: inherit; text-decoration: none;">
+<a href="#new-8" id="new-8" style="color: inherit; text-decoration: none;">
   <h3>New</h3>
 </a>
 <ul>
@@ -435,7 +475,7 @@ to get back some information. We don&#39;t have our own <code>userId</code>.</p>
   <h2>0.0.7 (2021-07-08)</h2>
 </a>
 
-<a href="#new-8" id="new-8" style="color: inherit; text-decoration: none;">
+<a href="#new-9" id="new-9" style="color: inherit; text-decoration: none;">
   <h3>New</h3>
 </a>
 <ul>
@@ -485,7 +525,7 @@ to get back some information. We don&#39;t have our own <code>userId</code>.</p>
   <h2>0.0.5 (2021-07-05)</h2>
 </a>
 
-<a href="#new-9" id="new-9" style="color: inherit; text-decoration: none;">
+<a href="#new-10" id="new-10" style="color: inherit; text-decoration: none;">
   <h3>New</h3>
 </a>
 <ul>
@@ -517,7 +557,7 @@ using only the =apiToken=.</p>
   <h2>0.0.4 (2021-07-01)</h2>
 </a>
 
-<a href="#new-10" id="new-10" style="color: inherit; text-decoration: none;">
+<a href="#new-11" id="new-11" style="color: inherit; text-decoration: none;">
   <h3>New</h3>
 </a>
 <ul>
@@ -551,7 +591,7 @@ need to use it.</p>
   <h2>0.0.3 (2021-06-30)</h2>
 </a>
 
-<a href="#new-11" id="new-11" style="color: inherit; text-decoration: none;">
+<a href="#new-12" id="new-12" style="color: inherit; text-decoration: none;">
   <h3>New</h3>
 </a>
 <ul>
@@ -576,7 +616,7 @@ attribute.</p>
   <h2>0.0.2 (2021-06-27)</h2>
 </a>
 
-<a href="#new-12" id="new-12" style="color: inherit; text-decoration: none;">
+<a href="#new-13" id="new-13" style="color: inherit; text-decoration: none;">
   <h3>New</h3>
 </a>
 <ul>
