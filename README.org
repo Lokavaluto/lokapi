@@ -407,7 +407,7 @@ console.log(recipients[3].is_favorite) // is expected to be unset
 List past transactions for the current logged in user.
 
 #+begin_src typescript
-let transactions = await $lokapi.getTransactions()
+let transactions = await lokAPI.getTransactions()
 
 for (const tr of transactions) {
     console.log(`  ${tr.date} ${tr.amount} ${tr.currency}`)
