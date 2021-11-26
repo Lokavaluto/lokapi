@@ -35,6 +35,11 @@ export abstract class BackendAbstract {
         this.jsonData = jsonData
     }
 
+    get internalId () {
+        return this.jsonData.type
+    }
+
+
     /**
      * By using a AsyncGenerator, getTransactions() allows :
      * - client app to request the amount of transaction they need at the pace
