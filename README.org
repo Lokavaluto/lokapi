@@ -415,6 +415,30 @@ for (const tr of transactions) {
 #+end_src
 
 
+** get the backend list
+
+You can query the =lokapi= to get the backend list available on the
+administration backend side. A Backend instance is the main object
+whose instance is responsible for a currency domain. You have a
+Backend per currency. So in short, =.getBackends()= will give you
+the available currencies available.
+
+This function is cached, so it doesn't get updated if you happen
+to add a new currency backend in the administration backend.
+
+=.getBackends()= returns an Object mapping a string identifier for the
+backend (ie: `cyclos:cyclos.example.com`, `comchain:Lemanopolis`, ...), and
+the Backend object instance.
+
+#+begin_src typescript
+let backends = await lokAPI.getBackends()
+
+for (const b in backends) {
+    console.log(`  Backend ${b}:`, backends[b])
+}
+#+end_src
+
+
 ** Direct request to odoo api
 
 You can use =lokapi= instance to query directly the odoo api trough

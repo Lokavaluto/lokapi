@@ -71,7 +71,7 @@ abstract class LokAPIAbstract extends OdooRESTAbstract {
      *
      * @returns Object
      */
-    private async getBackends (): Promise<any> {
+    public async getBackends (): Promise<any> {
         // XXXvlab: cached, should transition to general cache
         // decorator to allow fine control of when we required a
         // fetch.
