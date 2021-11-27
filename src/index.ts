@@ -102,10 +102,11 @@ abstract class LokAPIAbstract extends OdooRESTAbstract {
             requestLogin, requestLocalPassword
         } = this
         backendCredentials.forEach((backendData: any) => {
-            const BackendClassAbstract = <any>self.BackendFactories[backendData.type]
+            const backendId = backendData.type.split(':')[0]
+            const BackendClassAbstract = <any>self.BackendFactories[backendId]
             if (!BackendClassAbstract) {
                 console.log(
-                    `Data received for unknown backend ${backendData.type}`
+                    `Data received for unknown backend ${backendId}`
                 )
                 return
             }
@@ -124,6 +125,7 @@ abstract class LokAPIAbstract extends OdooRESTAbstract {
                 }
             }
             let backend: any
+            console.log(`making backend ${backendData.type}`, backendData)
             try {
                 backend = new Backend({ odoo: this }, backendData)
             } catch (err) {
