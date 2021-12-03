@@ -62,7 +62,10 @@ abstract class LokAPIAbstract extends OdooRESTAbstract {
     }
 
     private _backendCredentialsPromise: any
-    private _backendCredentials: any
+    // XXXvlab: Poor man's way to allow some kind of cache clearance
+    // via setting this to 'protected' while waiting for a more
+    // generalized cache manangement.
+    protected _backendCredentials: any
 
 
     /**
@@ -91,7 +94,10 @@ abstract class LokAPIAbstract extends OdooRESTAbstract {
     }
 
     private _backendsPromise: any
-    private _backends: any
+    // XXXvlab: Poor man's way to allow some kind of cache clearance
+    // via setting this to 'protected' while waiting for a more
+    // generalized cache manangement.
+    protected _backends: any
 
 
     private makeBackends (backendCredentials: any): any {
