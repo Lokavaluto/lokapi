@@ -65,7 +65,7 @@ export interface IPersistentStore {
 
 
 export interface IBackend {
-
+    [index: string]: any
 }
 
 
