@@ -271,7 +271,9 @@ it should. Use with caution.
 
 * Usage
 
-** Login
+** Basic usage
+
+*** Login
 
 You must log in to the server with an existing Odoo Lokavaluto
 account:
@@ -281,7 +283,7 @@ await lokApi.login("myuser", "mypassword")
 #+end_src
 
 
-** Accessing accounts
+*** Accessing accounts
 
 We assume that you've instanciated =LokAPI= as stated in the previous
 section, and you have logged in.
@@ -302,7 +304,8 @@ console.log(`balance in first account: ${balance} ${symbol}`)
 
 - =account.getSymbol()= is the currency symbol for the account
 
-** Crediting account
+
+*** Crediting account
 
 You can credit your account thanks to =account.getCreditUrl(amount)=.
 This will return an url to finish the purchase of new credits.
@@ -316,7 +319,8 @@ console.log(`I need to follow instructions on $url ` +
             'to purchase credit to store in my account.')
 #+end_src
 
-** Looking for recipients
+
+*** Looking for recipients
 
 Recipients are possible receiving end of a transfer of
 money. These are connected to contacts in =lokapi=.
@@ -353,7 +357,7 @@ recipients.forEach(recipient => {
 #+end_src
 
 
-** Transfer money between an account to a recipient
+*** Transfer money between an account to a recipient
 
 Transfering money is done from an account of the logged-in user
 to a recipient:
@@ -366,7 +370,8 @@ let recipients = await lokAPI.searchRecipients("Alain")
 await recipients[0].transfer("12", "Dinner Party participation")
 #+end_src
 
-** Requesting contact info on current logged in user
+
+*** Requesting contact info on current logged in user
 
 The method =lokAPI.getMyContact()= allows you to get back
 your own information.:
@@ -379,7 +384,8 @@ console.log(`My user name: ${me.name}`)
 
 #+end_src
 
-** Setting/Unsetting Favorite status of a contact
+
+*** Setting/Unsetting Favorite status of a contact
 
 You can set or unset the "favorite" state of a given contact with the
 =lokAPI.setFavorite(..)=, =lokAPI.unsetFavorite(..)=, or
@@ -402,7 +408,7 @@ console.log(recipients[3].is_favorite) // is expected to be unset
 #+end_src
 
 
-** List transactions
+*** List transactions
 
 List past transactions for the current logged in user.
 
@@ -415,7 +421,9 @@ for (const tr of transactions) {
 #+end_src
 
 
-** get the backend list
+** Miscellaneous and internal helpers
+
+*** Get the backend list
 
 You can query the =lokapi= to get the backend list available on the
 administration backend side. A Backend instance is the main object
@@ -439,7 +447,7 @@ for (const b in backends) {
 #+end_src
 
 
-** Direct request to odoo api
+*** Direct request to odoo api
 
 You can use =lokapi= instance to query directly the odoo api trough
 the =get=, =post=, =put=, =delete= methods and their authenticated
