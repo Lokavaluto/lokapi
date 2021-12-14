@@ -53,5 +53,15 @@ export abstract class BackendAbstract {
     public async * getTransactions (order: any): AsyncGenerator {
         throw new Error('Backend does not implement `.getTransactions()` yet.')
     }
+
+    public get userAccounts (): Array<any> {
+        throw new Error('Backend does not implement `.userAccounts` yet.')
+    }
+
+    public async hasUserAccountValidationRights (): Promise<boolean> {
+        const results = await Promise.all(Object.values(this.userAccounts).map(
+            (a: any) => a.hasUserAccountValidationRights ? a.hasUserAccountValidationRights() : false))
+        return results.reduce((a: boolean, b: boolean) => a || b, false)
+    }
 }
 

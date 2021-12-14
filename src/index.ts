@@ -144,6 +144,14 @@ abstract class LokAPIAbstract extends OdooRESTAbstract {
     }
 
 
+    public async hasUserAccountValidationRights () {
+        const backends = await this.getBackends()
+        const results = await Promise.all(Object.values(backends).map(
+            (b: any) => b.hasUserAccountValidationRights()))
+        return results.reduce((a: boolean, b: boolean) => a || b, false)
+    }
+
+
     /**
      * Get list of Accounts
      *
