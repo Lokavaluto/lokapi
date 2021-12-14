@@ -29,6 +29,7 @@ export abstract class BackendAbstract {
     protected abstract base64Encode: t.Base64Encode
     protected abstract persistentStore: t.IPersistentStore
     protected abstract requestLogin(): void
+    public abstract requestLocalPassword: (state: string) => Promise<any>
 
     constructor (backends: any, jsonData: any) {
         this.backends = backends
