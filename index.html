@@ -1,4 +1,4 @@
-<!DOCTYPE html><html class="default"><head><meta charSet="utf-8"/><meta http-equiv="x-ua-compatible" content="IE=edge"/><title>LokAPI - v0.0.19-alpha.202112032213</title><meta name="description" content="Documentation for LokAPI - v0.0.19-alpha.202112032213"/><meta name="viewport" content="width=device-width, initial-scale=1"/><link rel="stylesheet" href="assets/style.css"/><link rel="stylesheet" href="assets/highlight.css"/><script async src="assets/search.js" id="search-script"></script></head><body><script>document.body.classList.add(localStorage.getItem("tsd-theme") || "os")</script><header><div class="tsd-page-toolbar"><div class="container"><div class="table-wrap"><div class="table-cell" id="tsd-search" data-base="."><div class="field"><label for="tsd-search-field" class="tsd-widget search no-caption">Search</label><input type="text" id="tsd-search-field"/></div><ul class="results"><li class="state loading">Preparing search index...</li><li class="state failure">The search index is not available</li></ul><a href="index.html" class="title">LokAPI - v0.0.19-alpha.202112032213</a></div><div class="table-cell" id="tsd-widgets"><div id="tsd-filter"><a href="#" class="tsd-widget options no-caption" data-toggle="options">Options</a><div class="tsd-filter-group"><div class="tsd-select" id="tsd-filter-visibility"><span class="tsd-select-label">All</span><ul class="tsd-select-list"><li data-value="public">Public</li><li data-value="protected">Public/Protected</li><li data-value="private" class="selected">All</li></ul></div> <input type="checkbox" id="tsd-filter-inherited" checked/><label class="tsd-widget" for="tsd-filter-inherited">Inherited</label><input type="checkbox" id="tsd-filter-externals" checked/><label class="tsd-widget" for="tsd-filter-externals">Externals</label></div></div><a href="#" class="tsd-widget menu no-caption" data-toggle="menu">Menu</a></div></div></div></div><div class="tsd-page-title"><div class="container"><h1>LokAPI - v0.0.19-alpha.202112032213</h1></div></div></header><div class="container container-main"><div class="row"><div class="col-8 col-content"><div class="tsd-panel tsd-typography"><p>LokAPI is a javascript library intended to be used in mobile
+<!DOCTYPE html><html class="default"><head><meta charSet="utf-8"/><meta http-equiv="x-ua-compatible" content="IE=edge"/><title>LokAPI - v0.0.19-alpha.202112141355</title><meta name="description" content="Documentation for LokAPI - v0.0.19-alpha.202112141355"/><meta name="viewport" content="width=device-width, initial-scale=1"/><link rel="stylesheet" href="assets/style.css"/><link rel="stylesheet" href="assets/highlight.css"/><script async src="assets/search.js" id="search-script"></script></head><body><script>document.body.classList.add(localStorage.getItem("tsd-theme") || "os")</script><header><div class="tsd-page-toolbar"><div class="container"><div class="table-wrap"><div class="table-cell" id="tsd-search" data-base="."><div class="field"><label for="tsd-search-field" class="tsd-widget search no-caption">Search</label><input type="text" id="tsd-search-field"/></div><ul class="results"><li class="state loading">Preparing search index...</li><li class="state failure">The search index is not available</li></ul><a href="index.html" class="title">LokAPI - v0.0.19-alpha.202112141355</a></div><div class="table-cell" id="tsd-widgets"><div id="tsd-filter"><a href="#" class="tsd-widget options no-caption" data-toggle="options">Options</a><div class="tsd-filter-group"><div class="tsd-select" id="tsd-filter-visibility"><span class="tsd-select-label">All</span><ul class="tsd-select-list"><li data-value="public">Public</li><li data-value="protected">Public/Protected</li><li data-value="private" class="selected">All</li></ul></div> <input type="checkbox" id="tsd-filter-inherited" checked/><label class="tsd-widget" for="tsd-filter-inherited">Inherited</label><input type="checkbox" id="tsd-filter-externals" checked/><label class="tsd-widget" for="tsd-filter-externals">Externals</label></div></div><a href="#" class="tsd-widget menu no-caption" data-toggle="menu">Menu</a></div></div></div></div><div class="tsd-page-title"><div class="container"><h1>LokAPI - v0.0.19-alpha.202112141355</h1></div></div></header><div class="container container-main"><div class="row"><div class="col-8 col-content"><div class="tsd-panel tsd-typography"><p>LokAPI is a javascript library intended to be used in mobile
 applications or web application to abstract all logics with
 lokavaluto&#39;s server.</p>
 
@@ -75,8 +75,12 @@ it should. Use with caution.</p>
   <h1>Usage</h1>
 </a>
 
+<a href="#basic-usage" id="basic-usage" style="color: inherit; text-decoration: none;">
+  <h2>Basic usage</h2>
+</a>
+
 <a href="#login" id="login" style="color: inherit; text-decoration: none;">
-  <h2>Login</h2>
+  <h3>Login</h3>
 </a>
 <p>You must log in to the server with an existing Odoo Lokavaluto
 account:</p>
@@ -84,7 +88,7 @@ account:</p>
 </code></pre>
 
 <a href="#accessing-accounts" id="accessing-accounts" style="color: inherit; text-decoration: none;">
-  <h2>Accessing accounts</h2>
+  <h3>Accessing accounts</h3>
 </a>
 <p>We assume that you&#39;ve instanciated <code>LokAPI</code> as stated in the previous
 section, and you have logged in.</p>
@@ -101,7 +105,7 @@ section, and you have logged in.</p>
 </ul>
 
 <a href="#crediting-account" id="crediting-account" style="color: inherit; text-decoration: none;">
-  <h2>Crediting account</h2>
+  <h3>Crediting account</h3>
 </a>
 <p>You can credit your account thanks to <code>account.getCreditUrl(amount)</code>.
 This will return an url to finish the purchase of new credits.</p>
@@ -109,7 +113,7 @@ This will return an url to finish the purchase of new credits.</p>
 </code></pre>
 
 <a href="#looking-for-recipients" id="looking-for-recipients" style="color: inherit; text-decoration: none;">
-  <h2>Looking for recipients</h2>
+  <h3>Looking for recipients</h3>
 </a>
 <p>Recipients are possible receiving end of a transfer of
 money. These are connected to contacts in <code>lokapi</code>.</p>
@@ -129,7 +133,7 @@ for each backend you can use to send money.</p>
 </code></pre>
 
 <a href="#transfer-money-between-an-account-to-a-recipient" id="transfer-money-between-an-account-to-a-recipient" style="color: inherit; text-decoration: none;">
-  <h2>Transfer money between an account to a recipient</h2>
+  <h3>Transfer money between an account to a recipient</h3>
 </a>
 <p>Transfering money is done from an account of the logged-in user
 to a recipient:</p>
@@ -137,7 +141,7 @@ to a recipient:</p>
 </code></pre>
 
 <a href="#requesting-contact-info-on-current-logged-in-user" id="requesting-contact-info-on-current-logged-in-user" style="color: inherit; text-decoration: none;">
-  <h2>Requesting contact info on current logged in user</h2>
+  <h3>Requesting contact info on current logged in user</h3>
 </a>
 <p>The method <code>lokAPI.getMyContact()</code> allows you to get back
 your own information.:</p>
@@ -145,7 +149,7 @@ your own information.:</p>
 </code></pre>
 
 <a href="#settingunsetting-favorite-status-of-a-contact" id="settingunsetting-favorite-status-of-a-contact" style="color: inherit; text-decoration: none;">
-  <h2>Setting/Unsetting Favorite status of a contact</h2>
+  <h3>Setting/Unsetting Favorite status of a contact</h3>
 </a>
 <p>You can set or unset the &quot;favorite&quot; state of a given contact with the
 <code>lokAPI.setFavorite(..)</code>, <code>lokAPI.unsetFavorite(..)</code>, or
@@ -159,14 +163,48 @@ accordingly.</p>
 </code></pre>
 
 <a href="#list-transactions" id="list-transactions" style="color: inherit; text-decoration: none;">
-  <h2>List transactions</h2>
+  <h3>List transactions</h3>
 </a>
 <p>List past transactions for the current logged in user.</p>
 <pre><code class="language-typescript"><span class="hl-2">let</span><span class="hl-0"> </span><span class="hl-5">transactions</span><span class="hl-0"> = </span><span class="hl-1">await</span><span class="hl-0"> </span><span class="hl-5">lokAPI</span><span class="hl-0">.</span><span class="hl-4">getTransactions</span><span class="hl-0">()</span><br/><br/><span class="hl-1">for</span><span class="hl-0"> (</span><span class="hl-2">const</span><span class="hl-0"> </span><span class="hl-8">tr</span><span class="hl-0"> </span><span class="hl-2">of</span><span class="hl-0"> </span><span class="hl-5">transactions</span><span class="hl-0">) {</span><br/><span class="hl-0">    </span><span class="hl-5">console</span><span class="hl-0">.</span><span class="hl-4">log</span><span class="hl-0">(</span><span class="hl-6">`  </span><span class="hl-2">${</span><span class="hl-5">tr</span><span class="hl-9">.</span><span class="hl-5">date</span><span class="hl-2">}</span><span class="hl-6"> </span><span class="hl-2">${</span><span class="hl-5">tr</span><span class="hl-9">.</span><span class="hl-5">amount</span><span class="hl-2">}</span><span class="hl-6"> </span><span class="hl-2">${</span><span class="hl-5">tr</span><span class="hl-9">.</span><span class="hl-5">currency</span><span class="hl-2">}</span><span class="hl-6">`</span><span class="hl-0">)</span><br/><span class="hl-0">}</span>
 </code></pre>
 
+<a href="#admin" id="admin" style="color: inherit; text-decoration: none;">
+  <h2>Admin</h2>
+</a>
+<p>These are usage for users having special administrative rights
+on the <em>administrative backends</em> or the <em>currency backends</em>.</p>
+
+<a href="#check-user-account-validation-rights" id="check-user-account-validation-rights" style="color: inherit; text-decoration: none;">
+  <h3>check user account validation rights</h3>
+</a>
+<p>The call to <code>.hasUserAccountValidationRights()</code> will return a boolean
+to tell you if any backends has at least one of their user accounts
+with <code>Account Validation</code> rights.</p>
+<p>Please note that this function is available on top-level <code>lokApi</code>
+instance, and also on <code>Backend</code>&#39;s instances (it&#39;ll only check for
+rights in its own user accounts), and finally directly on each
+<code>UserAccount</code> instances.</p>
+<pre><code class="language-typescript"><span class="hl-2">let</span><span class="hl-0"> </span><span class="hl-5">hasRights</span><span class="hl-0"> = </span><span class="hl-1">await</span><span class="hl-0"> </span><span class="hl-5">lokAPI</span><span class="hl-0">.</span><span class="hl-4">hasUserAccountValidationRights</span><span class="hl-0">()</span><br/><br/><span class="hl-1">if</span><span class="hl-0"> (</span><span class="hl-5">hasRights</span><span class="hl-0">) {</span><br/><span class="hl-0">  </span><span class="hl-5">console</span><span class="hl-0">.</span><span class="hl-4">log</span><span class="hl-0">(</span><span class="hl-6">&quot;I&#39;ve got the power !&quot;</span><span class="hl-0">)</span><br/><span class="hl-0">}</span>
+</code></pre>
+
+<a href="#get-list-of-account-waiting-for-validation" id="get-list-of-account-waiting-for-validation" style="color: inherit; text-decoration: none;">
+  <h3>get list of account waiting for validation</h3>
+</a>
+<p><code>.getStagingUserAccounts()</code> on main instance will query
+administrative backend for the list of user account created that needs
+validation from an administrative account.</p>
+<p>Please note that it returns <code>IRecipient</code> objects, that allows you
+to print names.</p>
+<pre><code class="language-typescript"><span class="hl-2">let</span><span class="hl-0"> </span><span class="hl-5">recipients</span><span class="hl-0"> = </span><span class="hl-1">await</span><span class="hl-0"> </span><span class="hl-5">lokAPI</span><span class="hl-0">.</span><span class="hl-4">getStagingUserAccounts</span><span class="hl-0">()</span><br/><br/><span class="hl-5">recipients</span><span class="hl-0">.</span><span class="hl-4">forEach</span><span class="hl-0">(</span><span class="hl-5">recipient</span><span class="hl-0"> </span><span class="hl-2">=&gt;</span><span class="hl-0"> {</span><br/><span class="hl-0">    </span><span class="hl-5">console</span><span class="hl-0">.</span><span class="hl-4">log</span><span class="hl-0">(</span><span class="hl-6">`</span><span class="hl-2">${</span><span class="hl-5">recipient</span><span class="hl-9">.</span><span class="hl-5">name</span><span class="hl-2">}</span><span class="hl-6"> has created his account and awaits validation.`</span><span class="hl-0">)</span><br/><span class="hl-0">})</span>
+</code></pre>
+
+<a href="#miscellaneous-and-internal-helpers" id="miscellaneous-and-internal-helpers" style="color: inherit; text-decoration: none;">
+  <h2>Miscellaneous and internal helpers</h2>
+</a>
+
 <a href="#get-the-backend-list" id="get-the-backend-list" style="color: inherit; text-decoration: none;">
-  <h2>get the backend list</h2>
+  <h3>Get the backend list</h3>
 </a>
 <p>You can query the <code>lokapi</code> to get the backend list available on the
 administration backend side. A Backend instance is the main object
@@ -182,7 +220,7 @@ the Backend object instance.</p>
 </code></pre>
 
 <a href="#direct-request-to-odoo-api" id="direct-request-to-odoo-api" style="color: inherit; text-decoration: none;">
-  <h2>Direct request to odoo api</h2>
+  <h3>Direct request to odoo api</h3>
 </a>
 <p>You can use <code>lokapi</code> instance to query directly the odoo api trough
 the <code>get</code>, <code>post</code>, <code>put</code>, <code>delete</code> methods and their authenticated
@@ -198,14 +236,22 @@ provided.</p>
   <h1>Changelog</h1>
 </a>
 
-<a href="#0019-alpha202112032213" id="0019-alpha202112032213" style="color: inherit; text-decoration: none;">
-  <h2>0.0.19-alpha.202112032213</h2>
+<a href="#0019-alpha202112141355" id="0019-alpha202112141355" style="color: inherit; text-decoration: none;">
+  <h2>0.0.19-alpha.202112141355</h2>
 </a>
 
 <a href="#new" id="new" style="color: inherit; text-decoration: none;">
   <h3>New</h3>
 </a>
 <ul>
+<li><p>Provide <code>requestLocalPassword</code> type declaration for backends. [Valentin Lab]</p>
+</li>
+<li><p>Provide new general exception and utility functions to be used in backends. [Valentin Lab]</p>
+</li>
+<li><p>Add <code>.getStagingUserAccounts()</code> to get list of newly created account awaiting for validation. [Valentin Lab]</p>
+</li>
+<li><p>Provide new <code>.hasUserAccountValidationRights()</code> async boolean check. [Valentin Lab]</p>
+</li>
 <li><p><code>LokAPI.getBackends(..)</code> is now public. [Valentin Lab]</p>
 <p>This is now required as <code>Backend</code> direct access is required to
 <code>Backend.createAccount(..)</code> and other <code>Backend</code> level features.</p>
