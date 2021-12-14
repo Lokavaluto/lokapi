@@ -220,6 +220,31 @@ abstract class LokAPIAbstract extends OdooRESTAbstract {
         return recipients
     }
 
+    public async getStagingUserAccounts () {
+        const backends = await this.getBackends()
+        const partners = await this.$get('/partner/accounts', {
+            backend_keys: Object.keys(backends),
+        })
+        const accounts = []
+        const markBackend = Object.keys(backends).length > 1
+        partners.rows.forEach((partnerData: any) => {
+            Object.keys(partnerData.monujo_backends).forEach(
+                (backendId: string) => {
+                    if (!backends[backendId]?.jsonData?.accounts?.length) {
+                        return  // don't have this backend anyway
+                    }
+                    const backendRecipients = backends[backendId].makeRecipients(
+                        partnerData
+                    )
+                    backendRecipients.forEach((account: any) => {
+                        account.markBackend = markBackend
+                        accounts.push(account)
+                    })
+                }
+            )
+        })
+        return accounts
+    }
 
     /**
      * Same as searchRecipients(), but returning only professional

@@ -446,6 +446,24 @@ if (hasRights) {
 #+end_src
 
 
+*** Get list of account waiting for validation
+
+=.getStagingUserAccounts()= on main instance will query
+administrative backend for the list of user account created that needs
+validation from an administrative account.
+
+Please note that it returns =IRecipient= objects, that allows you
+to print names.
+
+#+begin_src typescript
+let recipients = await lokAPI.getStagingUserAccounts()
+
+recipients.forEach(recipient => {
+    console.log(`${recipient.name} has created his account and awaits validation.`)
+})
+#+end_src
+
+
 ** Miscellaneous and internal helpers
 
 *** Get the backend list
