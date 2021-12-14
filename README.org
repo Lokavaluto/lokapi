@@ -464,6 +464,24 @@ recipients.forEach(recipient => {
 #+end_src
 
 
+*** Validate account creation
+
+=.validateCreation()= upon a recipient instance will request the
+validation of that account. The current user logged in need to have
+user account validation rights.
+
+Depending on the backend, it could have to check your identity or your
+credentials.
+
+#+begin_src typescript
+let recipients = await lokAPI.getStagingUserAccounts()
+
+recipients.forEach(recipient => {
+    await recipient.validateCreation()
+})
+#+end_src
+
+
 ** Miscellaneous and internal helpers
 
 *** Get the backend list
