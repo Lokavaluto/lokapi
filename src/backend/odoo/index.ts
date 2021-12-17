@@ -130,10 +130,17 @@ export abstract class OdooRESTAbstract extends JsonRESTPersistentClientAbstract 
             login: login,
             uid: authData.uid,
         }
-        this.userProfile = authData.prefetch.partner
+        this._getMyContact = this.makeContact(authData.prefetch.partner)
         return authData
     }
 
+
+    _getMyContact: t.IContact
+    private makeContact (jsonData): t.IContact {
+        return new Contact(
+                { odoo: this }, this, { odoo: jsonData }
+        )
+    }
 
     /**
      * Get Contact of given contact id's. If no id is specified, returns the
@@ -148,8 +155,11 @@ export abstract class OdooRESTAbstract extends JsonRESTPersistentClientAbstract 
      *
      * @returns {Object
      */
-    public async getMyContact(): Promise<t.IContact> {
-        return new Contact({ odoo: this }, this, { odoo: await this.$get(`/partner/0`) })
+    public async getMyContact (): Promise<t.IContact> {
+        if (!this._getMyContact) {
+            this._getMyContact = this.makeContact(await this.$get('/partner/0'))
+        }
+        return this._getMyContact
     }
 
 }
