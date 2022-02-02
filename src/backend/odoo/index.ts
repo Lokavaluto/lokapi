@@ -1,5 +1,9 @@
 import { JsonRESTPersistentClientAbstract } from '../../rest'
 import { Contact } from './contact'
+import { e as httpRequestExc,
+         t as httpRequestType
+       } from '@0k.io/types-request'
+
 import * as t from '../../type'
 
 import * as e from '../../rest/exception'
@@ -95,7 +99,7 @@ export abstract class OdooRESTAbstract extends JsonRESTPersistentClientAbstract 
         try {
             response = await super.request(path, opts)
         } catch (err) {
-            if (err instanceof e.HttpError && (err.code === 401 || err.code === 403)) {
+            if (err instanceof httpRequestExc.HttpError && (err.code === 401 || err.code === 403)) {
                 console.log('Odoo AccessDenied: Authentication Required')
                 throw new e.AuthenticationRequired(
                     err.code, 'Authentication Failed',
@@ -151,7 +155,7 @@ export abstract class OdooRESTAbstract extends JsonRESTPersistentClientAbstract 
 }
 
 
-t.httpMethods.forEach((method) => {
+httpRequestType.httpMethods.forEach((method) => {
     const methodLc = method.toLowerCase()
     OdooRESTAbstract.prototype[methodLc] = function (
         path: string,

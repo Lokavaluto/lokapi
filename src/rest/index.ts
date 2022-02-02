@@ -1,6 +1,8 @@
+import { stringify as toQueryString } from 'qs'
+import { t as httpRequestType } from '@0k.io/types-request'
+
 import * as e from './exception'
 import * as t from '../type'
-import { stringify as toQueryString } from 'qs'
 
 
 export function getHostOrUrlParts (HostOrUrl: string): t.UrlParts {
@@ -52,7 +54,7 @@ export abstract class JsonRESTClientAbstract {
     path: string = ''
     port: number
 
-    protected abstract httpRequest: t.HttpRequest
+    protected abstract httpRequest: httpRequestType.HttpRequest
     protected abstract base64Encode: t.Base64Encode
 
     // Constants
@@ -168,7 +170,7 @@ export interface JsonRESTClientAbstract {
 }
 
 
-t.httpMethods.forEach((method) => {
+httpRequestType.httpMethods.forEach((method) => {
     JsonRESTClientAbstract.prototype[method.toLowerCase()] = async function (
         path: string,
         data?: any,

@@ -1,10 +1,5 @@
+import { e as httpRequestExc } from '@0k.io/types-request'
 
-export class RequestFailed extends Error {
-    constructor (message: string) {
-        super(message)
-        this.name = 'RequestFailed'
-    }
-}
 
 
 export class APIRequestFailed extends Error {
@@ -31,20 +26,6 @@ export class InvalidCredentials extends Error {
 }
 
 
-export class HttpError extends Error {
-    code: number
-    data: string
-    response: any
-    constructor (code: number, message: string, data: string, response: any) {
-        super(message)
-        this.code = code
-        this.data = data
-        this.response = response
-        this.name = 'HttpError'
-    }
-}
-
-
 export class InvalidJson extends Error {
     constructor (message: string) {
         super(message)
@@ -53,7 +34,7 @@ export class InvalidJson extends Error {
 }
 
 
-export class AuthenticationRequired extends HttpError {
+export class AuthenticationRequired extends httpRequestExc.HttpError {
     constructor (code: number, message: string, data: string, response: any) {
         super(code, message, data, response)
         this.name = 'AuthenticationRequired'

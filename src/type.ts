@@ -1,27 +1,5 @@
+import { t as httpRequestType } from '@0k.io/types-request'
 
-export const httpMethods = [
-    'GET',
-    'POST',
-    'PUT',
-    'DELETE',
-    'PATCH',
-    'HEAD'
-] as const
-
-
-export type httpMethod = typeof httpMethods[number]
-
-
-export type coreHttpOpts = {
-    protocol: string
-    host: string
-    path: string
-    method: httpMethod
-    headers?: {}
-    port?: number
-    data?: {}
-    responseHeaders?: {[k: string]: any}
-}
 
 
 export type UrlParts = {
@@ -32,7 +10,6 @@ export type UrlParts = {
 }
 
 
-export type HttpRequest = (opts: coreHttpOpts) => Object
 export type Base64Encode = (s: string) => string
 
 
@@ -50,7 +27,7 @@ export interface JsonData {
 
 
 export type HttpOpts = {
-    method: httpMethod
+    method: httpRequestType.httpMethod
     headers?: {}
     data?: JsonData | [string, JsonData][]
     responseHeaders?: {[k: string]: any}

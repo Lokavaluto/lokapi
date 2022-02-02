@@ -1,3 +1,4 @@
+import { e as httpRequestExc } from '@0k.io/types-request'
 
 import { OdooRESTAbstract } from './backend/odoo'
 
@@ -318,7 +319,7 @@ abstract class LokAPIAbstract extends OdooRESTAbstract {
                 backend_keys: Object.keys(backends),
             })
         } catch (err) {
-            if (err instanceof RestExc.HttpError && err.code === 404) {
+            if (err instanceof httpRequestExc.HttpError && err.code === 404) {
                 return []
             }
         }

@@ -1,3 +1,5 @@
+import { t as httpRequestType } from '@0k.io/types-request'
+
 import * as t from '../type'
 
 /**
@@ -25,7 +27,7 @@ export abstract class BackendAbstract {
     protected backends: { [index: string]: t.IBackend }
     protected jsonData
 
-    protected abstract httpRequest: t.HttpRequest
+    protected abstract httpRequest: httpRequestType.HttpRequest
     protected abstract base64Encode: t.Base64Encode
     protected abstract persistentStore: t.IPersistentStore
     protected abstract requestLogin(): void
