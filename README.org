@@ -426,7 +426,13 @@ for (const tr of transactions) {
 These are usage for users having special administrative rights
 on the /administrative backends/ or the /currency backends/.
 
-*** Check user account validation rights
+*** Validate account creation requests
+
+Users can request the creation of a new bank account via
+=IBackend.createUserAccount(..)=, provided that the backend
+implements this.
+
+**** Check user account validation rights
 
 The call to =.hasUserAccountValidationRights()= will return a boolean
 to tell you if any backends has at least one of their user accounts
@@ -446,7 +452,7 @@ if (hasRights) {
 #+end_src
 
 
-*** Get list of account waiting for validation
+**** Get list of account waiting for validation
 
 =.getStagingUserAccounts()= on main instance will query
 administrative backend for the list of user account created that needs
@@ -464,7 +470,7 @@ recipients.forEach(recipient => {
 #+end_src
 
 
-*** Validate account creation
+**** Validate account creation
 
 =.validateCreation()= upon a recipient instance will request the
 validation of that account. The current user logged in need to have
@@ -479,6 +485,34 @@ let recipients = await lokAPI.getStagingUserAccounts()
 recipients.forEach(recipient => {
     await recipient.validateCreation()
 })
+#+end_src
+
+
+*** Validate credit requests
+
+Credit requests (the action of requesting to get some additional
+credit on your account) can be issued indirectly by the administrative
+backend. There are no direct method on LokAPI to create a credit
+request.
+
+
+**** Check credit requests validation rights
+
+The call to =.hasCreditRequestValidationRights()= will return a
+boolean to tell you if any backends has at least one of their user
+accounts with =Credit Request Validation= rights.
+
+Please note that this method is available on top-level =lokApi=
+instance, and also on =Backend='s instances (it'll only check for
+rights in its own user accounts), and finally directly on each
+=UserAccount= instances.
+
+#+begin_src typescript
+let hasRights = await lokAPI.hasCreditRequestValidationRights()
+
+if (hasRights) {
+  console.log("I've got the power !")
+}
 #+end_src
 
 

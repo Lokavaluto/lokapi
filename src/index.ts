@@ -152,6 +152,12 @@ abstract class LokAPIAbstract extends OdooRESTAbstract {
         return results.reduce((a: boolean, b: boolean) => a || b, false)
     }
 
+    public async hasCreditRequestValidationRights () {
+        const backends = await this.getBackends()
+        const results = await Promise.all(Object.values(backends).map(
+            (b: any) => b.hasCreditRequestValidationRights()))
+        return results.reduce((a: boolean, b: boolean) => a || b, false)
+    }
 
     /**
      * Get list of Accounts
