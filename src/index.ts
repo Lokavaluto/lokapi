@@ -253,6 +253,29 @@ abstract class LokAPIAbstract extends OdooRESTAbstract {
         return accounts
     }
 
+    public async getCreditRequests () {
+        const backends = await this.getBackends()
+        let requests = await this.$get('/partner/credit-requests', {
+            backend_keys: Object.keys(backends),
+        })
+
+        const creditRequests = []
+        const markBackend = Object.keys(backends).length > 1
+        await Promise.all(requests.map(async (partnerData: any) => {
+            const backendId = partnerData.monujo_backend[0]
+            if (!backends[backendId]?.jsonData?.accounts?.length) {
+                // don't have this backend nor user account on this backend anyway
+                return
+            }
+            const backendCreditRequest = await backends[backendId].makeCreditRequest(
+                partnerData
+            )
+            backendCreditRequest.markBackend = markBackend
+            creditRequests.push(backendCreditRequest)
+        }))
+        return creditRequests
+    }
+
     /**
      * Same as searchRecipients(), but returning only professional
      * recipients.

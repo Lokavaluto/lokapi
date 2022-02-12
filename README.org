@@ -516,6 +516,27 @@ if (hasRights) {
 #+end_src
 
 
+**** Get list of credit requests waiting for validation
+
+=.getCreditRequests()= on main instance will query administrative
+backend for the list of credit requests that needs validation
+from an administrative account.
+
+Please note that it returns =ICreditRequest= objects, allowing you
+to query the recipient requesting the credit, and the amount.
+
+Note that =ICreditRequest= are =ITransactions=, so you can expect
+the same properties (=amount=, =relatedUser=, =currency=, ...)
+
+#+begin_src typescript
+let creditRequests = await lokAPI.getCreditRequests()
+
+creditRequests.forEach(creditRequest => {
+    console.log(`${creditRequest.relatedUser} has requested a credit of ${creditRequest.amount}.`)
+})
+#+end_src
+
+
 ** Miscellaneous and internal helpers
 
 *** Get the backend list

@@ -76,6 +76,9 @@ export interface ITransaction extends IBridge {
 }
 
 
+export interface ICreditRequest extends ITransaction {}
+
+
 export interface IContact extends IBridge {
 
     /**
