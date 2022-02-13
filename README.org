@@ -319,6 +319,9 @@ console.log(`I need to follow instructions on $url ` +
             'to purchase credit to store in my account.')
 #+end_src
 
+Note that depending on the backend, an admin might have to
+manually validate the final step of crediting the money on
+your account.
 
 *** Looking for recipients
 
@@ -419,6 +422,37 @@ for (const tr of transactions) {
     console.log(`  ${tr.date} ${tr.amount} ${tr.currency}`)
 }
 #+end_src
+
+
+** Advanced usage
+
+*** list backends instances
+
+Lokapi provides advanced backend actions directly on it's backend's
+instances. You can list them with cached, debounced, async call
+=lokAPI.getBackends()=.
+
+#+begin_src typescript
+let backends = await lokAPI.getBackends()
+
+for (const backend of backends) {
+    console.log(`  ${backend.internalId}`)
+}
+#+end_src
+
+*** Requesting the creation of a new user account
+
+If you don't already have a money account, some backends will allow
+you to submit a money account creation request. Once accepted by an
+admin, you'll be able to use it.
+
+This is done directly on the backend object thanks to
+=IBackend.createUserAccount(data)=, provided that the backend
+implements this.
+
+Argument of =IBackend.createUserAccount(data)= is a simple object
+whose content depends on the backend. Please refer to the target
+backend documentation to provide the correct information.
 
 
 ** Admin
