@@ -571,6 +571,25 @@ creditRequests.forEach(creditRequest => {
 #+end_src
 
 
+**** Validate credit request
+
+=.validate()= upon a credit request instance will send the validation
+of that credit request (and thus credit the account with the given
+amount). The current user logged in need to have credit request
+validation rights.
+
+Depending on the backend, you might have to confirm your identity or
+your credentials.
+
+#+begin_src typescript
+let creditRequests = await lokAPI.getCreditRequests()
+
+creditRequests.forEach(creditRequest => {
+    await creditRequest.validate()
+})
+#+end_src
+
+
 ** Miscellaneous and internal helpers
 
 *** Get the backend list
