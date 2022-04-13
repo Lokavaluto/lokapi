@@ -373,6 +373,13 @@ let recipients = await lokAPI.searchRecipients("Alain")
 await recipients[0].transfer("12", "Dinner Party participation")
 #+end_src
 
+Note that =.transfer(..)= can lead to these exceptions to be thrown:
+- sub-classes of =InvalidAmount=
+  - =NegativeAmount=: Upon negative amounts
+  - =NullAmount=: Upon 0 amount
+  - =RefusedAmount=: When the backend refuses the transaction (often
+      linked to insufficient funds).
+- =InactiveAccount=: Source or destination account is inactive.
 
 *** Requesting contact info on current logged in user
 

@@ -36,3 +36,35 @@ export class InactiveAccount extends Error {
         this.name = 'InactiveAccount'
     }
 }
+
+
+export class InvalidAmount extends Error {
+    constructor (message: string) {
+        super(message)
+        this.name = 'InvalidAmount'
+    }
+}
+
+
+export class NegativeAmount extends InvalidAmount {
+    constructor (message: string) {
+        super(message)
+        this.name = 'NegativeAmount'
+    }
+}
+
+
+export class NullAmount extends InvalidAmount {
+    constructor (message: string) {
+        super(message)
+        this.name = 'NullAmount'
+    }
+}
+
+
+export class RefusedAmount extends InvalidAmount {
+    constructor (message: string) {
+        super(message)
+        this.name = 'RefusedAmount'
+    }
+}
