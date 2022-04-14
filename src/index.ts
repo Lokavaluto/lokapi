@@ -276,42 +276,6 @@ abstract class LokAPIAbstract extends OdooRESTAbstract {
         return creditRequests
     }
 
-    /**
-     * Same as searchRecipients(), but returning only professional
-     * recipients.
-     *
-     * Paging is available and should be used.
-     *
-     * @param value The given string will be searched in name, email, phone
-     *
-     * @throws {RequestFailed, APIRequestFailed, InvalidCredentials, InvalidJson}
-     *
-     * @returns Array<t.IRecipient>
-     */
-    public async searchProRecipients (
-        value: string,
-    ): Promise<t.IRecipient[]> {
-        // XXXvlab: to cache with global cache decorator that allow fine control
-        // of forceRefresh
-        const backends = await this.getBackends()
-        const partners = await this.$get('/partner/search', {
-            value: value,
-            backend_keys: Object.keys(backends),
-            order: 'is_favorite desc, name',
-            is_company: 1,
-        })
-        const recipients = []
-        partners.rows.forEach((partnerData: any) => {
-            Object.keys(partnerData.monujo_backends).forEach((backendId: string) => {
-                let backendRecipients = backends[backendId].makeRecipients(partnerData)
-                backendRecipients.forEach((recipient: any) => {
-                    recipients.push(recipient)
-                })
-            })
-        })
-        return recipients
-    }
-
 
     /**
      * Get recipients from a QR code url string. It'll return a recipient per

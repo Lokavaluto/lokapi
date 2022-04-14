@@ -328,11 +328,6 @@ your account.
 Recipients are possible receiving end of a transfer of
 money. These are connected to contacts in =lokapi=.
 
-We have Pro Recipients which are used for company. And normal
-Recipient, any contact non-professional contact. We make
-separate search through =lokAPI.searchRecipients(..)= or
-=lokAPI.searchProRecipients(..)=.
-
 #+begin_src typescript
 let recipients = await lokAPI.searchRecipients("Alain")
 
@@ -342,7 +337,7 @@ recipients.forEach(recipient => {
 #+end_src
 
 Note that if you look for an empty string,
-=lokAPI.search{,Pro}Recipients("")= will return all favorite recipients.
+=lokAPI.searchRecipients("")= will return all favorite recipients.
 
 Recipients are always ordered with favorites first and by name.
 
