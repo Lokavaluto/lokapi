@@ -99,7 +99,7 @@ export abstract class OdooRESTAbstract extends JsonRESTPersistentClientAbstract 
         try {
             response = await super.request(path, opts)
         } catch (err) {
-            if (err instanceof httpRequestExc.HttpError && (err.code === 401 || err.code === 403)) {
+            if (err instanceof httpRequestExc.HttpError && err.code === 401) {
                 console.log('Odoo AccessDenied: Authentication Required')
                 throw new e.AuthenticationRequired(
                     err.code, 'Authentication Failed',
