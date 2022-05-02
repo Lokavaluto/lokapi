@@ -107,7 +107,8 @@ export abstract class JsonRESTClientAbstract {
         const headers = Object.assign({}, this.COMMON_HEADERS, opts.headers)
         let rawData: any
         let qs = ''
-        if (opts.method === 'GET' && Object.keys(opts.data).length !== 0) {
+        if (opts.method === 'GET' && typeof opts.data === "object" &&
+            Object.keys(opts.data).length !== 0) {
             qs = toQueryString(opts.data, { allowDots: true })
         }
         try {
@@ -179,8 +180,8 @@ httpRequestType.httpMethods.forEach((method) => {
     ) {
         const opts: t.HttpOpts = {
             method: method,
-            headers: headers || {},
-            data: data || {},
+            ...(headers && { headers }),
+            ...(data && { data }),
             responseHeaders
         }
         return this.request(path, opts)
@@ -196,8 +197,8 @@ httpRequestType.httpMethods.forEach((method) => {
     ) {
         const opts: t.HttpOpts = {
             method: method,
-            headers: headers || {},
-            data: data || {},
+            ...(headers && { headers }),
+            ...(data && { data }),
             responseHeaders
         }
         return this.authRequest(path, opts)
