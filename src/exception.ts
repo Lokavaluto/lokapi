@@ -68,3 +68,11 @@ export class RefusedAmount extends InvalidAmount {
         this.name = 'RefusedAmount'
     }
 }
+
+
+export class InsufficientBalance extends Error {
+    constructor (message: string) {
+        super(message)
+        this.name = 'Insufficientbalance'
+    }
+}
