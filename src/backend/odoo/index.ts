@@ -27,7 +27,7 @@ export abstract class OdooRESTAbstract extends JsonRESTPersistentClientAbstract 
     userProfile: any
 
 
-    constructor (host: string, dbName: string) {
+    constructor (host: string, dbName?: string) {
         super(host)
         this.dbName = dbName
         this.authHeaders = {}
@@ -39,8 +39,8 @@ export abstract class OdooRESTAbstract extends JsonRESTPersistentClientAbstract 
                 '/auth/authenticate',
                 {
                     api_version: this.API_VERSION,
-                    db: this.dbName,
                     params: ['lcc_app'],
+                    ...(this.dbName && { db: this.dbName })
                 },
                 {
                     Authorization: `Basic ${this.base64Encode(

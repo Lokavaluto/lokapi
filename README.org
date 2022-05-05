@@ -67,12 +67,11 @@ LokAPIAbstract and define these objects:
 
 ** Instanciating lokapi
 
-On instantiation time, =LokAPI= class will require you to provide:
-
-  - host :: as a =string= (example: "lokavaluto.fr")
-
-  - database :: as a =string= (example: "myodoodb")
-
+On instantiation time, =LokAPI= class will require you to provide a
+=host= as first argument (a string, describing the URL to reach the
+administrative backend), and can receive a database name as second
+argument. If you don't specify the database name, it'll be the default
+one selected by the server.
 
 *** Example for node
 
@@ -175,11 +174,6 @@ class NodeLokAPI extends LokApiAbstract {
 
 if (!process.env.VUE_APP_LOKAPI_HOST) {
     throw new Error("Please specify VUE_APP_LOKAPI_HOST in '.env'")
-}
-
-
-if (!process.env.VUE_APP_LOKAPI_DB) {
-    throw new Error("Please specify VUE_APP_LOKAPI_DB in '.env'")
 }
 
 
