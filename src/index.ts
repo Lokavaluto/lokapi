@@ -16,7 +16,7 @@ abstract class LokAPIAbstract extends OdooRESTAbstract {
 
     abstract BackendFactories: { [k:string]: any }
 
-    async requestLocalPassword (state: string): Promise<any> {
+    async requestLocalPassword (state: string, userAccount: any): Promise<any> {
         throw new Error('No `.requestLocalPassword(..)` method provided')
     }
 
@@ -160,9 +160,7 @@ abstract class LokAPIAbstract extends OdooRESTAbstract {
     }
 
     /**
-     * Get list of Accounts
-     *
-     * @throws {RequestFailed, APIRequestFailed, InvalidCredentials, InvalidJson}
+     * Get list of Bank Accounts
      *
      * @returns Object
      */
@@ -180,6 +178,20 @@ abstract class LokAPIAbstract extends OdooRESTAbstract {
             })
         }
         return lokapiBankAccounts
+    }
+
+    /**
+     * Get list of User Accounts
+     *
+     * @returns Object
+     */
+    public async getUserAccounts (): Promise<any> {
+        // XXXvlab: to cache with global cache decorator that allow
+        // fine control of forceRefresh
+        const backends = await this.getBackends()
+        return Object.values(backends).map(
+            (b: BackendAbstract) => Object.values(b.userAccounts)
+        ).flat()
     }
 
 
