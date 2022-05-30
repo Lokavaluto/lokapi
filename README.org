@@ -451,6 +451,42 @@ whose content depends on the backend. Please refer to the target
 backend documentation to provide the correct information.
 
 
+*** list user accounts
+
+Backends hols several user accounts. These are often not so much
+advertised intermediary object as they can be confusingly close from
+bank accounts, as in most backend, either there are no real user
+accounts but only an account, and in others, there are only one bank
+account per user account. But they share one aspect : they are the
+object requiring authentication of the holder.
+
+You can list them from a =Backend= object thanks to property
+`backend.userAccounts`, which output an Object associating the 
+``internalId`` with the corresponding ``userAccount`` :
+
+#+begin_src typescript
+let backends = await lokAPI.getBackends()
+
+for (const backend of backends) {
+    console.log(`  ${backend.internalId}`)
+    for (const userAccount of Object.values(backend.userAccounts)) {
+        console.log(`    - account: ${userAccount.internalId}`)
+    }
+}
+#+end_src
+
+You can also get the full list of all user accounts from the main
+``LokAPI`` object:
+
+#+begin_src typescript
+const userAccounts = await lokAPI.getUserAccounts()
+
+for (const userAccount of userAccounts) {
+    console.log(`  ${userAccount.internalId}`)
+}
+#+end_src
+
+
 ** Admin
 
 These are usage for users having special administrative rights

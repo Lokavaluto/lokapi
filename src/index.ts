@@ -182,6 +182,20 @@ abstract class LokAPIAbstract extends OdooRESTAbstract {
         return lokapiBankAccounts
     }
 
+    /**
+     * Get list of User Accounts
+     *
+     * @returns Object
+     */
+    public async getUserAccounts (): Promise<any> {
+        // XXXvlab: to cache with global cache decorator that allow
+        // fine control of forceRefresh
+        const backends = await this.getBackends()
+        return Object.values(backends).map(
+            (b: BackendAbstract) => Object.values(b.userAccounts)
+        ).flat()
+    }
+
 
     /**
      * Get list of non-Professional Recipients (contacts with an
