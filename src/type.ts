@@ -22,7 +22,7 @@ export type restMethod = (
 
 
 export interface JsonData {
-    [index: string]: string | number | JsonData | JsonData[]
+    [index: string]: boolean | string | number | JsonData | JsonData[]
 }
 
 
