@@ -160,9 +160,7 @@ abstract class LokAPIAbstract extends OdooRESTAbstract {
     }
 
     /**
-     * Get list of Accounts
-     *
-     * @throws {RequestFailed, APIRequestFailed, InvalidCredentials, InvalidJson}
+     * Get list of Bank Accounts
      *
      * @returns Object
      */
