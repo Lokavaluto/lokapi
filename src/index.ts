@@ -16,7 +16,7 @@ abstract class LokAPIAbstract extends OdooRESTAbstract {
 
     abstract BackendFactories: { [k:string]: any }
 
-    async requestLocalPassword (state: string): Promise<any> {
+    async requestLocalPassword (state: string, userAccount: any): Promise<any> {
         throw new Error('No `.requestLocalPassword(..)` method provided')
     }
 
