@@ -465,8 +465,8 @@ account per user account. But they share one aspect : they are the
 object requiring authentication of the holder.
 
 You can list them from a =Backend= object thanks to property
-`backend.userAccounts`, which output an Object associating the 
-``internalId`` with the corresponding ``userAccount`` :
+=backend.userAccounts=, which output an Object associating the
+=internalId= with the corresponding =userAccount= :
 
 #+begin_src typescript
 let backends = await lokAPI.getBackends()
@@ -480,7 +480,7 @@ for (const backend of backends) {
 #+end_src
 
 You can also get the full list of all user accounts from the main
-``LokAPI`` object:
+=LokAPI= object:
 
 #+begin_src typescript
 const userAccounts = await lokAPI.getUserAccounts()
@@ -654,17 +654,17 @@ creditRequests.forEach(creditRequest => {
 *** Get the backend list
 
 You can query the =lokapi= to get the backend list available on the
-administration backend side. A Backend instance is the main object
+administration backend side. A =Backend= instance is the main object
 whose instance is responsible for a currency domain. You have a
-Backend per currency. So in short, =.getBackends()= will give you
+=Backend= per currency. So in short, =.getBackends()= will give you
 the available currencies available.
 
 This function is cached, so it doesn't get updated if you happen
 to add a new currency backend in the administration backend.
 
 =.getBackends()= returns an Object mapping a string identifier for the
-backend (ie: `cyclos:cyclos.example.com`, `comchain:Lemanopolis`, ...), and
-the Backend object instance.
+backend (ie: =cyclos:cyclos.example.com=, =comchain:Lemanopolis=,
+...), and the Backend object instance.
 
 #+begin_src typescript
 let backends = await lokAPI.getBackends()
