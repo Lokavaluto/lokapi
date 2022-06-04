@@ -276,6 +276,7 @@ account:
 await lokApi.login("myuser", "mypassword")
 #+end_src
 
+Note that you can check if you are logged in with =lokApi.isLogged()=
 
 *** Accessing accounts
 

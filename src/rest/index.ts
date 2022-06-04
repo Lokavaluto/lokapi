@@ -325,4 +325,15 @@ export abstract class JsonRESTPersistentClientAbstract extends JsonRESTSessionCl
         this.apiToken = null
     }
 
+
+    /**
+     * Returns true/false whether we are logged in or not
+     *
+     * @returns boolean
+     *
+     */
+    get isLogged (): boolean {
+        return this.apiToken !== null
+    }
+
 }
