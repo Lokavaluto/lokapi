@@ -52,12 +52,28 @@ abstract class LokAPIAbstract extends OdooRESTAbstract {
         // fetch.
         if (!this._backendCredentials) {
             if (!this._backendCredentialsPromise) {
-                this._backendCredentialsPromise = this.$post(
-                    '/partner/backend_credentials'
-                )
+                const self = this
+                let _backendCredentialsPromise: Promise<any>
+                _backendCredentialsPromise = (async () => {
+                    let backendCredentials
+                    try {
+                        backendCredentials = await this.$post('/partner/backend_credentials')
+                    } catch (err) {
+                        if (self._backendCredentialsPromise !== _backendCredentialsPromise) {
+                            throw new Error(`Cancelled '_backendCredentialsPromise' (failed with: ${err})`)
+                        }
+                        self._backendCredentialsPromise = null
+                        throw err
+                    }
+                    if (self._backendCredentialsPromise !== _backendCredentialsPromise) {
+                        throw new Error('Cancelled promise (succeeded)')
+                    }
+                    self._backendCredentialsPromise = null
+                    self._backendCredentials = backendCredentials
+                })()
+                this._backendCredentialsPromise = _backendCredentialsPromise
             }
-            this._backendCredentials = await this._backendCredentialsPromise
-            this._backendCredentialsPromise = null
+            await this._backendCredentialsPromise
         }
         return this._backendCredentials
     }
@@ -83,13 +99,27 @@ abstract class LokAPIAbstract extends OdooRESTAbstract {
         if (!this._backends) {
             if (!this._backendsPromise) {
                 const self = this
-                this._backendsPromise = (async function () {
-                    const backendCredentials = await self.getBackendCredentials()
-                    return self.makeBackends(backendCredentials)
+                let _backendsPromise: Promise<any>
+                _backendsPromise = (async () => {
+                    let backendCredentials
+                    try {
+                        backendCredentials = await self.getBackendCredentials()
+                    } catch (err) {
+                        if (self._backendsPromise !== _backendsPromise) {
+                            throw new Error(`Cancelled '_backendsPromise' (failed with: ${err})`)
+                        }
+                        self._backendsPromise = null
+                        throw err
+                    }
+                    if (self._backendsPromise !== _backendsPromise) {
+                        throw new Error("Cancelled '_backendsPromise' (succeeded)")
+                    }
+                    self._backendsPromise = null
+                    self._backends = self.makeBackends(backendCredentials)
                 })()
+                this._backendsPromise = _backendsPromise
             }
-            this._backends = await this._backendsPromise
-            this._backendsPromise = null
+            await this._backendsPromise
         }
         return this._backends
     }
@@ -363,6 +393,23 @@ abstract class LokAPIAbstract extends OdooRESTAbstract {
         )
     }
 
+    /**
+     * Forces cache refresh of the current lokAPI instance. Backends will
+     * have to be requeried and rebuild.
+     *
+     * @returns void
+     */
+    public flushBackendCaches (): void {
+        this._backends = null
+        this._backendsPromise = null
+        this._backendCredentials = null
+        this._backendCredentialsPromise = null
+    }
+
+    public async logout (): Promise<void> {
+        await super.logout()
+        this.flushBackendCaches()
+    }
 }
 
 

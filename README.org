@@ -450,6 +450,10 @@ Argument of =IBackend.createUserAccount(data)= is a simple object
 whose content depends on the backend. Please refer to the target
 backend documentation to provide the correct information.
 
+You might want to have a look at the section talking about caching
+and debouncing, because the backend list won't be udpated after
+the user account created unless you flush the backend caches
+with =lokAPI.flushBackendCaches()=.
 
 *** list user accounts
 
@@ -486,6 +490,29 @@ for (const userAccount of userAccounts) {
 }
 #+end_src
 
+
+*** caching and debouncing
+
+=lokAPI= instances provide partial caching and debouncing. Caching
+means that most calls that generates an http request will have their
+results stored, and the next call won't be actually performed but the
+=lokAPI= instance will provide the caller with the stored result.
+
+Debouncing occurs when you have several callers waiting for the same
+async results, they will all be coalesced into waiting for the same
+query, avoiding to make N calls for the same query.
+
+This is especially useful if you deal with reactive GUIs with lots of
+components in a typically event-driven environment.
+
+An issue with this, is that you need to know how to forget and ask for
+a new query when you know data might have changed on the server side.
+
+We provide the =lokAPI.flushBackendCaches()= to deal with that.
+
+This is especially important after creating a new account, as backends
+creation are cached and debounced, because these are information that
+typically won't change often.
 
 ** Admin
 
