@@ -1,4 +1,4 @@
-<!DOCTYPE html><html class="default"><head><meta charSet="utf-8"/><meta http-equiv="x-ua-compatible" content="IE=edge"/><title>LokAPI - v0.0.19-alpha.202205300536</title><meta name="description" content="Documentation for LokAPI - v0.0.19-alpha.202205300536"/><meta name="viewport" content="width=device-width, initial-scale=1"/><link rel="stylesheet" href="assets/style.css"/><link rel="stylesheet" href="assets/highlight.css"/><script async src="assets/search.js" id="search-script"></script></head><body><script>document.body.classList.add(localStorage.getItem("tsd-theme") || "os")</script><header><div class="tsd-page-toolbar"><div class="container"><div class="table-wrap"><div class="table-cell" id="tsd-search" data-base="."><div class="field"><label for="tsd-search-field" class="tsd-widget search no-caption">Search</label><input type="text" id="tsd-search-field"/></div><ul class="results"><li class="state loading">Preparing search index...</li><li class="state failure">The search index is not available</li></ul><a href="index.html" class="title">LokAPI - v0.0.19-alpha.202205300536</a></div><div class="table-cell" id="tsd-widgets"><div id="tsd-filter"><a href="#" class="tsd-widget options no-caption" data-toggle="options">Options</a><div class="tsd-filter-group"><div class="tsd-select" id="tsd-filter-visibility"><span class="tsd-select-label">All</span><ul class="tsd-select-list"><li data-value="public">Public</li><li data-value="protected">Public/Protected</li><li data-value="private" class="selected">All</li></ul></div> <input type="checkbox" id="tsd-filter-inherited" checked/><label class="tsd-widget" for="tsd-filter-inherited">Inherited</label><input type="checkbox" id="tsd-filter-externals" checked/><label class="tsd-widget" for="tsd-filter-externals">Externals</label></div></div><a href="#" class="tsd-widget menu no-caption" data-toggle="menu">Menu</a></div></div></div></div><div class="tsd-page-title"><div class="container"><h1>LokAPI - v0.0.19-alpha.202205300536 </h1></div></div></header><div class="container container-main"><div class="row"><div class="col-8 col-content"><div class="tsd-panel tsd-typography"><p>LokAPI is a javascript library intended to be used in mobile
+<!DOCTYPE html><html class="default"><head><meta charSet="utf-8"/><meta http-equiv="x-ua-compatible" content="IE=edge"/><title>LokAPI - v0.0.19-alpha.202206150839</title><meta name="description" content="Documentation for LokAPI - v0.0.19-alpha.202206150839"/><meta name="viewport" content="width=device-width, initial-scale=1"/><link rel="stylesheet" href="assets/style.css"/><link rel="stylesheet" href="assets/highlight.css"/><script async src="assets/search.js" id="search-script"></script></head><body><script>document.body.classList.add(localStorage.getItem("tsd-theme") || "os")</script><header><div class="tsd-page-toolbar"><div class="container"><div class="table-wrap"><div class="table-cell" id="tsd-search" data-base="."><div class="field"><label for="tsd-search-field" class="tsd-widget search no-caption">Search</label><input type="text" id="tsd-search-field"/></div><ul class="results"><li class="state loading">Preparing search index...</li><li class="state failure">The search index is not available</li></ul><a href="index.html" class="title">LokAPI - v0.0.19-alpha.202206150839</a></div><div class="table-cell" id="tsd-widgets"><div id="tsd-filter"><a href="#" class="tsd-widget options no-caption" data-toggle="options">Options</a><div class="tsd-filter-group"><div class="tsd-select" id="tsd-filter-visibility"><span class="tsd-select-label">All</span><ul class="tsd-select-list"><li data-value="public">Public</li><li data-value="protected">Public/Protected</li><li data-value="private" class="selected">All</li></ul></div> <input type="checkbox" id="tsd-filter-inherited" checked/><label class="tsd-widget" for="tsd-filter-inherited">Inherited</label><input type="checkbox" id="tsd-filter-externals" checked/><label class="tsd-widget" for="tsd-filter-externals">Externals</label></div></div><a href="#" class="tsd-widget menu no-caption" data-toggle="menu">Menu</a></div></div></div></div><div class="tsd-page-title"><div class="container"><h1>LokAPI - v0.0.19-alpha.202206150839 </h1></div></div></header><div class="container container-main"><div class="row"><div class="col-8 col-content"><div class="tsd-panel tsd-typography"><p>LokAPI is a javascript library intended to be used in mobile
 applications or web application to abstract all logics with
 lokavaluto&#39;s server.</p>
 
@@ -88,6 +88,7 @@ it should. Use with caution.</p>
 account:</p>
 <pre><code class="language-typescript"><span class="hl-1">await</span><span class="hl-0"> </span><span class="hl-5">lokApi</span><span class="hl-0">.</span><span class="hl-4">login</span><span class="hl-0">(</span><span class="hl-6">&quot;myuser&quot;</span><span class="hl-0">, </span><span class="hl-6">&quot;mypassword&quot;</span><span class="hl-0">)</span>
 </code></pre>
+<p>Note that you can check if you are logged in with <code>lokApi.isLogged()</code></p>
 
 <a href="#accessing-accounts" id="accessing-accounts" style="color: inherit; text-decoration: none;">
   <h3>Accessing accounts</h3>
@@ -204,6 +205,10 @@ implements this.</p>
 <p>Argument of <code>IBackend.createUserAccount(data)</code> is a simple object
 whose content depends on the backend. Please refer to the target
 backend documentation to provide the correct information.</p>
+<p>You might want to have a look at the section talking about caching
+and debouncing, because the backend list won&#39;t be udpated after
+the user account created unless you flush the backend caches
+with <code>lokAPI.flushBackendCaches()</code>.</p>
 
 <a href="#list-user-accounts" id="list-user-accounts" style="color: inherit; text-decoration: none;">
   <h3>list user accounts</h3>
@@ -223,6 +228,25 @@ object requiring authentication of the holder.</p>
 <code>LokAPI</code> object:</p>
 <pre><code class="language-typescript"><span class="hl-2">const</span><span class="hl-0"> </span><span class="hl-8">userAccounts</span><span class="hl-0"> = </span><span class="hl-1">await</span><span class="hl-0"> </span><span class="hl-5">lokAPI</span><span class="hl-0">.</span><span class="hl-4">getUserAccounts</span><span class="hl-0">()</span><br/><br/><span class="hl-1">for</span><span class="hl-0"> (</span><span class="hl-2">const</span><span class="hl-0"> </span><span class="hl-8">userAccount</span><span class="hl-0"> </span><span class="hl-2">of</span><span class="hl-0"> </span><span class="hl-5">userAccounts</span><span class="hl-0">) {</span><br/><span class="hl-0">    </span><span class="hl-5">console</span><span class="hl-0">.</span><span class="hl-4">log</span><span class="hl-0">(</span><span class="hl-6">`  </span><span class="hl-2">${</span><span class="hl-5">userAccount</span><span class="hl-9">.</span><span class="hl-5">internalId</span><span class="hl-2">}</span><span class="hl-6">`</span><span class="hl-0">)</span><br/><span class="hl-0">}</span>
 </code></pre>
+
+<a href="#caching-and-debouncing" id="caching-and-debouncing" style="color: inherit; text-decoration: none;">
+  <h3>caching and debouncing</h3>
+</a>
+<p><code>lokAPI</code> instances provide partial caching and debouncing. Caching
+means that most calls that generates an http request will have their
+results stored, and the next call won&#39;t be actually performed but the
+<code>lokAPI</code> instance will provide the caller with the stored result.</p>
+<p>Debouncing occurs when you have several callers waiting for the same
+async results, they will all be coalesced into waiting for the same
+query, avoiding to make N calls for the same query.</p>
+<p>This is especially useful if you deal with reactive GUIs with lots of
+components in a typically event-driven environment.</p>
+<p>An issue with this, is that you need to know how to forget and ask for
+a new query when you know data might have changed on the server side.</p>
+<p>We provide the <code>lokAPI.flushBackendCaches()</code> to deal with that.</p>
+<p>This is especially important after creating a new account, as backends
+creation are cached and debounced, because these are information that
+typically won&#39;t change often.</p>
 
 <a href="#admin" id="admin" style="color: inherit; text-decoration: none;">
   <h2>Admin</h2>
@@ -326,15 +350,15 @@ your credentials.</p>
   <h3>Get the backend list</h3>
 </a>
 <p>You can query the <code>lokapi</code> to get the backend list available on the
-administration backend side. A Backend instance is the main object
+administration backend side. A <code>Backend</code> instance is the main object
 whose instance is responsible for a currency domain. You have a
-Backend per currency. So in short, <code>.getBackends()</code> will give you
+<code>Backend</code> per currency. So in short, <code>.getBackends()</code> will give you
 the available currencies available.</p>
 <p>This function is cached, so it doesn&#39;t get updated if you happen
 to add a new currency backend in the administration backend.</p>
 <p><code>.getBackends()</code> returns an Object mapping a string identifier for the
-backend (ie: <code>cyclos:cyclos.example.com</code>, <code>comchain:Lemanopolis</code>, ...), and
-the Backend object instance.</p>
+backend (ie: <code>cyclos:cyclos.example.com</code>, <code>comchain:Lemanopolis</code>,
+...), and the Backend object instance.</p>
 <pre><code class="language-typescript"><span class="hl-2">let</span><span class="hl-0"> </span><span class="hl-5">backends</span><span class="hl-0"> = </span><span class="hl-1">await</span><span class="hl-0"> </span><span class="hl-5">lokAPI</span><span class="hl-0">.</span><span class="hl-4">getBackends</span><span class="hl-0">()</span><br/><br/><span class="hl-1">for</span><span class="hl-0"> (</span><span class="hl-2">const</span><span class="hl-0"> </span><span class="hl-8">b</span><span class="hl-0"> </span><span class="hl-2">in</span><span class="hl-0"> </span><span class="hl-5">backends</span><span class="hl-0">) {</span><br/><span class="hl-0">    </span><span class="hl-5">console</span><span class="hl-0">.</span><span class="hl-4">log</span><span class="hl-0">(</span><span class="hl-6">`  Backend </span><span class="hl-2">${</span><span class="hl-5">b</span><span class="hl-2">}</span><span class="hl-6">:`</span><span class="hl-0">, </span><span class="hl-5">backends</span><span class="hl-0">[</span><span class="hl-5">b</span><span class="hl-0">])</span><br/><span class="hl-0">}</span>
 </code></pre>
 
@@ -355,14 +379,16 @@ provided.</p>
   <h1>Changelog</h1>
 </a>
 
-<a href="#0019-alpha202205300536" id="0019-alpha202205300536" style="color: inherit; text-decoration: none;">
-  <h2>0.0.19-alpha.202205300536</h2>
+<a href="#0019-alpha202206150839" id="0019-alpha202206150839" style="color: inherit; text-decoration: none;">
+  <h2>0.0.19-alpha.202206150839</h2>
 </a>
 
 <a href="#new" id="new" style="color: inherit; text-decoration: none;">
   <h3>New</h3>
 </a>
 <ul>
+<li><p>Add <code>lokAPI.isLogged()</code> to query if we are logged in. [Valentin Lab]</p>
+</li>
 <li><p>Provide a <code>LokAPI.getUserAccounts()</code> to list all user accounts. [Valentin Lab]</p>
 <p>User accounts are the one requiring authentication in currently implemented
 backends. And if previously, we didn&#39;t advertise these intermediary object
@@ -414,6 +440,11 @@ choose to trust.</p>
   <h3>Fix</h3>
 </a>
 <ul>
+<li><p>Prevent data leaking when de-logging or for forcing user accounts refresh. [Valentin Lab]</p>
+<p>This provides a stronger debouncing and caching mecanism along with a
+<code>lokAPI.forceRefresh()</code> cache clearing function. All this begs for a
+proper caching and debouncing library.</p>
+</li>
 <li><p>Let 403 error on odoo backend be not treated as re-login request. [Valentin Lab]</p>
 </li>
 <li><p>Remove <code>searchProRecipients(..)</code> as endpoint was removed. [Valentin Lab]</p>
