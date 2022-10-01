@@ -620,13 +620,13 @@ Please note that it returns =ICreditRequest= objects, allowing you
 to query the recipient requesting the credit, and the amount.
 
 Note that =ICreditRequest= are =ITransactions=, so you can expect
-the same properties (=amount=, =relatedUser=, =currency=, ...)
+the same properties (=amount=, =related=, =currency=, ...)
 
 #+begin_src typescript
 let creditRequests = await lokAPI.getCreditRequests()
 
 creditRequests.forEach(creditRequest => {
-    console.log(`${creditRequest.relatedUser} has requested a credit of ${creditRequest.amount}.`)
+    console.log(`${creditRequest.related} has requested a credit of ${creditRequest.amount}.`)
 })
 #+end_src
 

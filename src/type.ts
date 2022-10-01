@@ -72,7 +72,6 @@ export interface ITransaction extends IBridge {
     description: string
     id: string
     related: string
-    relatedUser: {[index: string]: any}
 }
 
 
