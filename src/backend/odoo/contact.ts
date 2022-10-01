@@ -63,7 +63,6 @@ export class Contact extends BridgeObject implements t.IContact {
      * @returns Object
      */
     public async setFavorite (): Promise<void> {
-        console.log('Contact.setFavorite', this)
         await this.backends.odoo.$put(
             `/partner/${this.jsonData.odoo.id}/favorite/set`
         )
