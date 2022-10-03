@@ -31,7 +31,7 @@ export abstract class BackendAbstract {
     protected abstract httpRequest: httpRequestType.HttpRequest
     protected abstract base64Encode: t.Base64Encode
     protected abstract persistentStore: t.IPersistentStore
-    protected abstract requestLogin(): void
+    protected abstract requestLogin (): void
     public abstract requestLocalPassword: (state: string) => Promise<any>
 
     constructor (backends: any, jsonData: any) {
@@ -63,14 +63,24 @@ export abstract class BackendAbstract {
     }
 
     public async hasUserAccountValidationRights (): Promise<boolean> {
-        const results = await Promise.all(Object.values(this.userAccounts).map(
-            (a: any) => a.hasUserAccountValidationRights ? a.hasUserAccountValidationRights() : false))
+        const results = await Promise.all(
+            Object.values(this.userAccounts).map((a: any) =>
+                a.hasUserAccountValidationRights
+                    ? a.hasUserAccountValidationRights()
+                    : false
+            )
+        )
         return results.reduce((a: boolean, b: boolean) => a || b, false)
     }
 
     public async hasCreditRequestValidationRights (): Promise<boolean> {
-        const results = await Promise.all(Object.values(this.userAccounts).map(
-            (a: any) => a.hasCreditRequestValidationRights ? a.hasCreditRequestValidationRights() : false))
+        const results = await Promise.all(
+            Object.values(this.userAccounts).map((a: any) =>
+                a.hasCreditRequestValidationRights
+                    ? a.hasCreditRequestValidationRights()
+                    : false
+            )
+        )
         return results.reduce((a: boolean, b: boolean) => a || b, false)
     }
 }

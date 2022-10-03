@@ -107,8 +107,11 @@ export abstract class JsonRESTClientAbstract {
         const headers = Object.assign({}, this.COMMON_HEADERS, opts.headers)
         let rawData: any
         let qs = ''
-        if (opts.method === 'GET' && typeof opts.data === "object" &&
-            Object.keys(opts.data).length !== 0) {
+        if (
+            opts.method === 'GET' &&
+            typeof opts.data === 'object' &&
+            Object.keys(opts.data).length !== 0
+        ) {
             qs = toQueryString(opts.data, { allowDots: true })
         }
         try {
@@ -176,33 +179,32 @@ httpRequestType.httpMethods.forEach((method) => {
         path: string,
         data?: any,
         headers?: any,
-        responseHeaders?: {[k: string]: any}
+        responseHeaders?: { [k: string]: any }
     ) {
         const opts: t.HttpOpts = {
             method: method,
             ...(headers && { headers }),
             ...(data && { data }),
-            responseHeaders
+            responseHeaders,
         }
         return this.request(path, opts)
     }
 
-    JsonRESTClientAbstract.prototype[
-        '$' + method.toLowerCase()
-    ] = async function (
-        path: string,
-        data?: any,
-        headers?: any,
-        responseHeaders?: {[k: string]: any}
-    ) {
-        const opts: t.HttpOpts = {
-            method: method,
-            ...(headers && { headers }),
-            ...(data && { data }),
-            responseHeaders
+    JsonRESTClientAbstract.prototype['$' + method.toLowerCase()] =
+        async function (
+            path: string,
+            data?: any,
+            headers?: any,
+            responseHeaders?: { [k: string]: any }
+        ) {
+            const opts: t.HttpOpts = {
+                method: method,
+                ...(headers && { headers }),
+                ...(data && { data }),
+                responseHeaders,
+            }
+            return this.authRequest(path, opts)
         }
-        return this.authRequest(path, opts)
-    }
 })
 
 
@@ -304,8 +306,10 @@ export abstract class JsonRESTPersistentClientAbstract extends JsonRESTSessionCl
         try {
             return await super.authRequest(path, opts)
         } catch (err) {
-            if (err instanceof e.AuthenticationRequired ||
-                err instanceof e.TokenRequired) {
+            if (
+                err instanceof e.AuthenticationRequired ||
+                err instanceof e.TokenRequired
+            ) {
                 this.apiToken = null
                 if (this.requestLogin) {
                     this.requestLogin()
