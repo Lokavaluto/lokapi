@@ -116,3 +116,10 @@ export interface IAccount extends IBridge {
              amount: number,
              description: string): Promise<IPayment>
 }
+
+
+export interface ITransactionOptions {
+    dateBegin?: Date
+    dateEnd?: Date
+    order?: Array<string>
+}

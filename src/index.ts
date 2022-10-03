@@ -8,7 +8,7 @@ import * as t from './type'
 
 import { mux } from './generator'
 
-import { BackendAbstract } from './backend'
+import { BackendAbstract, Transaction } from './backend'
 import { getHostOrUrlParts } from './rest'
 
 
@@ -383,13 +383,12 @@ abstract class LokAPIAbstract extends OdooRESTAbstract {
      *
      * @returns AsyncGenerator
      */
-    public async * getTransactions (order?: (x: any, y: any) => number): AsyncGenerator {
-        order = order || ((x: any, y: any) => y.date.getTime() - x.date.getTime())
+    public async * getTransactions (opts?: t.ITransactionOptions): AsyncGenerator {
         const backends = await this.getBackends()
-        yield * mux(
+        yield * Transaction.mux(
             Object.values(backends).map(
-                (b: BackendAbstract) => b.getTransactions(order)),
-            order
+                (b: BackendAbstract) => b.getTransactions(opts)),
+            opts?.order || ['-date']
         )
     }
 

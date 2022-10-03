@@ -420,6 +420,19 @@ for (const tr of transactions) {
 }
 #+end_src
 
+You can also retrieve transaction in a specific date span:
+
+#+begin_src typescript
+  let transactions = await lokAPI.getTransactions({
+    dateBegin: new Date(2020, 1, 1),
+    dateEnd: new Date(2021, 1, 1)
+  })
+
+  for (const tr of transactions) {
+      console.log(`  ${tr.date} ${tr.amount} ${tr.currency}`)
+  }
+#+end_src
+
 
 ** Advanced usage
 

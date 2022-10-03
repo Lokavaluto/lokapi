@@ -1,6 +1,7 @@
 import { t as httpRequestType } from '@0k.io/types-request'
 
 import * as t from '../type'
+import { Record } from '../record'
 
 /**
  * Base object to implement common API between data from
@@ -73,4 +74,13 @@ export abstract class BackendAbstract {
         return results.reduce((a: boolean, b: boolean) => a || b, false)
     }
 }
+
+
+export const Transaction = Record(BridgeObject, {
+    date: {
+        order: {
+            orderFn: (x: any, y: any) => x.getTime() - y.getTime(),
+        },
+    },
+})
 
