@@ -6,7 +6,7 @@ import { BridgeObject } from '..'
 export class Contact extends BridgeObject implements t.IContact {
 
     get name () {
-        return this.jsonData.odoo.name
+        return this.jsonData.odoo.public_name || this.jsonData.odoo.name
     }
 
     get city () {
