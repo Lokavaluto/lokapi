@@ -436,17 +436,20 @@ You can also retrieve transaction in a specific date span:
 
 ** Advanced usage
 
-*** list backends instances
+*** list backends instances and minimum credit amount
 
 Lokapi provides advanced backend actions directly on it's backend's
 instances. You can list them with cached, debounced, async call
 =lokAPI.getBackends()=.
 
+=Backend= objects offers =minCreditAmount= that allows you to know
+what would be the minimum accepted amount for credit requests.
+
 #+begin_src typescript
 let backends = await lokAPI.getBackends()
 
 for (const backend of backends) {
-    console.log(`  ${backend.internalId}`)
+    console.log(`  ${backend.internalId}: min: ${backend.minCreditAmount}`)
 }
 #+end_src
 
