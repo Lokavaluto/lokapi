@@ -48,3 +48,11 @@ export class TokenRequired extends Error {
         this.name = 'TokenRequired'
     }
 }
+
+
+export class InvalidUserOrEmail extends Error {
+    constructor (message: string) {
+        super(message)
+        this.name = 'InvalidUserOrEmail'
+    }
+}

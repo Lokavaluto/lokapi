@@ -74,6 +74,45 @@ export abstract class OdooRESTAbstract extends JsonRESTPersistentClientAbstract 
         }
     }
 
+
+    /**
+     * Triggers the odoo request password process for given user
+     * login. Use `.canResetPassword()` to check if this functionality
+     * is available before using it.
+     *
+     * @param {string} login - Full user identifier on odoo server
+     *                         (ie: john.doe@company.com)
+     * @returns {Promise<void>}
+     *
+     * @throws {InvalidUserOrEmail, RequestFailed, APIRequestFailed, InvalidJson, Error}
+     */
+    async resetPassword (login: string): Promise<void> {
+        const response = await this.post('/auth/reset_password', { login })
+        if (response.status === 'Error') {
+            if (response.error.includes('invalid username or email')) {
+                throw new e.InvalidUserOrEmail('Invalid user or email')
+            }
+            console.log(
+                "'resetPassword' returned with unexpected error: " +
+                    response.error
+            )
+            throw new Error(response.error)
+        }
+    }
+
+
+    /**
+     * Asks odoo if reset password process is enabled.
+     *
+     * @returns {Promise<Boolean>} Wether reset password is enabled
+     *
+     * @throws {RequestFailed, APIRequestFailed, InvalidJson}
+     */
+    canResetPassword (): Promise<Boolean> {
+        return this.post('/auth/can_reset_password')
+    }
+
+
     private getHTMLErrorMessage (htmlString: string): string {
         const parser = new DOMParser()
         let htmlDoc: any

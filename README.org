@@ -267,6 +267,30 @@ it should. Use with caution.
 
 ** Basic usage
 
+*** Requesting a password reset
+
+If you forgot your password, you can trigger a request to reset your
+password by providing your login.
+
+#+begin_src typescript
+if (await lokApi.canResetPassword()) {
+    await lokApi.resetPassword("myuser")
+}
+#+end_src
+
+Note that *the administrative backend might implement* password reset
+mechanism *or choose not to*. Thus, you can check if this is possible
+through ~lokApi.canResetPassword()~ first before trying to effectively
+use ~lokApi.resetPassword(..)~.
+
+Under the hood, the later will trigger the administrative backend to
+take actions to reset your password. In =odoo= administrative backend,
+traditionally, that could means sending you an email with instructions
+you'll need to follow to reset your password.
+
+Note that ~lokApi.resetPassword(..)~ / ~lokApi.canResetPassword()~ do
+NOT require to be logged in before.
+
 *** Login
 
 You must log in to the server with an existing account on the
