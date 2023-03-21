@@ -73,6 +73,41 @@ export abstract class OdooRESTAbstract extends JsonRESTPersistentClientAbstract 
         }
     }
 
+    async resetPassword (login: string): Promise<any> {
+        const response = await this.post('/auth/reset_password', {
+            login,
+        })
+        if (response.status == 'Error') {
+            throw new Error(response.error)
+        }
+        return response
+    }
+
+    canResetPassword (): Promise<any> {
+        return this.post('/auth/can_reset_password')
+    canSignup(): Promise<any> {
+        return this.post('/auth/can_signup')
+    }
+    async signup(
+        login: string,
+        lastname: string,
+        firstname: string,
+        password: string,
+        confirm_password: string
+    ): Promise<any> {
+        const response = await this.post('/auth/signup', {
+            login,
+            lastname,
+            firstname,
+            password,
+            confirm_password,
+        })
+        if (response.status == 'Error') {
+            throw new Error(response.error)
+        }
+        return response
+    }
+
     private getHTMLErrorMessage (htmlString: string): string {
         const parser = new DOMParser()
         let htmlDoc: any
