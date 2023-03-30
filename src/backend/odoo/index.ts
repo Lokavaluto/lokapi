@@ -1,8 +1,9 @@
 import { JsonRESTPersistentClientAbstract } from '../../rest'
 import { Contact } from './contact'
-import { e as httpRequestExc,
-         t as httpRequestType
-       } from '@0k.io/types-request'
+import {
+    e as httpRequestExc,
+    t as httpRequestType
+} from '@0k.io/types-request'
 
 import * as t from '../../type'
 
@@ -119,7 +120,7 @@ export abstract class OdooRESTAbstract extends JsonRESTPersistentClientAbstract 
      *                         (ie: john.doe@company.com)
      * @param {string} password - Password of given user identifier
      *
-     * @returns {Object} autData
+     * @returns {Object} authData
      *
      * @throws {RequestFailed, APIRequestFailed, InvalidCredentials, InvalidJson}
      */

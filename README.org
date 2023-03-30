@@ -269,8 +269,8 @@ it should. Use with caution.
 
 *** Login
 
-You must log in to the server with an existing Odoo Lokavaluto
-account:
+You must log in to the server with an existing account on the
+administrative backend:
 
 #+begin_src typescript
 await lokApi.login("myuser", "mypassword")
@@ -474,7 +474,7 @@ with =lokAPI.flushBackendCaches()=.
 
 *** list user accounts
 
-Backends hols several user accounts. These are often not so much
+Backends holds several user accounts. These are often not so much
 advertised intermediary object as they can be confusingly close from
 bank accounts, as in most backend, either there are no real user
 accounts but only an account, and in others, there are only one bank
@@ -530,6 +530,7 @@ We provide the =lokAPI.flushBackendCaches()= to deal with that.
 This is especially important after creating a new account, as backends
 creation are cached and debounced, because these are information that
 typically won't change often.
+
 
 ** Admin
 
