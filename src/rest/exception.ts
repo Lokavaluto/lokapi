@@ -56,3 +56,10 @@ export class InvalidUserOrEmail extends Error {
         this.name = 'InvalidUserOrEmail'
     }
 }
+
+export class UserOrEmailAlreadyTaken extends Error {
+    constructor (message: string) {
+        super(message)
+        this.name = 'UserOrEmailAlreadyTaken'
+    }
+}

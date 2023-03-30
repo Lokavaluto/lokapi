@@ -113,6 +113,53 @@ export abstract class OdooRESTAbstract extends JsonRESTPersistentClientAbstract 
     }
 
 
+    /**
+     * Perform Signup of a new user in odoo. Use `.canSignup()` to
+     * check if this functionality is available before using it.
+     *
+     * @returns {Promise<void>}
+     *
+     * @throws {RequestFailed, APIRequestFailed, InvalidJson}
+     */
+    async signup (
+        login: string,
+        firstname: string,
+        lastname: string,
+        password: string,
+    ): Promise<void> {
+        const response = await this.post('/auth/signup', {
+            login,
+            firstname,
+            lastname,
+            password,
+        })
+        if (response.status === 'Error') {
+            if (response.error.includes('user is already registered')) {
+                throw new e.UserOrEmailAlreadyTaken(
+                    'User or email already taken'
+                )
+            }
+            console.log(
+                "'signup' request returned an unexpected error: " +
+                    response.error
+            )
+            throw new Error(response.error)
+        }
+    }
+
+
+    /**
+     * Asks odoo if signup process is enabled.
+     *
+     * @returns {Promise<Boolean>} Whether signup is enabled
+     *
+     * @throws {RequestFailed, APIRequestFailed, InvalidJson}
+     */
+    canSignup (): Promise<Boolean> {
+        return this.post('/auth/can_signup')
+    }
+
+
     private getHTMLErrorMessage (htmlString: string): string {
         const parser = new DOMParser()
         let htmlDoc: any

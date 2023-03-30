@@ -267,6 +267,39 @@ it should. Use with caution.
 
 ** Basic usage
 
+*** Request to sign-up
+
+Before being able to log in and use the local currency, you must have
+a user account on the administrative backend. If you don't already
+have one yet, this is how to request the creation of one from the
+`lokApi` instance:
+
+#+begin_src typescript
+if (await lokApi.canSignup()) {
+    await lokApi.signup(
+      "john.doe@company.com",  // login
+      "Doe",                   // firstname
+      "John",                  // lastname
+      "myp4ss0rd",             // password
+    )
+}
+#+end_src
+
+Note that *the administrative backend might implement* sign-up
+mechanism *or choose not to*. Thus, you can check if this is possible
+through ~lokApi.canSignup()~ first before trying to effectively
+use ~lokApi.signup(..)~.
+
+Under the hood, the later will trigger the administrative backend to
+take actions to process your sign-up request. In =odoo= administrative
+backend, traditionally, that could means sending you an email with
+instructions you'll need to follow to effectively complete the
+registration process.
+
+Note that ~lokApi.signup(..)~ / ~lokApi.canSignup()~, along with
+~lokApi.resetPassword(..)~ / ~lokApi.canResetPassword()~ do NOT require
+to be logged in before.
+
 *** Requesting a password reset
 
 If you forgot your password, you can trigger a request to reset your
