@@ -1,4 +1,4 @@
-<!DOCTYPE html><html class="default"><head><meta charSet="utf-8"/><meta http-equiv="x-ua-compatible" content="IE=edge"/><title>LokAPI - v0.0.19-alpha.202210260834</title><meta name="description" content="Documentation for LokAPI - v0.0.19-alpha.202210260834"/><meta name="viewport" content="width=device-width, initial-scale=1"/><link rel="stylesheet" href="assets/style.css"/><link rel="stylesheet" href="assets/highlight.css"/><script async src="assets/search.js" id="search-script"></script></head><body><script>document.body.classList.add(localStorage.getItem("tsd-theme") || "os")</script><header><div class="tsd-page-toolbar"><div class="container"><div class="table-wrap"><div class="table-cell" id="tsd-search" data-base="."><div class="field"><label for="tsd-search-field" class="tsd-widget search no-caption">Search</label><input type="text" id="tsd-search-field"/></div><ul class="results"><li class="state loading">Preparing search index...</li><li class="state failure">The search index is not available</li></ul><a href="index.html" class="title">LokAPI - v0.0.19-alpha.202210260834</a></div><div class="table-cell" id="tsd-widgets"><div id="tsd-filter"><a href="#" class="tsd-widget options no-caption" data-toggle="options">Options</a><div class="tsd-filter-group"><div class="tsd-select" id="tsd-filter-visibility"><span class="tsd-select-label">All</span><ul class="tsd-select-list"><li data-value="public">Public</li><li data-value="protected">Public/Protected</li><li data-value="private" class="selected">All</li></ul></div> <input type="checkbox" id="tsd-filter-inherited" checked/><label class="tsd-widget" for="tsd-filter-inherited">Inherited</label><input type="checkbox" id="tsd-filter-externals" checked/><label class="tsd-widget" for="tsd-filter-externals">Externals</label></div></div><a href="#" class="tsd-widget menu no-caption" data-toggle="menu">Menu</a></div></div></div></div><div class="tsd-page-title"><div class="container"><h1>LokAPI - v0.0.19-alpha.202210260834 </h1></div></div></header><div class="container container-main"><div class="row"><div class="col-8 col-content"><div class="tsd-panel tsd-typography"><p>LokAPI is a javascript library intended to be used in mobile
+<!DOCTYPE html><html class="default"><head><meta charSet="utf-8"/><meta http-equiv="x-ua-compatible" content="IE=edge"/><title>LokAPI - v0.0.19-alpha.202303311612</title><meta name="description" content="Documentation for LokAPI - v0.0.19-alpha.202303311612"/><meta name="viewport" content="width=device-width, initial-scale=1"/><link rel="stylesheet" href="assets/style.css"/><link rel="stylesheet" href="assets/highlight.css"/><script async src="assets/search.js" id="search-script"></script></head><body><script>document.body.classList.add(localStorage.getItem("tsd-theme") || "os")</script><header><div class="tsd-page-toolbar"><div class="container"><div class="table-wrap"><div class="table-cell" id="tsd-search" data-base="."><div class="field"><label for="tsd-search-field" class="tsd-widget search no-caption">Search</label><input type="text" id="tsd-search-field"/></div><ul class="results"><li class="state loading">Preparing search index...</li><li class="state failure">The search index is not available</li></ul><a href="index.html" class="title">LokAPI - v0.0.19-alpha.202303311612</a></div><div class="table-cell" id="tsd-widgets"><div id="tsd-filter"><a href="#" class="tsd-widget options no-caption" data-toggle="options">Options</a><div class="tsd-filter-group"><div class="tsd-select" id="tsd-filter-visibility"><span class="tsd-select-label">All</span><ul class="tsd-select-list"><li data-value="public">Public</li><li data-value="protected">Public/Protected</li><li data-value="private" class="selected">All</li></ul></div> <input type="checkbox" id="tsd-filter-inherited" checked/><label class="tsd-widget" for="tsd-filter-inherited">Inherited</label><input type="checkbox" id="tsd-filter-externals" checked/><label class="tsd-widget" for="tsd-filter-externals">Externals</label></div></div><a href="#" class="tsd-widget menu no-caption" data-toggle="menu">Menu</a></div></div></div></div><div class="tsd-page-title"><div class="container"><h1>LokAPI - v0.0.19-alpha.202303311612 </h1></div></div></header><div class="container container-main"><div class="row"><div class="col-8 col-content"><div class="tsd-panel tsd-typography"><p>LokAPI is a javascript library intended to be used in mobile
 applications or web application to abstract all logics with
 lokavaluto&#39;s server.</p>
 
@@ -81,11 +81,51 @@ it should. Use with caution.</p>
   <h2>Basic usage</h2>
 </a>
 
+<a href="#request-to-sign-up" id="request-to-sign-up" style="color: inherit; text-decoration: none;">
+  <h3>Request to sign-up</h3>
+</a>
+<p>Before being able to log in and use the local currency, you must have
+a user account on the administrative backend. If you don&#39;t already
+have one yet, this is how to request the creation of one from the
+<code>lokApi</code> instance:</p>
+<pre><code class="language-typescript"><span class="hl-1">if</span><span class="hl-0"> (</span><span class="hl-1">await</span><span class="hl-0"> </span><span class="hl-5">lokApi</span><span class="hl-0">.</span><span class="hl-4">canSignup</span><span class="hl-0">()) {</span><br/><span class="hl-0">    </span><span class="hl-1">await</span><span class="hl-0"> </span><span class="hl-5">lokApi</span><span class="hl-0">.</span><span class="hl-4">signup</span><span class="hl-0">(</span><br/><span class="hl-0">      </span><span class="hl-6">&quot;john.doe@company.com&quot;</span><span class="hl-0">,  </span><span class="hl-7">// login</span><br/><span class="hl-0">      </span><span class="hl-6">&quot;Doe&quot;</span><span class="hl-0">,                   </span><span class="hl-7">// firstname</span><br/><span class="hl-0">      </span><span class="hl-6">&quot;John&quot;</span><span class="hl-0">,                  </span><span class="hl-7">// lastname</span><br/><span class="hl-0">      </span><span class="hl-6">&quot;myp4ss0rd&quot;</span><span class="hl-0">,             </span><span class="hl-7">// password</span><br/><span class="hl-0">    )</span><br/><span class="hl-0">}</span>
+</code></pre>
+<p>Note that <strong>the administrative backend might implement</strong> sign-up
+mechanism <strong>or choose not to</strong>. Thus, you can check if this is possible
+through <code>lokApi.canSignup()</code> first before trying to effectively
+use <code>lokApi.signup(..)</code>.</p>
+<p>Under the hood, the later will trigger the administrative backend to
+take actions to process your sign-up request. In <code>odoo</code> administrative
+backend, traditionally, that could means sending you an email with
+instructions you&#39;ll need to follow to effectively complete the
+registration process.</p>
+<p>Note that <code>lokApi.signup(..)~/~lokApi.canSignup()</code>, along with
+<code>lokApi.resetPassword(..)~/~lokApi.canResetPassword()</code> do NOT require
+to be logged in before.</p>
+
+<a href="#requesting-a-password-reset" id="requesting-a-password-reset" style="color: inherit; text-decoration: none;">
+  <h3>Requesting a password reset</h3>
+</a>
+<p>If you forgot your password, you can trigger a request to reset your
+password by providing your login.</p>
+<pre><code class="language-typescript"><span class="hl-1">if</span><span class="hl-0"> (</span><span class="hl-1">await</span><span class="hl-0"> </span><span class="hl-5">lokApi</span><span class="hl-0">.</span><span class="hl-4">canResetPassword</span><span class="hl-0">()) {</span><br/><span class="hl-0">    </span><span class="hl-1">await</span><span class="hl-0"> </span><span class="hl-5">lokApi</span><span class="hl-0">.</span><span class="hl-4">resetPassword</span><span class="hl-0">(</span><span class="hl-6">&quot;myuser&quot;</span><span class="hl-0">)</span><br/><span class="hl-0">}</span>
+</code></pre>
+<p>Note that <strong>the administrative backend might implement</strong> password reset
+mechanism <strong>or choose not to</strong>. Thus, you can check if this is possible
+through <code>lokApi.canResetPassword()</code> first before trying to effectively
+use <code>lokApi.resetPassword(..)</code>.</p>
+<p>Under the hood, the later will trigger the administrative backend to
+take actions to reset your password. In <code>odoo</code> administrative backend,
+traditionally, that could means sending you an email with instructions
+you&#39;ll need to follow to reset your password.</p>
+<p>Note that <code>lokApi.resetPassword(..)~/~lokApi.canResetPassword()</code> do
+NOT require to be logged in before.</p>
+
 <a href="#login" id="login" style="color: inherit; text-decoration: none;">
   <h3>Login</h3>
 </a>
-<p>You must log in to the server with an existing Odoo Lokavaluto
-account:</p>
+<p>You must log in to the server with an existing account on the
+administrative backend:</p>
 <pre><code class="language-typescript"><span class="hl-1">await</span><span class="hl-0"> </span><span class="hl-5">lokApi</span><span class="hl-0">.</span><span class="hl-4">login</span><span class="hl-0">(</span><span class="hl-6">&quot;myuser&quot;</span><span class="hl-0">, </span><span class="hl-6">&quot;mypassword&quot;</span><span class="hl-0">)</span>
 </code></pre>
 <p>Note that you can check if you are logged in with <code>lokApi.isLogged()</code></p>
@@ -218,7 +258,7 @@ with <code>lokAPI.flushBackendCaches()</code>.</p>
 <a href="#list-user-accounts" id="list-user-accounts" style="color: inherit; text-decoration: none;">
   <h3>list user accounts</h3>
 </a>
-<p>Backends hols several user accounts. These are often not so much
+<p>Backends holds several user accounts. These are often not so much
 advertised intermediary object as they can be confusingly close from
 bank accounts, as in most backend, either there are no real user
 accounts but only an account, and in others, there are only one bank
@@ -384,17 +424,21 @@ provided.</p>
   <h1>Changelog</h1>
 </a>
 
-<a href="#0019-alpha202210260834" id="0019-alpha202210260834" style="color: inherit; text-decoration: none;">
-  <h2>0.0.19-alpha.202210260834</h2>
+<a href="#0019-alpha202303311612" id="0019-alpha202303311612" style="color: inherit; text-decoration: none;">
+  <h2>0.0.19-alpha.202303311612</h2>
 </a>
 
 <a href="#new" id="new" style="color: inherit; text-decoration: none;">
   <h3>New</h3>
 </a>
 <ul>
+<li><p>Add <code>.signup(..)</code>/<code>.canSignup()</code> methods. [Valentin Lab]</p>
+</li>
+<li><p>Add <code>.resetPassword(..)</code>/<code>.canResetPassword()</code> methods. [Seddik Kadi]</p>
+</li>
 <li><p>Add <code>Backend.minCreditAmount</code> property. [Valentin Lab]</p>
 </li>
-<li><p>Display the <code>public_name</code> if available. [Valentin Lab]</p>
+<li><p>Use odoo&#39;s <code>public_name</code> if available as <code>contact.name</code> [Valentin Lab]</p>
 </li>
 <li><p>Add date span capability to <code>.getTransactions(..)</code> [Valentin Lab]</p>
 </li>
@@ -413,16 +457,9 @@ choose to trust.</p>
 </li>
 <li><p>Provide <code>InsufficientBalance</code> exception for currency backends. [Seddik Kadi]</p>
 </li>
-<li><p>Add section on <code>creditRequest.validate()</code> [Valentin Lab]</p>
-<p>Note that the implementation is in the backend code.</p>
-</li>
-<li><p>Add sections on <code>.getBackends(..)</code> and <code>IBackend.createUserAccount(..)</code> [Valentin Lab]</p>
-</li>
 <li><p>Add <code>.getCreditRequests(..)</code> to get list of pending credit requests. [Valentin Lab]</p>
 </li>
 <li><p>Add <code>.hasCreditRequestValidationRights()</code> check. [Valentin Lab]</p>
-</li>
-<li><p>Add <code>.validateCreation()</code> example and doc. [Valentin Lab]</p>
 </li>
 <li><p>Provide <code>requestLocalPassword</code> type declaration for backends. [Valentin Lab]</p>
 </li>
@@ -435,8 +472,6 @@ choose to trust.</p>
 <li><p><code>LokAPI.getBackends(..)</code> is now public. [Valentin Lab]</p>
 <p>This is now required as <code>Backend</code> direct access is required to
 <code>Backend.createAccount(..)</code> and other <code>Backend</code> level features.</p>
-</li>
-<li><p>New: doc: add a reference to <code>@lokavaluto/lokapi-browser</code>&#39;s help. [Valentin Lab]</p>
 </li>
 </ul>
 
@@ -454,6 +489,8 @@ choose to trust.</p>
   <h3>Fix</h3>
 </a>
 <ul>
+<li><p>Fix: enforce correct version of <code>@0k.io/type-requests</code> for support of <code>timeout</code> in http requests. [Valentin Lab]</p>
+</li>
 <li><p>Prevent data leaking when de-logging or for forcing user accounts refresh. [Valentin Lab]</p>
 <p>This provides a stronger debouncing and caching mecanism along with a
 <code>lokAPI.forceRefresh()</code> cache clearing function. All this begs for a
@@ -476,8 +513,6 @@ provided thanks to <code>BackendFactories</code>.</p>
 duplicate (!) declaration of exceptions.</p>
 </li>
 <li><p>Avoid exception when trying to <code>.makeRecipients()</code> in a backend where we don&#39;t have an account. [Valentin Lab]</p>
-</li>
-<li><p>Reflect package name change. [Valentin Lab]</p>
 </li>
 </ul>
 
@@ -503,8 +538,6 @@ they should display some information about the payment
 backend.</p>
 </li>
 <li><p>Support for response header querying. [Valentin Lab]</p>
-</li>
-<li><p>Added support of <code>http</code>, port in node&#39;s <code>httpRequest</code> implementation example. [Valentin Lab]</p>
 </li>
 </ul>
 
@@ -536,17 +569,6 @@ to optimize requesting.</p>
 <p>Client app may be inducing several call to these entrypoints at
 once. By storing and returning the ongoing promise, we make sure
 to avoid duplicating network requests.</p>
-</li>
-<li><p>Convert incorrect usage of undefined <code>reject()</code> to <code>throw new</code> [Valentin Lab]</p>
-<p>This concerns only the @nativescript example implementation.</p>
-</li>
-<li><p><code>persistentStorage</code> implementation example for node would output json, not string. [Valentin Lab]</p>
-<p>Indeed, in current implementation of <code>vue-cookie-next</code>, string
-output is automatically converted (with <code>JSON.parse(..)</code>) if it
-starts with a <code>{</code> . This breaks expectation of current
-<code>persistentStorage</code> interface.</p>
-</li>
-<li><p>Don&#39;t stringify if sending data is already a string. [Valentin Lab]</p>
 </li>
 </ul>
 
@@ -688,17 +710,6 @@ to get back some information. We don&#39;t have our own <code>userId</code>.</p>
 </li>
 </ul>
 
-<a href="#0010-2021-07-08" id="0010-2021-07-08" style="color: inherit; text-decoration: none;">
-  <h2>0.0.10 (2021-07-08)</h2>
-</a>
-
-<a href="#changes-5" id="changes-5" style="color: inherit; text-decoration: none;">
-  <h3>Changes</h3>
-</a>
-<ul>
-<li>Add doc for <code>getTransactions()</code> [Valentin Lab]</li>
-</ul>
-
 <a href="#009-2021-07-08" id="009-2021-07-08" style="color: inherit; text-decoration: none;">
   <h2>0.0.9 (2021-07-08)</h2>
 </a>
@@ -742,7 +753,7 @@ to get back some information. We don&#39;t have our own <code>userId</code>.</p>
 </li>
 </ul>
 
-<a href="#changes-6" id="changes-6" style="color: inherit; text-decoration: none;">
+<a href="#changes-5" id="changes-5" style="color: inherit; text-decoration: none;">
   <h3>Changes</h3>
 </a>
 <ul>
@@ -760,7 +771,7 @@ to get back some information. We don&#39;t have our own <code>userId</code>.</p>
   <h2>0.0.6 (2021-07-05)</h2>
 </a>
 
-<a href="#changes-7" id="changes-7" style="color: inherit; text-decoration: none;">
+<a href="#changes-6" id="changes-6" style="color: inherit; text-decoration: none;">
   <h3>Changes</h3>
 </a>
 <ul>
@@ -792,18 +803,11 @@ using only the =apiToken=.</p>
 </li>
 </ul>
 
-<a href="#changes-8" id="changes-8" style="color: inherit; text-decoration: none;">
+<a href="#changes-7" id="changes-7" style="color: inherit; text-decoration: none;">
   <h3>Changes</h3>
 </a>
 <ul>
 <li>Provide convenience method to request on all backends. [Valentin Lab]</li>
-</ul>
-
-<a href="#fix-6" id="fix-6" style="color: inherit; text-decoration: none;">
-  <h3>Fix</h3>
-</a>
-<ul>
-<li>Move level of headings up one. [Valentin Lab]</li>
 </ul>
 
 <a href="#004-2021-07-01" id="004-2021-07-01" style="color: inherit; text-decoration: none;">
@@ -823,14 +827,14 @@ using only the =apiToken=.</p>
 </li>
 </ul>
 
-<a href="#changes-9" id="changes-9" style="color: inherit; text-decoration: none;">
+<a href="#changes-8" id="changes-8" style="color: inherit; text-decoration: none;">
   <h3>Changes</h3>
 </a>
 <ul>
 <li>Changing from mixin to abstract class model. [Valentin Lab]</li>
 </ul>
 
-<a href="#fix-7" id="fix-7" style="color: inherit; text-decoration: none;">
+<a href="#fix-6" id="fix-6" style="color: inherit; text-decoration: none;">
   <h3>Fix</h3>
 </a>
 <ul>
@@ -855,7 +859,7 @@ need to use it.</p>
 </li>
 </ul>
 
-<a href="#fix-8" id="fix-8" style="color: inherit; text-decoration: none;">
+<a href="#fix-7" id="fix-7" style="color: inherit; text-decoration: none;">
   <h3>Fix</h3>
 </a>
 <ul>
