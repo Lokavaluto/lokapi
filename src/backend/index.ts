@@ -47,6 +47,9 @@ export abstract class BackendAbstract {
         return this.jsonData?.min_credit_amount
     }
 
+    get maxCreditAmount () {
+        return this.jsonData?.max_credit_amount
+    }
 
     /**
      * By using a AsyncGenerator, getTransactions() allows :
