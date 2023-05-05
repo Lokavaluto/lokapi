@@ -9,6 +9,8 @@ import * as t from '../../type'
 
 import * as e from '../../rest/exception'
 
+import { makePasswordChecker } from '../utils'
+
 
 export abstract class OdooRESTAbstract extends JsonRESTPersistentClientAbstract {
 
@@ -247,6 +249,28 @@ export abstract class OdooRESTAbstract extends JsonRESTPersistentClientAbstract 
             this._getMyContact = this.makeContact(await this.$get('/partner/0'))
         }
         return this._getMyContact
+    }
+
+
+    isPasswordStrongEnoughSync = makePasswordChecker([
+        'tooShort:8',
+        'noUpperCase',
+        'noLowerCase',
+        'noDigit',
+        // "noSymbol",
+    ])
+
+    /**
+     * Check password strength for odoo new user account
+     *
+     * @param password The password to check
+     *
+     * @returns string[] list of violated rules
+     */
+    public async isPasswordStrongEnough (
+        password: string
+    ): Promise<Array<string>> {
+        return this.isPasswordStrongEnoughSync(password)
     }
 
 }
