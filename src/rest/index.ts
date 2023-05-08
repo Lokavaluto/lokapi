@@ -1,5 +1,5 @@
 import { stringify as toQueryString } from 'qs'
-import { t as httpRequestType } from '@0k.io/types-request'
+import { t as httpRequestType } from '@0k/types-request'
 
 import * as e from './exception'
 import * as t from '../type'

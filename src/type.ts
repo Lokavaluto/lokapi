@@ -1,4 +1,4 @@
-import { t as httpRequestType } from '@0k.io/types-request'
+import { t as httpRequestType } from '@0k/types-request'
 
 
 

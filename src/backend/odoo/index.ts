@@ -3,7 +3,7 @@ import { Contact } from './contact'
 import {
     e as httpRequestExc,
     t as httpRequestType
-} from '@0k.io/types-request'
+} from '@0k/types-request'
 
 import * as t from '../../type'
 
