@@ -472,7 +472,7 @@ List past transactions for the current logged in user.
 #+begin_src typescript
 let transactions = await lokAPI.getTransactions()
 
-for (const tr of transactions) {
+for await (const tr of transactions) {
     console.log(`  ${tr.date} ${tr.amount} ${tr.currency}`)
 }
 #+end_src
