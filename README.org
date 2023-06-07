@@ -377,15 +377,15 @@ your account.
 
 *** Looking for recipients
 
-Recipients are possible receiving end of a transfer of
-money. These are connected to contacts in =lokapi=.
+Recipients are receiving ends of a transfer of money. These are
+connected to contacts in =lokapi=.
 
 #+begin_src typescript
 let recipients = await lokAPI.searchRecipients("Alain")
 
-recipients.forEach(recipient => {
+for await (const recipient of recipients) {
     console.log(`name: ${recipient.name}`)
-})
+}
 #+end_src
 
 Note that if you look for an empty string,

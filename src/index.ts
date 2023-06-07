@@ -226,47 +226,50 @@ abstract class LokAPIAbstract extends OdooRESTAbstract {
 
 
     /**
-     * Get list of non-Professional Recipients (contacts with an
-     * account information that can receive money from me) matching
-     * given string filter. Note that if value is empty, it'll list
-     * only all the favorites. If value is not empty, it'll filter by
-     * value in all recipient (favorites or not) and return result
-     * ordered by `favorite` and `name`.
+     * Get list of Recipients (contacts with an account information
+     * that can receive money from me) matching given string
+     * filter. Note that if value is empty, it'll list only all the
+     * recipients connected to favorite accounts. If value is not
+     * empty, it'll filter by value in all recipient (favorites or
+     * not) and return result ordered by `favorite` and `name`.
      *
      * @param value The given string will be searched in name, email, phone
      *
      * @throws {RequestFailed, APIRequestFailed, InvalidCredentials, InvalidJson}
      *
-     * @returns Array<t.IRecipient>
+     * @returns AsyncIterable<t.IRecipient>
      */
-    public async searchRecipients (
-        value: string,
-    ): Promise<t.IRecipient[]> {
+    public async * searchRecipients (value: string): AsyncIterable<t.IRecipient> {
+        let offset = 0
+        const limit = 30
         const backends = await this.getBackends()
-        const partners = await this.$get('/partner/search', {
-            value: value,
-            backend_keys: Object.keys(backends),
-            order: 'is_favorite desc, name',
-        })
-        const recipients = []
-        const markBackend = Object.keys(backends).length > 1
-        partners.rows.forEach((partnerData: any) => {
-            Object.keys(partnerData.monujo_backends).forEach(
-                (backendId: string) => {
+        while (true) {
+            const partners = await this.$get('/partner/search', {
+                value: value,
+                backend_keys: Object.keys(backends),
+                offset,
+                limit,
+                order: 'is_favorite desc, name',
+            })
+            const markBackend = Object.keys(backends).length > 1
+            for (const partnerData of partners.rows) {
+                for (const backendId of Object.keys(
+                    partnerData.monujo_backends
+                )) {
                     if (!backends[backendId].jsonData.accounts.length) {
-                        return  // don't have this backend anyway
+                        return // don't have this backend anyway
                     }
-                    const backendRecipients = backends[backendId].makeRecipients(
-                        partnerData
-                    )
-                    backendRecipients.forEach((recipient: any) => {
+                    const backendRecipients =
+                        backends[backendId].makeRecipients(partnerData)
+                    for (const recipient of backendRecipients) {
                         recipient.markBackend = markBackend
-                        recipients.push(recipient)
-                    })
+                        yield recipient
+                    }
                 }
-            )
-        })
-        return recipients
+            }
+            if (partners.rows.length < limit) return
+            offset += limit
+        }
     }
 
     public async getStagingUserAccounts () {
