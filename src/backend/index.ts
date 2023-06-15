@@ -90,6 +90,46 @@ export abstract class BackendAbstract {
         )
         return results.reduce((a: boolean, b: boolean) => a || b, false)
     }
+
+    abstract makeRecipients (jsonData: t.JsonData): t.IRecipient[]
+
+    /**
+     * Get list of Recipients (contacts with an account information
+     * that can receive money from me) matching given string
+     * filter. Note that if value is empty, it'll list only all the
+     * recipients connected to favorite accounts. If value is not
+     * empty, it'll filter by value in all recipient (favorites or
+     * not) and return result ordered by `favorite` and `name`.
+     *
+     * @param value The given string will be searched in name, email, phone
+     *
+     * @throws {RequestFailed, APIRequestFailed, InvalidCredentials, InvalidJson}
+     *
+     * @returns AsyncIterable<t.IRecipient>
+     */
+    public async * searchRecipients (value: string): AsyncIterable<t.IRecipient> {
+        let offset = 0
+        const limit = 30
+        while (true) {
+            const partners = await this.backends.odoo.$get('/partner/search', {
+                value: value,
+                backend_keys: [this.internalId],
+                offset,
+                limit,
+                order: 'is_favorite desc, name',
+            })
+            for (const partnerData of partners.rows) {
+                const backendRecipients =
+                    this.makeRecipients(partnerData)
+                for (const recipient of backendRecipients) {
+                    yield recipient
+                }
+            }
+            if (partners.rows.length < limit) return
+            offset += limit
+        }
+    }
+
 }
 
 
