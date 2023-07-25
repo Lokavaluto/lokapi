@@ -55,16 +55,6 @@ export interface IBridge {
 }
 
 
-export interface IPayment extends IBridge {
-    amount: number
-    date: string
-    description: string
-    from: string
-    id: string
-    to: string
-}
-
-
 export interface ITransaction extends IBridge {
     amount: string      // Don't want fancy rounding issues
     currency: string
@@ -103,7 +93,7 @@ export interface IContact extends IBridge {
 
 
 export interface IRecipient extends IContact {
-    transfer(amount: number, description): Promise<IPayment>
+    transfer(amount: number, description): Promise<ITransaction>
 }
 
 
@@ -114,7 +104,7 @@ export interface IAccount extends IBridge {
 
     transfer(recipient: IRecipient,
              amount: number,
-             description: string): Promise<IPayment>
+             description: string): Promise<ITransaction>
 }
 
 
