@@ -76,3 +76,10 @@ export class InsufficientBalance extends Error {
         this.name = 'Insufficientbalance'
     }
 }
+
+export class PaymentConfirmationMissing extends Error {
+    constructor (message: string) {
+        super(message)
+        this.name = 'PaymentConfirmationMissing'
+    }
+}
