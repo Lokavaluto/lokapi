@@ -130,6 +130,31 @@ export abstract class BackendAbstract {
         }
     }
 
+    /**
+     * Get recipient (contact with an account information that can
+     * receive money from me) matching given data.
+     *
+     * @param data internal key required by the backend
+     *
+     * @throws {RequestFailed, APIRequestFailed, InvalidCredentials, InvalidJson}
+     *
+     * @returns Promise<t.IRecipient>
+     */
+    public async searchRecipientByUri(data: t.JsonData): Promise<t.IRecipient> {
+        let partner = await this.backends.odoo.$get(
+            '/partner/get_recipient_by_uri',
+            {
+                data,
+                backend_keys: [ this.internalId ],
+            }
+        )
+        // XXXvlab: ``.makeRecipients()`` returns a list that
+        // de-duplicate the actual partner data along the multiple
+        // backends possible there is a shift of the API to enforce
+        // single valued partner data. So here we know it'll return
+        // only one recipient.
+        return this.makeRecipients(partner)[0]
+    }
 }
 
 
