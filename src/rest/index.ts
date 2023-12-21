@@ -60,6 +60,7 @@ export abstract class JsonRESTClientAbstract {
     // Constants
 
     COMMON_HEADERS = {
+        'Accept-Language': 'en-US',
         'Content-Type': 'application/json',
         Accept: 'application/json',
     }
