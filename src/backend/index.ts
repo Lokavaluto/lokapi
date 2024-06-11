@@ -51,6 +51,16 @@ export abstract class BackendAbstract {
         return this.jsonData?.max_credit_amount
     }
 
+    get safeWalletRecipient () {
+        const partnerData = this.jsonData?.safe_wallet_recipient
+        const recipients = this.makeRecipients(partnerData)
+        if (recipients.length > 1)
+            throw new Error("Received more than 1 safe wallet")
+        if (recipients.length === 0)
+            throw new Error("No safe wallet on this backend")
+        return recipients[0]
+    }
+
     /**
      * By using a AsyncGenerator, getTransactions() allows :
      * - client app to request the amount of transaction they need at the pace
