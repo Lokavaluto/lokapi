@@ -516,6 +516,9 @@ for (const backend of backends) {
         `${backend.internalId}:\n` +
         `  min: ${backend.minCreditAmount}\n` +
         `  max: ${backend.maxCreditAmount}\n`)
+    if (backend.safeWalletRecipient) {
+      console.log(`  safe wallet: {backend.safeWalletRecipient.name}`)
+    }
 }
 #+end_src
 
