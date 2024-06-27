@@ -9,6 +9,8 @@ import * as t from '../../type'
 
 import * as e from '../../rest/exception'
 
+import * as LokAPIExc from '../../exception'
+
 import { makePasswordChecker } from '../utils'
 
 
@@ -271,6 +273,34 @@ export abstract class OdooRESTAbstract extends JsonRESTPersistentClientAbstract 
         password: string
     ): Promise<Array<string>> {
         return this.isPasswordStrongEnoughSync(password)
+    }
+
+
+    /**
+     * Register the account as active in the administrative backend
+     * and synchronize some other information from financial backend.
+     *
+     * @param accounds The account data necessary to identify the account and
+     *                 send some additional data
+     *
+     * @returns void
+     */
+    public async activateAccount (accounts: t.JsonData[]) {
+        let res
+        try {
+            res = await this.$post('/partner/account_activate', {
+                accounts
+            })
+        } catch(err) {
+            if (err instanceof httpRequestExc.HttpError && err.code === 403) {
+                throw new LokAPIExc.PermissionDenied("Permission denied to activate account")
+            }
+        }
+        if (!res) {
+            throw new Error(
+                'Admin backend refused activation of one or more account',
+            )
+        }
     }
 
 }
