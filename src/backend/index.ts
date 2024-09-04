@@ -34,6 +34,8 @@ export abstract class BackendAbstract {
     protected abstract requestLogin (): void
     public abstract requestLocalPassword: (state: string) => Promise<any>
 
+    public abstract splitMemoSupport: boolean
+
     constructor (backends: any, jsonData: any) {
         this.backends = backends
         this.jsonData = jsonData

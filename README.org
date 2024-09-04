@@ -433,6 +433,15 @@ Note that =.transfer(..)= can lead to these exceptions to be thrown:
       linked to insufficient funds).
 - =InactiveAccount=: Source or destination account is inactive.
 
+If the backend supports it (test ~Backend.splitMemoSupport~ to check
+for this support), you can then also provide a third string argument
+as a recipient memo, this allows you to set different memo
+(descriptions) for the transaction for the recipient and the sender.
+
+Without support for split memo, or without specifying a third
+argument, the second argument is used as the description for both
+sides.
+
 *** Requesting contact info on current logged in user
 
 The method =lokAPI.getMyContact()= allows you to get back
