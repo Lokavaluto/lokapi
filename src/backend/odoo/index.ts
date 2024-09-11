@@ -295,6 +295,26 @@ export abstract class OdooRESTAbstract extends JsonRESTPersistentClientAbstract 
             if (err instanceof httpRequestExc.HttpError && err.code === 403) {
                 throw new LokAPIExc.PermissionDenied("Permission denied to activate account")
             }
+            if (err instanceof httpRequestExc.HttpError && err.code === 404) {
+                // Let's try previous API
+                console.warn("Using deprecated API (with flaws)")
+                try {
+                    res = await this.$post('/comchain/activate', {
+                        accounts: accounts.map((account: any) => ({
+                            recipient_id: account.recipient_id,
+                            address: account.account_id.split(':')[1],
+                            type: account.data.type,
+                            credit_min: account.data.credit_min,
+                            credit_max: account.data.credit_max,
+                        })),
+                    })
+                } catch(err) {
+                    if (err instanceof httpRequestExc.HttpError && err.code === 403) {
+                        throw new LokAPIExc.PermissionDenied("Permission denied to activate account")
+                    }
+                    throw err
+                }
+            }
         }
         if (!res) {
             throw new Error(
