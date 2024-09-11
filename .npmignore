@@ -9,3 +9,4 @@ autogen.sh
 .package.d
 .package
 .gitchangelog.rc
+tsconfig.json
