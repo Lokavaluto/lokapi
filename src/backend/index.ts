@@ -58,6 +58,12 @@ export abstract class BackendAbstract {
         if (!recipientData) {
             return null
         }
+        if (recipientData.name && !recipientData.monujo_backends[this.internalId]) {
+            console.error(
+                `Existing recipient ${JSON.stringify(recipientData.name)} doesn't ` +
+                    'have an account in current backend')
+            return null
+        }
         const recipients = this.makeRecipients(recipientData)
         if (recipients.length > 1)
             throw new Error("Received more than 1 safe wallet")
