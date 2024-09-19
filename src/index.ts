@@ -131,45 +131,66 @@ abstract class LokAPIAbstract extends OdooRESTAbstract {
     protected _backends: any
 
 
-    private makeBackends (backendCredentials: any): any {
+    protected _makeBackendCache = new Map<string, any>()
+
+    private makeBackend(backendData: any) {
+        let key = JSON.stringify(backendData)
+        let cachedValue = this._makeBackendCache.get(key)
+        if (!cachedValue) {
+            cachedValue = this._makeBackend(backendData)
+            this._makeBackendCache.set(
+                key, cachedValue
+            )
+        }
+        return cachedValue
+    }
+
+    private _makeBackend(backendData: any) {
         const self = this
-        const backends = {}
+        const backendId = backendData.type.split(':')[0]
+        const BackendClassAbstract = <any>self.BackendFactories[backendId]
         const {
             httpRequest, base64Encode, persistentStore,
             requestLogin, requestLocalPassword
         } = this
-        backendCredentials.forEach((backendData: any) => {
-            const backendId = backendData.type.split(':')[0]
-            const BackendClassAbstract = <any>self.BackendFactories[backendId]
-            if (!BackendClassAbstract) {
-                console.log(
-                    `Data received for unknown backend ${backendId}`
-                )
-                return
-            }
-            class Backend extends BackendClassAbstract {
-                httpRequest = httpRequest
-                base64Encode = base64Encode
-                persistentStore = persistentStore
-                requestLogin = requestLogin
-                requestLocalPassword = requestLocalPassword
+        if (!BackendClassAbstract) {
+            console.log(
+                `Data received for unknown backend ${backendId}`
+            )
+            return
+        }
+        class Backend extends BackendClassAbstract {
+            httpRequest = httpRequest
+            base64Encode = base64Encode
+            persistentStore = persistentStore
+            requestLogin = requestLogin
+            requestLocalPassword = requestLocalPassword
 
-                // This function declaration seems necessary for typescript
-                // to avoid having issues with this dynamic abstract class
-                // eslint-disable-next-line no-useless-constructor
-                constructor (...args) {
-                    super(...args)
-                }
+            // This function declaration seems necessary for typescript
+            // to avoid having issues with this dynamic abstract class
+            // eslint-disable-next-line no-useless-constructor
+            constructor (...args) {
+                super(...args)
             }
-            let backend: any
-            console.log(`making backend ${backendData.type}`, backendData)
-            try {
-                backend = new Backend({ odoo: this }, backendData)
-            } catch (err) {
-                console.log(`Backend ${backendData.type} creation failed:`, err)
-                return
-            }
-            backends[backend.internalId] = backend
+        }
+        let backend: any
+        console.log(`making backend ${backendData.type}`, backendData)
+        try {
+            backend = new Backend({ odoo: this }, backendData)
+        } catch (err) {
+            console.log(`Backend ${backendData.type} creation failed:`, err)
+            return
+        }
+        return backend
+    }
+
+
+    private makeBackends (backendCredentials: any): any {
+        const backends = {}
+        backendCredentials.forEach((backendData: any) => {
+            let backend = this.makeBackend(backendData)
+            if (backend)
+                backends[backend.internalId] = backend
         })
         return backends
     }
