@@ -83,3 +83,10 @@ export class PaymentConfirmationMissing extends Error {
         this.name = 'PaymentConfirmationMissing'
     }
 }
+
+export class BackendUnavailableTransient extends Error {
+    constructor (message) {
+        super(message)
+        this.name = 'BackendUnavailableTransient'
+    }
+}
