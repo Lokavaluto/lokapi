@@ -90,3 +90,10 @@ export class BackendUnavailableTransient extends Error {
         this.name = 'BackendUnavailableTransient'
     }
 }
+
+export class CanceledOperation extends Error {
+    constructor (message) {
+        super(message)
+        this.name = 'CanceledOperation'
+    }
+}

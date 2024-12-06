@@ -106,7 +106,7 @@ abstract class LokAPIAbstract extends OdooRESTAbstract {
                         backendCredentials = await self.getBackendCredentials()
                     } catch (err) {
                         if (self._backendsPromise !== _backendsPromise) {
-                            throw new Error(`Cancelled '_backendsPromise' (failed with: ${err})`)
+                            throw new e.CanceledOperation(`Canceled '_backendsPromise' (failed with: ${err})`)
                         }
                         self._backendsPromise = null
                         throw err
