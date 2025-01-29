@@ -27,6 +27,9 @@ export default class CreditRequest extends BridgeObject {
         return this.jsonData.odoo.paid
     }
 
+    get isTopUp() {
+        return true
+    }
     public async cancel() {
         // XXXvlab: yuck, there need to be a clean up and
         //   rationalisation of these backends and jsonData link
