@@ -44,4 +44,7 @@ export default class CreditRequest extends BridgeObject {
         }
         return
     }
+    get requester() {
+        return this.jsonData.odoo.requester
+    }
 }
