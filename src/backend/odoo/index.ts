@@ -39,8 +39,9 @@ export abstract class OdooRESTAbstract extends JsonRESTPersistentClientAbstract 
     }
 
     async authenticate (login: string, password: string): Promise<any> {
+        let response
         try {
-            const response = await this.post(
+            response = await this.post(
                 '/auth/authenticate',
                 {
                     api_version: this.API_VERSION,
@@ -53,29 +54,35 @@ export abstract class OdooRESTAbstract extends JsonRESTPersistentClientAbstract 
                     )}`,
                 }
             )
-            if (response.status === 'Error') {
-                if (response.error === 'Access denied') {
-                    throw new e.InvalidCredentials('Access denied')
-                } else {
-                    throw new e.APIRequestFailed(
-                        `Could not obtain token: ${response.error}`
-                    )
-                }
-            }
-            if (response.api_version !== this.API_VERSION) {
-                console.log(
-                    'Warning: API Version Mismatch ' +
-                        `between client (${this.API_VERSION}) ` +
-                        `and server (${response.api_version})`
-                )
-            }
-            this.apiToken = response.api_token
-            return response
         } catch (err) {
+            if (err instanceof httpRequestExc.HttpError && err.code === 401) {
+                throw new e.InvalidCredentials('Invalid credentials')
+            }
             console.log('Odoo Authentication Failed:', err.message)
             this.apiToken = undefined
             throw err
         }
+        if (response.status === 'Error') {
+            if (
+                response.error === 'Access denied' ||
+                response.error === 'Access Denied'
+            ) {
+                throw new e.InvalidCredentials('Access denied')
+            } else {
+                throw new e.APIRequestFailed(
+                    `Could not obtain token: ${response.error}`,
+                )
+            }
+        }
+        if (response.api_version !== this.API_VERSION) {
+            console.log(
+                'Warning: API Version Mismatch ' +
+                    `between client (${this.API_VERSION}) ` +
+                    `and server (${response.api_version})`,
+            )
+        }
+        this.apiToken = response.api_token
+        return response
     }
 
 
