@@ -93,6 +93,7 @@ export interface IContact extends IBridge {
 
 
 export interface IRecipient extends IContact {
+    walletInternalId: string
     transfer(amount: number,
              senderMemo: string,
              recipientMemo: string): Promise<ITransaction[]>
