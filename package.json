@@ -7,7 +7,7 @@
     "scripts": {
         "prepare": "tsc",
         "lint": "eslint --ignore-path .gitignore --ext .js,.ts .",
-        "test": "echo \"Error: no test specified\" && exit 1"
+        "test": "vitest run"
     },
     "author": "Valentin LAB",
     "license": "MIT",
@@ -17,13 +17,15 @@
     },
     "devDependencies": {
         "@0k/prettier": "^0.2.1",
-        "@types/node": "^15.12.2",
+        "@types/node": "^22.15.3",
         "@typescript-eslint/eslint-plugin": "^4.29.0",
         "@typescript-eslint/parser": "^4.29.0",
         "eslint": "^7.32.0",
         "eslint-config-standard": "^16.0.3",
+        "jsdom": "^26.1.0",
         "typedoc": "^0.22.8",
-        "typescript": "^4.4.4"
+        "typescript": "^4.7.4",
+        "vitest": "^3.1.2"
     },
     "dependencies": {
         "@0k/types-request": "^1.0.0",

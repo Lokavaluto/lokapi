@@ -804,3 +804,31 @@ Please note that =.get(..)= and =.$get(..)= have same prototype
 and usage than other function and do not require you to build a query
 string as it'll encode in the URL as a querystring the data you've
 provided.
+
+* Contributing to Lokapi
+
+This package is using ~npm~ to track dependendies, so you can install them
+with:
+
+   #+begin_src sh
+   npm install
+   #+end_src
+
+As this package is written in =typescript=. You can transpile to
+=javascript= and transpile on file change with:
+
+   #+begin_src sh
+   ## Compile and watch
+   npx tspc -w
+   #+end_src
+
+Tests are managed through =vitest=
+
+
+   #+begin_src sh
+   ## Run test once
+   npm run test
+   #+end_src
+
+Note that you can also use ~npx vitest~ command to launch tests in
+watch mode.
