@@ -97,3 +97,46 @@ export class CanceledOperation extends Error {
         this.name = 'CanceledOperation'
     }
 }
+
+// Payment exceptions
+
+export class PrepareTransferError extends Error {
+    constructor (message) {
+        super(message)
+        this.name = 'PrepareTransferError'
+    }
+}
+
+export class PrepareTransferException extends PrepareTransferError {
+
+    origException: Error
+
+    constructor (message, origException?: Error) {
+        super(message)
+        this.name = 'PrepareTransferException'
+        this.origException = origException
+    }
+}
+
+export class PrepareTransferAmountError extends PrepareTransferError {
+    constructor (message) {
+        super(message)
+        this.name = 'PrepareTransferAmountError'
+    }
+}
+
+export class PrepareTransferInsufficientBalance extends PrepareTransferError {
+    constructor (message) {
+        super(message)
+        this.name = 'PrepareTransferInsufficientBalance'
+    }
+}
+
+export class PrepareTransferUnsafeBalance extends PrepareTransferError {
+    realBal: number
+    constructor (message, realBal) {
+        super(message)
+        this.name = 'PrepareTransferUnsafeBalance'
+        this.realBal
+    }
+}
