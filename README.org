@@ -422,10 +422,13 @@ to a recipient:
 // Fetch recipients named 'Alain'
 let recipients = await lokAPI.searchRecipients("Alain")
 
-await recipients[0].transfer("12", "Dinner Party participation")
+let payments = await recipients[0].prepareTransfer("12", "Dinner Party participation")
+for (const payment of payments) {
+  payment.execute()
+}
 #+end_src
 
-Note that =.transfer(..)= can lead to these exceptions to be thrown:
+Note that =.prepareTransfer(..)= can lead to these exceptions to be thrown:
 - sub-classes of =InvalidAmount=
   - =NegativeAmount=: Upon negative amounts
   - =NullAmount=: Upon 0 amount

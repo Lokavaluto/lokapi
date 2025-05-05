@@ -93,9 +93,11 @@ export interface IContact extends IBridge {
 
 
 export interface IRecipient extends IContact {
-    transfer(amount: number,
-             senderMemo: string,
-             recipientMemo: string): Promise<ITransaction>
+    prepareTransfer(
+        amount: string,
+        senderMemo: string,
+        recipientMemo: string,
+    ): Promise<ITransaction[]>
 }
 
 
@@ -104,10 +106,12 @@ export interface IAccount extends IBridge {
     getBalance(): Promise<string>
     getSymbol(): Promise<string>
 
-    transfer(recipient: IRecipient,
-             amount: number,
-             senderMemo: string,
-             recipientMemo: string): Promise<ITransaction>
+    prepareTransfer(
+        recipient: IRecipient,
+        amount: string,
+        senderMemo: string,
+        recipientMemo: string,
+    ): Promise<ITransaction[]>
 }
 
 
