@@ -1,34 +1,34 @@
 {
-    "name": "@lokavaluto/lokapi",
-    "version": "%%version%%",
-    "description": "Lokavaluto API",
-    "main": "build/index.js",
-    "types": "build/index.d.ts",
-    "scripts": {
-        "prepare": "tsc",
-        "lint": "eslint --ignore-path .gitignore --ext .js,.ts .",
-        "test": "vitest run"
-    },
-    "author": "Valentin LAB",
-    "license": "MIT",
-    "repository": {
-        "type": "git",
-        "url": "git@github.com:Lokavaluto/lokapi.git"
-    },
-    "devDependencies": {
-        "@0k/prettier": "^0.2.1",
-        "@types/node": "^22.15.3",
-        "@typescript-eslint/eslint-plugin": "^4.29.0",
-        "@typescript-eslint/parser": "^4.29.0",
-        "eslint": "^7.32.0",
-        "eslint-config-standard": "^16.0.3",
-        "jsdom": "^26.1.0",
-        "typedoc": "^0.22.8",
-        "typescript": "^4.7.4",
-        "vitest": "^3.1.2"
-    },
-    "dependencies": {
-        "@0k/types-request": "^1.0.0",
-        "qs": "^6.10.1"
-    }
+  "name": "@lokavaluto/lokapi",
+  "version": "0.1.1-alpha.202505101504",
+  "description": "Lokavaluto API",
+  "main": "build/index.js",
+  "types": "build/index.d.ts",
+  "scripts": {
+    "prepare": "tsc",
+    "lint": "eslint --ignore-path .gitignore --ext .js,.ts .",
+    "test": "vitest run"
+  },
+  "author": "Valentin LAB",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git@github.com:Lokavaluto/lokapi.git"
+  },
+  "devDependencies": {
+    "@0k/prettier": "^0.2.1",
+    "@types/node": "^22.15.3",
+    "@typescript-eslint/eslint-plugin": "^4.29.0",
+    "@typescript-eslint/parser": "^4.29.0",
+    "eslint": "^7.32.0",
+    "eslint-config-standard": "^16.0.3",
+    "jsdom": "^26.1.0",
+    "typedoc": "^0.22.8",
+    "typescript": "^4.7.4",
+    "vitest": "^3.1.2"
+  },
+  "dependencies": {
+    "@0k/types-request": "^1.0.0",
+    "qs": "^6.10.1"
+  }
 }
