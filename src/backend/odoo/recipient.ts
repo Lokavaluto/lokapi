@@ -15,6 +15,7 @@ export default abstract class Recipient extends Contact implements t.IRecipient 
         amount: string,
         senderMemo: string,
         recipientMemo: string,
+        signal: AbortSignal,
     ): Promise<t.ITransaction[]>
 
     /**

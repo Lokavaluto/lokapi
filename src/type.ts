@@ -97,6 +97,7 @@ export interface IRecipient extends IContact {
         amount: string,
         senderMemo: string,
         recipientMemo: string,
+        signal: AbortSignal,
     ): Promise<ITransaction[]>
 }
 
@@ -111,6 +112,7 @@ export interface IAccount extends IBridge {
         amount: string,
         senderMemo: string,
         recipientMemo: string,
+        signal: AbortSignal,
     ): Promise<ITransaction[]>
 }
 

@@ -86,7 +86,7 @@ export abstract class BackendAbstract {
         throw new Error('Backend does not implement `.getTransactions()` yet.')
     }
 
-    public get userAccounts (): Array<any> {
+    public get userAccounts (): Record<string, any> {
         throw new Error('Backend does not implement `.userAccounts` yet.')
     }
 
