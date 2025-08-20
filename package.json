@@ -15,6 +15,12 @@
         "type": "git",
         "url": "git@github.com:Lokavaluto/lokapi.git"
     },
+    "files": [
+      "build",
+      "src",
+      "README.md",
+      "LICENSE"
+    ],
     "devDependencies": {
         "@0k/prettier": "^0.2.1",
         "@types/node": "^15.12.2",
