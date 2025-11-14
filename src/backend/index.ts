@@ -129,10 +129,34 @@ export abstract class BackendAbstract {
      * @returns AsyncIterable<t.IRecipient>
      */
     public async * searchRecipients (value: string): AsyncIterable<t.IRecipient> {
+        for await (const elt of this.searchRecipientsWithEntrypoint('/partner/search', value)) {
+            yield elt
+        }
+    }
+
+
+    /**
+     * Get list of All Recipients. Similar to `searchRecipients`, but not
+     * constrained by restriction rules.
+     *
+     * @param value The given string will be searched in name, email, phone
+     *
+     * @throws {RequestFailed, APIRequestFailed, InvalidCredentials, InvalidJson}
+     *
+     * @returns AsyncIterable<t.IRecipient>
+     */
+    public async * searchAllRecipients (value: string): AsyncIterable<t.IRecipient> {
+        for await (const elt of this.searchRecipientsWithEntrypoint('/partner/search_all',value)) {
+            yield elt
+        }
+    }
+
+
+    private async * searchRecipientsWithEntrypoint (entrypoint: string, value: string): AsyncIterable<t.IRecipient> {
         let offset = 0
         const limit = 30
         while (true) {
-            const partners = await this.backends.odoo.$get('/partner/search', {
+            const partners = await this.backends.odoo.$get(entrypoint, {
                 value: value,
                 backend_keys: [this.internalId],
                 offset,
