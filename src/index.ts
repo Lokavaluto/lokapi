@@ -416,6 +416,39 @@ abstract class LokAPIAbstract extends OdooRESTAbstract {
         )
     }
 
+
+    /**
+     * Get the UserAccount from the wallet URI
+     *
+     * Wallet URIs follow the `<currency-uri>/<wallet-ident>` pattern,
+     * where the currency URI (eg: `monujo:abcd`).
+     *
+     * @param walletUri Full wallet URI that identifies which backend/currency
+     *                  the wallet belongs to.
+     *
+     * @throws {Error} When the current LokAPI instance has no backend loaded
+     *                 for the URI prefix contained within the wallet URI.
+     *
+     * @returns Promise<t.IAccount[]> Accounts returned by the backend for
+     *                                 the specified wallet identifier.
+     */
+    public async getUserAccountsFromWalletUri (walletUri: string) {
+        const splitArray = walletUri.split("/")
+        const walletIdent = splitArray.pop()
+        const currencyUri = splitArray.join("/")
+        const [_, currencyIdent] = currencyUri.split(":")
+
+        const backends = await this.getBackends()
+
+        var backend = backends[currencyUri]
+        if (!backend) {
+          throw new Error(`backend ${currencyUri} not found`)
+        }
+
+        return backend.getUserAccountsFromWalletIdent(currencyIdent, walletIdent)
+    }
+
+
     /**
      * Forces cache refresh of the current lokAPI instance. Backends will
      * have to be requeried and rebuild.
