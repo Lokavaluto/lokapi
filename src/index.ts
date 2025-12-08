@@ -418,6 +418,16 @@ abstract class LokAPIAbstract extends OdooRESTAbstract {
 
 
     /**
+     * Get the contact information (address, phone) of the issuer and
+     * user of the currency. This is the legal entity running the currency.
+     *
+     */
+    public async getReportContactInformation () {
+        return await this.$get('/partner/report-contact-info')
+    }
+
+
+    /**
      * Get the UserAccount from the wallet URI
      *
      * Wallet URIs follow the `<currency-uri>/<wallet-ident>` pattern,
