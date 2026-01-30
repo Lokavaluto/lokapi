@@ -68,6 +68,21 @@ export interface ITransaction extends IBridge {
 export interface ICreditRequest extends ITransaction {}
 
 
+export interface IPaymentRequest extends IBridge {
+    id: number
+    amount: string
+    message: string
+    state: string
+    creatorWalletUri: string
+    senderWalletUri: string
+    receiverWalletUri: string
+
+    cancel(): Promise<void>
+    refuse(reason: string): Promise<void>
+    markAsPaid(txId: string): Promise<void>
+}
+
+
 export interface IContact extends IBridge {
 
     /**
