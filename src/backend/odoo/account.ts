@@ -1,5 +1,3 @@
-import * as t from '../../type'
-
 import { BridgeObject } from '..'
 
 
