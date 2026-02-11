@@ -83,6 +83,27 @@ export interface IPaymentRequest extends IBridge {
 }
 
 
+export type RecurringRuleType = 'daily' | 'weekly' | 'monthly' | 'yearly'
+
+
+export interface IRecurrentContract extends IBridge {
+    id: number
+    amount: string
+    message: string
+    state: string
+    creatorWalletUri: string
+    senderWalletUri: string
+    receiverWalletUri: string
+    dateStart: string | null
+    dateEnd: string | null
+    recurringRuleType: RecurringRuleType
+    recurringInterval: number
+    nextExecutionDate: string | null
+
+    delete(): Promise<boolean>
+}
+
+
 export interface IContact extends IBridge {
 
     /**
