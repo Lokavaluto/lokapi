@@ -136,6 +136,19 @@ export abstract class BackendAbstract {
 
 
     /**
+     * Check if the current user can search all recipients
+     * (without restriction rules) on this backend.
+     *
+     * @throws {RequestFailed, APIRequestFailed, InvalidCredentials, InvalidJson}
+     *
+     * @returns Promise<boolean>
+     */
+    public async canSearchAllRecipients (): Promise<boolean> {
+        return this.backends.odoo.$get('/partner/can-search-all-recipients')
+    }
+
+
+    /**
      * Get list of All Recipients. Similar to `searchRecipients`, but not
      * constrained by restriction rules.
      *
