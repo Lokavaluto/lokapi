@@ -91,10 +91,32 @@ export abstract class BackendAbstract {
     }
 
     public async hasUserAccountValidationRights (): Promise<boolean> {
+        const [admin, financial] = await Promise.all([
+            this.hasUserAccountValidationRightsForAdministrativeBackend(),
+            this.hasUserAccountValidationRightsForFinancialBackend(),
+        ])
+        return admin && financial
+    }
+
+
+    /**
+     * Check if the current user can activate/validate user accounts
+     * on the administrative backend.
+     *
+     * @throws {RequestFailed, APIRequestFailed, InvalidCredentials, InvalidJson}
+     *
+     * @returns Promise<boolean>
+     */
+    public async hasUserAccountValidationRightsForAdministrativeBackend (): Promise<boolean> {
+        return this.backends.odoo.$get('/comchain/can-activate')
+    }
+
+
+    public async hasUserAccountValidationRightsForFinancialBackend (): Promise<boolean> {
         const results = await Promise.all(
             Object.values(this.userAccounts).map((a: any) =>
-                a.hasUserAccountValidationRights
-                    ? a.hasUserAccountValidationRights()
+                a.hasUserAccountValidationRightsForFinancialBackend
+                    ? a.hasUserAccountValidationRightsForFinancialBackend()
                     : false
             )
         )
@@ -102,10 +124,32 @@ export abstract class BackendAbstract {
     }
 
     public async hasCreditRequestValidationRights (): Promise<boolean> {
+        const [admin, financial] = await Promise.all([
+            this.hasCreditRequestValidationRightsForAdministrativeBackend(),
+            this.hasCreditRequestValidationRightsForFinancialBackend(),
+        ])
+        return admin && financial
+    }
+
+
+    /**
+     * Check if the current user can validate credit requests
+     * on the administrative backend.
+     *
+     * @throws {RequestFailed, APIRequestFailed, InvalidCredentials, InvalidJson}
+     *
+     * @returns Promise<boolean>
+     */
+    public async hasCreditRequestValidationRightsForAdministrativeBackend (): Promise<boolean> {
+        return this.backends.odoo.$get('/partner/can-validate-credit-request')
+    }
+
+
+    public async hasCreditRequestValidationRightsForFinancialBackend (): Promise<boolean> {
         const results = await Promise.all(
             Object.values(this.userAccounts).map((a: any) =>
-                a.hasCreditRequestValidationRights
-                    ? a.hasCreditRequestValidationRights()
+                a.hasCreditRequestValidationRightsForFinancialBackend
+                    ? a.hasCreditRequestValidationRightsForFinancialBackend()
                     : false
             )
         )
