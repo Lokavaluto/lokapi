@@ -14,6 +14,16 @@ export class UserAccountAlreadyExists extends Error {
 }
 
 
+export class CurrencyNotAvailable extends Error {
+    currency: string
+    constructor (currency: string, message?: string) {
+        super(message || `Currency "${currency}" is not available on this server`)
+        this.name = 'CurrencyNotAvailable'
+        this.currency = currency
+    }
+}
+
+
 export class TimeoutError extends Error {
     constructor (message) {
         super(message)
