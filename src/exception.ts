@@ -24,6 +24,16 @@ export class CurrencyNotAvailable extends Error {
 }
 
 
+export class CurrencyMismatch extends Error {
+    currency: string
+    constructor (currency: string, message?: string) {
+        super(message || `Wallet currency "${currency}" does not match the selected currency`)
+        this.name = 'CurrencyMismatch'
+        this.currency = currency
+    }
+}
+
+
 export class TimeoutError extends Error {
     constructor (message) {
         super(message)
