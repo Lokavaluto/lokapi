@@ -70,10 +70,11 @@ abstract class LokAPIAbstract extends OdooRESTAbstract {
                     }
                     self._backendCredentialsPromise = null
                     self._backendCredentials = backendCredentials
+                    return backendCredentials
                 })()
                 this._backendCredentialsPromise = _backendCredentialsPromise
             }
-            await this._backendCredentialsPromise
+            return await this._backendCredentialsPromise
         }
         return this._backendCredentials
     }
@@ -116,10 +117,11 @@ abstract class LokAPIAbstract extends OdooRESTAbstract {
                     }
                     self._backendsPromise = null
                     self._backends = self.makeBackends(backendCredentials)
+                    return self._backends
                 })()
                 this._backendsPromise = _backendsPromise
             }
-            await this._backendsPromise
+            return await this._backendsPromise
         }
         return this._backends
     }

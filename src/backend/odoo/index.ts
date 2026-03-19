@@ -1,4 +1,7 @@
+import { stringify as toQueryString } from 'qs'
+
 import { JsonRESTPersistentClientAbstract } from '../../rest'
+import { BatchQueue } from './batch'
 import { Contact } from './contact'
 import {
     e as httpRequestExc,
@@ -32,10 +35,27 @@ export abstract class OdooRESTAbstract extends JsonRESTPersistentClientAbstract 
     userProfile: any
 
 
+    private _batchQueue: BatchQueue
+
     constructor (host: string, dbName?: string) {
         super(host)
         this.dbName = dbName
         this.authHeaders = {}
+        this._batchQueue = new BatchQueue(
+            (path, opts) => this._unbatchedRequest(path, opts)
+        )
+    }
+
+
+    /**
+     * Execute a single request bypassing the batch queue.
+     * Goes directly to the base class request() which handles
+     * header merging, query strings, and HTTP execution.
+     */
+    private async _unbatchedRequest (path: string, opts: t.HttpOpts): Promise<any> {
+        return JsonRESTPersistentClientAbstract.prototype.request.call(
+            this, path, opts
+        )
     }
 
     async authenticate (login: string, password: string): Promise<any> {
@@ -192,10 +212,42 @@ export abstract class OdooRESTAbstract extends JsonRESTPersistentClientAbstract 
         return errMessage
     }
 
+    /**
+     * Public entry point for Odoo HTTP requests. Converts GET
+     * query strings, enqueues into the batch queue for automatic
+     * deduplication and batching via POST /batch, and transforms
+     * 401 errors into AuthenticationRequired.
+     */
     public async request (path: string, opts: t.HttpOpts): Promise<any> {
-        let response: any
+        // Skip batching for authenticate — it establishes the
+        // session cookie that subsequent requests depend on.
+        const skipBatch = path.endsWith('/auth/authenticate')
+
         try {
-            response = await super.request(path, opts)
+            if (skipBatch) {
+                return await this._unbatchedRequest(path, opts)
+            }
+
+            // Pre-process GET query strings so that batch sub-request
+            // paths carry the query string (the server's batch handler
+            // uses PATH_INFO to route sub-requests).
+            let batchPath = path
+            let batchData = opts.data
+            if (
+                opts.method === 'GET' &&
+                typeof opts.data === 'object' &&
+                Object.keys(opts.data).length !== 0
+            ) {
+                batchPath = path + '?' + toQueryString(opts.data, { allowDots: true })
+                batchData = undefined
+            }
+
+            return await this._batchQueue.enqueue(batchPath, {
+                method: opts.method,
+                headers: opts.headers,
+                data: batchData,
+                responseHeaders: opts.responseHeaders,
+            })
         } catch (err) {
             if (err instanceof httpRequestExc.HttpError && err.code === 401) {
                 console.log('Odoo AccessDenied: Authentication Required')
@@ -206,7 +258,6 @@ export abstract class OdooRESTAbstract extends JsonRESTPersistentClientAbstract 
             }
             throw err
         }
-        return response
     }
 
     /**
