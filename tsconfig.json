@@ -1,17 +1,16 @@
 {
     "compilerOptions": {
-        "target": "esnext",
-        "module": "esnext",
+        "target": "es2020",
+        "module": "es2020",
         "moduleResolution": "node",
         "declaration": true,
         "removeComments": false,
-        "emitDecoratorMetadata": true,
-        "experimentalDecorators": true,
+
         "sourceMap": true,
         "skipLibCheck": true,
         "allowUnreachableCode": false,
         "allowUnusedLabels": false,
-        "noEmitHelpers": true,
+
         "noEmitOnError": false,
         "noImplicitAny": false,
         "noImplicitReturns": false,
