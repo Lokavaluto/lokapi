@@ -46,7 +46,7 @@ abstract class LokAPIAbstract extends OdooRESTAbstract {
      *
      * @returns Object
      */
-    private async getBackendCredentials (): Promise<any> {
+    private getBackendCredentials (): Promise<any> {
         // XXXvlab: cached, should transition to general cache
         // decorator to allow fine control of when we required a
         // fetch.
@@ -74,7 +74,7 @@ abstract class LokAPIAbstract extends OdooRESTAbstract {
                 })()
                 this._backendCredentialsPromise = _backendCredentialsPromise
             }
-            return await this._backendCredentialsPromise
+            return this._backendCredentialsPromise
         }
         return this._backendCredentials
     }
@@ -482,3 +482,141 @@ abstract class LokAPIAbstract extends OdooRESTAbstract {
 
 
 export { LokAPIAbstract, e, t, RestExc }
+/* @skip-prod-transpilation */
+if (import.meta.vitest) {
+    const { describe, it, expect, vi } = import.meta.vitest
+
+    /**
+     * Build a minimal LokAPIAbstract-shaped object with a mocked
+     * ``$post`` to exercise ``getBackendCredentials``.
+     */
+    function makeInstance (postMock: (...args: any[]) => Promise<any>) {
+        return {
+            $post: postMock,
+            _backendCredentials: null as any,
+            _backendCredentialsPromise: null as any,
+            getBackendCredentials:
+                LokAPIAbstract.prototype['getBackendCredentials'],
+            flushBackendCaches:
+                LokAPIAbstract.prototype['flushBackendCaches'],
+        }
+    }
+
+
+    describe('LokAPIAbstract.getBackendCredentials', () => {
+
+        it('fetches credentials via $post on first call', async () => {
+            const creds = { accounts: ['a'] }
+            const mock = vi.fn().mockResolvedValue(creds)
+            const instance = makeInstance(mock)
+
+            const result = await instance.getBackendCredentials()
+
+            expect(result).toBe(creds)
+            expect(mock).toHaveBeenCalledTimes(1)
+            expect(mock).toHaveBeenCalledWith('/partner/backend_credentials')
+        })
+
+
+        it('returns cached result on subsequent calls without hitting $post again', async () => {
+            const creds = { accounts: ['b'] }
+            const mock = vi.fn().mockResolvedValue(creds)
+            const instance = makeInstance(mock)
+
+            const r1 = await instance.getBackendCredentials()
+            const r2 = await instance.getBackendCredentials()
+
+            expect(r1).toBe(creds)
+            expect(r2).toBe(creds)
+            expect(mock).toHaveBeenCalledTimes(1)
+        })
+
+
+        it('deduplicates concurrent calls into a single $post', async () => {
+            let resolve: (v: any) => void
+            const pending = new Promise(r => { resolve = r })
+            const mock = vi.fn(() => pending)
+            const instance = makeInstance(mock)
+
+            const p1 = instance.getBackendCredentials()
+            const p2 = instance.getBackendCredentials()
+
+            expect(p1).toBe(p2)
+            expect(mock).toHaveBeenCalledTimes(1)
+
+            const creds = { accounts: ['c'] }
+            resolve!(creds)
+
+            const [r1, r2] = await Promise.all([p1, p2])
+            expect(r1).toBe(creds)
+            expect(r2).toBe(creds)
+        })
+
+
+        it('allows retry after $post rejection', async () => {
+            const creds = { accounts: ['d'] }
+            const mock = vi.fn()
+                .mockRejectedValueOnce(new Error('network'))
+                .mockResolvedValueOnce(creds)
+            const instance = makeInstance(mock)
+
+            await expect(instance.getBackendCredentials())
+                .rejects.toThrow('network')
+
+            const result = await instance.getBackendCredentials()
+
+            expect(result).toBe(creds)
+            expect(mock).toHaveBeenCalledTimes(2)
+        })
+
+
+        it('cancels in-flight call when flushed before $post resolves', async () => {
+            let resolve: (v: any) => void
+            const pending = new Promise(r => { resolve = r })
+            const mock = vi.fn(() => pending)
+            const instance = makeInstance(mock)
+
+            const p = instance.getBackendCredentials()
+
+            instance.flushBackendCaches()
+
+            resolve!({ accounts: ['e'] })
+
+            await expect(p).rejects.toThrow('Cancelled')
+        })
+
+
+        it('cancels in-flight call when flushed before $post rejects', async () => {
+            let reject: (e: any) => void
+            const pending = new Promise((_, r) => { reject = r })
+            const mock = vi.fn(() => pending)
+            const instance = makeInstance(mock)
+
+            const p = instance.getBackendCredentials()
+
+            instance.flushBackendCaches()
+
+            reject!(new Error('timeout'))
+
+            await expect(p).rejects.toThrow('Cancelled')
+        })
+
+
+        it('fetches fresh credentials after flush clears the cache', async () => {
+            const creds1 = { accounts: ['f'] }
+            const creds2 = { accounts: ['g'] }
+            const mock = vi.fn()
+                .mockResolvedValueOnce(creds1)
+                .mockResolvedValueOnce(creds2)
+            const instance = makeInstance(mock)
+
+            const r1 = await instance.getBackendCredentials()
+            instance.flushBackendCaches()
+            const r2 = await instance.getBackendCredentials()
+
+            expect(r1).toBe(creds1)
+            expect(r2).toBe(creds2)
+            expect(mock).toHaveBeenCalledTimes(2)
+        })
+    })
+}
