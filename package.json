@@ -5,9 +5,9 @@
     "main": "build/index.js",
     "types": "build/index.d.ts",
     "scripts": {
-        "prepare": "tsc",
+        "prepare": "ts-patch install -s",
         "lint": "eslint --ignore-path .gitignore --ext .js,.ts .",
-        "test": "echo \"Error: no test specified\" && exit 1"
+        "test": "vitest run"
     },
     "author": "Valentin LAB",
     "license": "MIT",
@@ -28,8 +28,14 @@
         "@typescript-eslint/parser": "^4.29.0",
         "eslint": "^7.32.0",
         "eslint-config-standard": "^16.0.3",
+        "jsdom": "^24.1.3",
+        "ts-node": "^10.9.2",
+        "ts-patch": "^3.3.0",
         "typedoc": "^0.28.9",
-        "typescript": "^5.9.3"
+        "typescript": "^5.9.3",
+        "vite": "^7.3.2",
+        "vite-plugin-doctest": "^1.2.2",
+        "vitest": "^3.2.4"
     },
     "dependencies": {
         "@0k/types-request": "^1.0.0",

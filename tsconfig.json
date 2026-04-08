@@ -23,7 +23,13 @@
         "outDir": "build",
         "paths": {
             "*": ["src/types/*"]
-        }
+        },
+        "types": [
+            "vitest/importMeta"
+        ],
+        "plugins": [
+            { "transform": "./skip-prod-transpilation.ts" }
+        ]
     },
     "typedocOptions": {
         "name": "LokAPI",
