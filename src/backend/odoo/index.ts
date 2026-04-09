@@ -13,6 +13,7 @@ import * as t from '../../type'
 import * as e from '../../rest/exception'
 
 import * as LokAPIExc from '../../exception'
+import { ttlcache } from '../../cache'
 
 import { makePasswordChecker } from '../utils'
 
@@ -279,12 +280,14 @@ export abstract class OdooRESTAbstract extends JsonRESTPersistentClientAbstract 
             login: login,
             uid: authData.uid,
         }
-        this._getMyContact = this.makeContact(authData.prefetch.partner)
+        ;(this.getMyContact as any).feedCache(
+            [],
+            this.makeContact(authData.prefetch.partner),
+        )
         return authData
     }
 
 
-    _getMyContact: t.IContact
     private makeContact (jsonData): t.IContact {
         return new Contact(
                 { odoo: this }, this, { odoo: jsonData }
@@ -304,11 +307,9 @@ export abstract class OdooRESTAbstract extends JsonRESTPersistentClientAbstract 
      *
      * @returns {Object
      */
+    @ttlcache({ttl: 10})
     public async getMyContact (): Promise<t.IContact> {
-        if (!this._getMyContact) {
-            this._getMyContact = this.makeContact(await this.$get('/partner/0'))
-        }
-        return this._getMyContact
+        return this.makeContact(await this.$get('/partner/0'))
     }
 
 
