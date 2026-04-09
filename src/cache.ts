@@ -5,4 +5,5 @@ export const singleton = cache({
     cacheStore: JsonKeyCacheStore,
     key: (x: any) => x.args,
     noCacheOnReject: true,
+    cancelOnClear: true,
 })
