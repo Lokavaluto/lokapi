@@ -39,7 +39,7 @@ abstract class LokAPIAbstract extends OdooRESTAbstract {
             [],
             authData.prefetch.backend_credentials,
         )
-        this._backends = false // force prefetch
+        ;(this.getBackends as any).clearCache()
         return true
     }
 
@@ -63,50 +63,22 @@ abstract class LokAPIAbstract extends OdooRESTAbstract {
 
 
     /**
-     * Get list of backends
+     * Get list of backends.
+     *
+     * Cached via ``@singleton``: subsequent calls return the
+     * same promise. On rejection, the cache is cleared and the
+     * next call retries. Calling ``flushBackendCaches()`` clears
+     * the cache and cancels any in-flight request.
      *
      * @throws {RequestFailed, APIRequestFailed, InvalidCredentials, InvalidJson}
      *
      * @returns Object
      */
+    @singleton
     public async getBackends (): Promise<any> {
-        // XXXvlab: cached, should transition to general cache
-        // decorator to allow fine control of when we required a
-        // fetch.
-        if (!this._backends) {
-            if (!this._backendsPromise) {
-                const self = this
-                let _backendsPromise: Promise<any>
-                _backendsPromise = (async () => {
-                    let backendCredentials
-                    try {
-                        backendCredentials = await self.getBackendCredentials()
-                    } catch (err) {
-                        if (self._backendsPromise !== _backendsPromise) {
-                            throw new e.CanceledOperation(`Canceled '_backendsPromise' (failed with: ${err})`)
-                        }
-                        self._backendsPromise = null
-                        throw err
-                    }
-                    if (self._backendsPromise !== _backendsPromise) {
-                        throw new Error("Cancelled '_backendsPromise' (succeeded)")
-                    }
-                    self._backendsPromise = null
-                    self._backends = self.makeBackends(backendCredentials)
-                    return self._backends
-                })()
-                this._backendsPromise = _backendsPromise
-            }
-            return await this._backendsPromise
-        }
-        return this._backends
+        const backendCredentials = await this.getBackendCredentials()
+        return this.makeBackends(backendCredentials)
     }
-
-    private _backendsPromise: any
-    // XXXvlab: Poor man's way to allow some kind of cache clearance
-    // via setting this to 'protected' while waiting for a more
-    // generalized cache manangement.
-    protected _backends: any
 
 
     protected _makeBackendCache = new Map<string, any>()
@@ -444,8 +416,7 @@ abstract class LokAPIAbstract extends OdooRESTAbstract {
      * @returns void
      */
     public flushBackendCaches (): void {
-        this._backends = null
-        this._backendsPromise = null
+        ;(this.getBackends as any).clearCache()
         ;(this.getBackendCredentials as any).clearCache()
     }
 
@@ -597,5 +568,159 @@ if (import.meta.vitest) {
             expect(r2).toBe(creds2)
             expect(mock).toHaveBeenCalledTimes(2)
         })
+    })
+
+
+    /**
+     * Create a TestLokAPI instance with a mocked
+     * ``getBackendCredentials`` to exercise ``getBackends``.
+     */
+    function makeBackendsInstance (
+        credsMock: (...args: any[]) => Promise<any>,
+    ) {
+        const instance = new TestLokAPI('http://test')
+        const backends = { 'comchain:Lemanopolis': { id: 'leman' } }
+        // Preserve clearCache from the decorated getBackendCredentials
+        // so that flushBackendCaches() works.
+        const originalClearCache =
+            (instance as any).getBackendCredentials.clearCache
+        ;(instance as any).getBackendCredentials = credsMock
+        ;(instance as any).getBackendCredentials.clearCache = originalClearCache
+        ;(instance as any).makeBackends = vi.fn(() => backends)
+        return { instance, backends }
+    }
+
+
+    describe('LokAPIAbstract.getBackends', () => {
+
+        it('calls getBackendCredentials and returns backends on first call', async () => {
+            const creds = [{ type: 'comchain:Leman' }]
+            const credsMock = vi.fn().mockResolvedValue(creds)
+            const { instance, backends } = makeBackendsInstance(credsMock)
+
+            const result = await instance.getBackends()
+
+            expect(result).toBe(backends)
+            expect(credsMock).toHaveBeenCalledTimes(1)
+            expect((instance as any).makeBackends).toHaveBeenCalledWith(creds)
+        })
+
+
+        it('returns cached backends on subsequent calls', async () => {
+            const credsMock = vi.fn().mockResolvedValue([])
+            const { instance, backends } = makeBackendsInstance(credsMock)
+
+            const r1 = await instance.getBackends()
+            const r2 = await instance.getBackends()
+
+            expect(r1).toBe(backends)
+            expect(r2).toBe(backends)
+            expect(credsMock).toHaveBeenCalledTimes(1)
+        })
+
+
+        it('deduplicates concurrent calls', async () => {
+            let resolve: (v: any) => void
+            const pending = new Promise(r => { resolve = r })
+            const credsMock = vi.fn(() => pending)
+            const { instance, backends } = makeBackendsInstance(credsMock)
+
+            const p1 = instance.getBackends()
+            const p2 = instance.getBackends()
+
+            expect(credsMock).toHaveBeenCalledTimes(1)
+
+            resolve!([])
+
+            const [r1, r2] = await Promise.all([p1, p2])
+            expect(r1).toBe(backends)
+            expect(r2).toBe(backends)
+        })
+
+
+        it('allows retry after getBackendCredentials rejection', async () => {
+            const credsMock = vi.fn()
+                .mockRejectedValueOnce(new Error('network'))
+                .mockResolvedValueOnce([])
+            const { instance, backends } = makeBackendsInstance(credsMock)
+
+            await expect(instance.getBackends())
+                .rejects.toThrow('network')
+
+            const result = await instance.getBackends()
+
+            expect(result).toBe(backends)
+            expect(credsMock).toHaveBeenCalledTimes(2)
+        })
+
+
+        it('cancels in-flight call when flushed before getBackendCredentials resolves', async () => {
+            let resolve: (v: any) => void
+            const pending = new Promise(r => { resolve = r })
+            const credsMock = vi.fn(() => pending)
+            const { instance } = makeBackendsInstance(credsMock)
+
+            const p = instance.getBackends()
+
+            instance.flushBackendCaches()
+
+            resolve!([])
+
+            await expect(p).rejects.toBeInstanceOf(CancelledCache)
+        })
+
+
+        it('cancels in-flight call when flushed before getBackendCredentials rejects', async () => {
+            let reject: (e: any) => void
+            const pending = new Promise((_, r) => { reject = r })
+            const credsMock = vi.fn(() => pending)
+            const { instance } = makeBackendsInstance(credsMock)
+
+            const p = instance.getBackends()
+
+            instance.flushBackendCaches()
+
+            reject!(new Error('timeout'))
+
+            await expect(p).rejects.toBeInstanceOf(CancelledCache)
+        })
+
+
+        it('concurrent calls that reject share the same error object', async () => {
+            const err = new Error('backend down')
+            const credsMock = vi.fn().mockRejectedValue(err)
+            const { instance } = makeBackendsInstance(credsMock)
+
+            const p1 = instance.getBackends()
+            const p2 = instance.getBackends()
+
+            const e1 = await p1.catch((e: Error) => e)
+            const e2 = await p2.catch((e: Error) => e)
+
+            expect(e1).toBe(e2)
+            expect(e1).toBe(err)
+        })
+
+
+        it('fetches fresh backends after flush clears the cache', async () => {
+            const backends1 = { a: { id: '1' } }
+            const backends2 = { b: { id: '2' } }
+            const credsMock = vi.fn().mockResolvedValue([])
+            const { instance } = makeBackendsInstance(credsMock)
+            const makeBackendsMock = (instance as any).makeBackends
+            makeBackendsMock
+                .mockReturnValueOnce(backends1)
+                .mockReturnValueOnce(backends2)
+
+            const r1 = await instance.getBackends()
+            instance.flushBackendCaches()
+            const r2 = await instance.getBackends()
+
+            expect(r1).toBe(backends1)
+            expect(r2).toBe(backends2)
+            expect(credsMock).toHaveBeenCalledTimes(2)
+        })
+
+
     })
 }
