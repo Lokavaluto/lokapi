@@ -7,7 +7,7 @@ import * as e from './exception'
 import * as RestExc from './rest/exception'
 import * as t from './type'
 
-import { singleton } from './cache'
+import { cache, singleton } from './cache'
 import { mux } from './generator'
 
 import { BackendAbstract, Transaction } from './backend'
@@ -81,24 +81,10 @@ abstract class LokAPIAbstract extends OdooRESTAbstract {
     }
 
 
-    protected _makeBackendCache = new Map<string, any>()
-
+    @cache
     private makeBackend(backendData: any) {
-        let key = JSON.stringify(backendData)
-        let cachedValue = this._makeBackendCache.get(key)
-        if (!cachedValue) {
-            cachedValue = this._makeBackend(backendData)
-            this._makeBackendCache.set(
-                key, cachedValue
-            )
-        }
-        return cachedValue
-    }
-
-    private _makeBackend(backendData: any) {
-        const self = this
         const backendId = backendData.type.split(':')[0]
-        const BackendClassAbstract = <any>self.BackendFactories[backendId]
+        const BackendClassAbstract = <any>this.BackendFactories[backendId]
         const {
             httpRequest, base64Encode, persistentStore,
             requestLogin, requestLocalPassword
