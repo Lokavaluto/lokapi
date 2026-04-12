@@ -63,3 +63,20 @@ export class UserOrEmailAlreadyTaken extends Error {
         this.name = 'UserOrEmailAlreadyTaken'
     }
 }
+
+
+export class FeatureMismatchError extends httpRequestExc.HttpError {
+    requestedFeatures: string
+    supportedFeatures: string[]
+
+    constructor (
+        requestedFeatures: string,
+        supportedFeatures: string[],
+        cause: httpRequestExc.HttpError,
+    ) {
+        super(cause.code, cause.message, cause.data, cause.response)
+        this.name = 'FeatureMismatchError'
+        this.requestedFeatures = requestedFeatures
+        this.supportedFeatures = supportedFeatures
+    }
+}

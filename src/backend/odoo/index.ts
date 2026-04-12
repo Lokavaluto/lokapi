@@ -1,6 +1,7 @@
 import { stringify as toQueryString } from 'qs'
 
 import { JsonRESTPersistentClientAbstract } from '../../rest'
+import { JsonRESTFeatureClientAbstract } from '../../rest/features'
 import { BatchQueue } from './batch'
 import { Contact } from './contact'
 import {
@@ -18,7 +19,7 @@ import { ttlcache } from '../../cache'
 import { makePasswordChecker } from '../utils'
 
 
-export abstract class OdooRESTAbstract extends JsonRESTPersistentClientAbstract {
+export abstract class OdooRESTAbstract extends JsonRESTFeatureClientAbstract {
 
     API_VERSION = 12
 
@@ -401,11 +402,11 @@ httpRequestType.httpMethods.forEach((method) => {
     OdooRESTAbstract.prototype['$' + methodLc] = function (
         path: string,
         data?: any,
-        headers?: any,
+        headersOrOpts?: any,
         responseHeaders?: {[k: string]: any}
     ) {
-        return JsonRESTPersistentClientAbstract.prototype[
+        return JsonRESTFeatureClientAbstract.prototype[
             '$' + methodLc
-        ].apply(this, [`/lokavaluto_api/private${path}`, data, headers, responseHeaders])
+        ].apply(this, [`/lokavaluto_api/private${path}`, data, headersOrOpts, responseHeaders])
     }
 })
