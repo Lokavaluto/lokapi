@@ -9,9 +9,11 @@ import * as t from './type'
 
 import { cache, singleton } from './cache'
 import { mux } from './generator'
+import { legacyToUri, parseUri } from './uri'
 
 import { BackendAbstract, Transaction } from './backend'
 import { getHostOrUrlParts } from './rest'
+import { LccApiClient } from './rest/lccApi'
 
 
 abstract class LokAPIAbstract extends OdooRESTAbstract {
@@ -37,7 +39,7 @@ abstract class LokAPIAbstract extends OdooRESTAbstract {
         const authData = await super.login(login, password)
         ;(this.getBackendCredentials as any).feedCache(
             [],
-            authData.prefetch.backend_credentials,
+            authData.prefetch.backend_credentials.map(legacyToUri),
         )
         ;(this.getBackends as any).clearCache()
         return true
@@ -57,8 +59,16 @@ abstract class LokAPIAbstract extends OdooRESTAbstract {
      * @returns Object
      */
     @singleton
-    private getBackendCredentials (): Promise<any> {
-        return this.$post('/partner/backend_credentials')
+    private async getBackendCredentials (): Promise<any> {
+        const selectedFeatures: string[] = []
+        const creds = await this.$post(
+            '/partner/backend_credentials', null, {
+                features: 'uri/0 feature-less/0',
+                selectedFeatures,
+            },
+        )
+        if (selectedFeatures.includes('uri/0')) return creds
+        return creds.map(legacyToUri)
     }
 
 
@@ -83,7 +93,7 @@ abstract class LokAPIAbstract extends OdooRESTAbstract {
 
     @cache
     private makeBackend(backendData: any) {
-        const backendId = backendData.type.split(':')[0]
+        const { engine: backendId } = parseUri(backendData.currency_uri)
         const BackendClassAbstract = <any>this.BackendFactories[backendId]
         const {
             httpRequest, base64Encode, persistentStore,
@@ -110,11 +120,11 @@ abstract class LokAPIAbstract extends OdooRESTAbstract {
             }
         }
         let backend: any
-        console.log(`making backend ${backendData.type}`, backendData)
+        console.log(`making backend ${backendData.currency_uri}`, backendData)
         try {
             backend = new Backend({ odoo: this }, backendData)
         } catch (err) {
-            console.log(`Backend ${backendData.type} creation failed:`, err)
+            console.log(`Backend ${backendData.currency_uri} creation failed:`, err)
             return
         }
         return backend
@@ -126,7 +136,7 @@ abstract class LokAPIAbstract extends OdooRESTAbstract {
         backendCredentials.forEach((backendData: any) => {
             let backend = this.makeBackend(backendData)
             if (backend)
-                backends[backend.internalId] = backend
+                backends[backend.uri] = backend
         })
         return backends
     }
@@ -143,6 +153,13 @@ abstract class LokAPIAbstract extends OdooRESTAbstract {
         const backends = await this.getBackends()
         const results = await Promise.all(Object.values(backends).map(
             (b: any) => b.hasCreditRequestValidationRights()))
+        return results.reduce((a: boolean, b: boolean) => a || b, false)
+    }
+
+    public async canSetPermissions () {
+        const backends = await this.getBackends()
+        const results = await Promise.all(Object.values(backends).map(
+            (b: any) => b.canSetPermissions()))
         return results.reduce((a: boolean, b: boolean) => a || b, false)
     }
 
@@ -378,7 +395,7 @@ abstract class LokAPIAbstract extends OdooRESTAbstract {
      * @returns Promise<t.IAccount[]> Accounts returned by the backend for
      *                                 the specified wallet identifier.
      */
-    public async getUserAccountsFromWalletUri (walletUri: string) {
+    public async getUserAccountsFromWalletUri (walletUri: string, caller?: any) {
         const splitArray = walletUri.split("/")
         const walletIdent = splitArray.pop()
         const currencyUri = splitArray.join("/")
@@ -391,7 +408,9 @@ abstract class LokAPIAbstract extends OdooRESTAbstract {
           throw new Error(`backend ${currencyUri} not found`)
         }
 
-        return backend.getUserAccountsFromWalletIdent(currencyIdent, walletIdent)
+        const userAccount = backend.getUserAccountsFromWalletIdent(currencyIdent, walletIdent)
+        await userAccount.refresh(caller)
+        return userAccount
     }
 
 
@@ -413,7 +432,9 @@ abstract class LokAPIAbstract extends OdooRESTAbstract {
 }
 
 
-export { LokAPIAbstract, e, t, RestExc }
+export { LokAPIAbstract, LccApiClient, e, t, RestExc }
+
+
 /* @skip-prod-transpilation */
 if (import.meta.vitest) {
     const { describe, it, expect, vi } = import.meta.vitest
@@ -427,7 +448,7 @@ if (import.meta.vitest) {
         persistentStore = { get: vi.fn(), set: vi.fn(), del: vi.fn() }
         async requestLogin () { return {} }
         httpRequest = vi.fn()
-        base64Encode = vi.fn()
+        base64Encode = vi.fn((s: string) => s)
     }
 
     function makeInstance (postMock: (...args: any[]) => Promise<any>) {
@@ -440,28 +461,27 @@ if (import.meta.vitest) {
     describe('LokAPIAbstract.getBackendCredentials', () => {
 
         it('fetches credentials via $post on first call', async () => {
-            const creds = { accounts: ['a'] }
+            const creds = [{ currency_uri: 'comchain://Leman' }]
             const mock = vi.fn().mockResolvedValue(creds)
             const instance = makeInstance(mock)
 
             const result = await (instance as any).getBackendCredentials()
 
-            expect(result).toBe(creds)
+            expect(result).toEqual(creds)
             expect(mock).toHaveBeenCalledTimes(1)
-            expect(mock).toHaveBeenCalledWith('/partner/backend_credentials')
         })
 
 
         it('returns cached result on subsequent calls without hitting $post again', async () => {
-            const creds = { accounts: ['b'] }
+            const creds = [{ currency_uri: 'comchain://Leman' }]
             const mock = vi.fn().mockResolvedValue(creds)
             const instance = makeInstance(mock)
 
             const r1 = await (instance as any).getBackendCredentials()
             const r2 = await (instance as any).getBackendCredentials()
 
-            expect(r1).toBe(creds)
-            expect(r2).toBe(creds)
+            expect(r1).toEqual(creds)
+            expect(r2).toEqual(creds)
             expect(mock).toHaveBeenCalledTimes(1)
         })
 
@@ -480,17 +500,17 @@ if (import.meta.vitest) {
             // Dedup is verified by $post being called only once.
             expect(mock).toHaveBeenCalledTimes(1)
 
-            const creds = { accounts: ['c'] }
+            const creds = [{ currency_uri: 'comchain://Leman' }]
             resolve!(creds)
 
             const [r1, r2] = await Promise.all([p1, p2])
-            expect(r1).toBe(creds)
-            expect(r2).toBe(creds)
+            expect(r1).toEqual(creds)
+            expect(r2).toEqual(creds)
         })
 
 
         it('allows retry after $post rejection', async () => {
-            const creds = { accounts: ['d'] }
+            const creds = [{ currency_uri: 'comchain://Leman' }]
             const mock = vi.fn()
                 .mockRejectedValueOnce(new Error('network'))
                 .mockResolvedValueOnce(creds)
@@ -501,7 +521,7 @@ if (import.meta.vitest) {
 
             const result = await (instance as any).getBackendCredentials()
 
-            expect(result).toBe(creds)
+            expect(result).toEqual(creds)
             expect(mock).toHaveBeenCalledTimes(2)
         })
 
@@ -516,7 +536,7 @@ if (import.meta.vitest) {
 
             instance.flushBackendCaches()
 
-            resolve!({ accounts: ['e'] })
+            resolve!([{ currency_uri: 'comchain://Leman' }])
 
             await expect(p).rejects.toBeInstanceOf(CancelledCache)
         })
@@ -539,8 +559,8 @@ if (import.meta.vitest) {
 
 
         it('fetches fresh credentials after flush clears the cache', async () => {
-            const creds1 = { accounts: ['f'] }
-            const creds2 = { accounts: ['g'] }
+            const creds1 = [{ currency_uri: 'comchain://A' }]
+            const creds2 = [{ currency_uri: 'comchain://B' }]
             const mock = vi.fn()
                 .mockResolvedValueOnce(creds1)
                 .mockResolvedValueOnce(creds2)
@@ -550,9 +570,21 @@ if (import.meta.vitest) {
             instance.flushBackendCaches()
             const r2 = await (instance as any).getBackendCredentials()
 
-            expect(r1).toBe(creds1)
-            expect(r2).toBe(creds2)
+            expect(r1).toEqual(creds1)
+            expect(r2).toEqual(creds2)
             expect(mock).toHaveBeenCalledTimes(2)
+        })
+
+
+        it('converts legacy type format to currency_uri', async () => {
+            const creds = [{ type: 'comchain:Leman' }]
+            const mock = vi.fn().mockResolvedValue(creds)
+            const instance = makeInstance(mock)
+
+            const result = await (instance as any).getBackendCredentials()
+
+            expect(result[0].currency_uri).toBe('comchain://Leman')
+            expect(result[0].type).toBe('comchain:Leman')
         })
     })
 

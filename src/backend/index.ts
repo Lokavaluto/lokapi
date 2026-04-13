@@ -41,8 +41,8 @@ export abstract class BackendAbstract {
         this.jsonData = jsonData
     }
 
-    get internalId () {
-        return this.jsonData.type
+    get uri () {
+        return this.jsonData.currency_uri
     }
 
     get minCreditAmount () {
@@ -58,7 +58,7 @@ export abstract class BackendAbstract {
         if (!recipientData) {
             return null
         }
-        if (recipientData.name && !recipientData.monujo_backends[this.internalId]) {
+        if (recipientData.name && !recipientData.monujo_backends[this.uri]) {
             console.error(
                 `Existing recipient ${JSON.stringify(recipientData.name)} doesn't ` +
                     'have an account in current backend')
@@ -215,7 +215,7 @@ export abstract class BackendAbstract {
         while (true) {
             const partners = await this.backends.odoo.$get(entrypoint, {
                 value: value,
-                backend_keys: [this.internalId],
+                backend_keys: [this.uri],
                 offset,
                 limit,
                 order: 'is_favorite desc, name',
@@ -247,7 +247,7 @@ export abstract class BackendAbstract {
             '/partner/get_recipient_by_uri',
             {
                 data,
-                backend_keys: [ this.internalId ],
+                backend_keys: [ this.uri ],
             }
         )
         // XXXvlab: ``.makeRecipients()`` returns a list that

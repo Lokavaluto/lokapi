@@ -71,10 +71,13 @@ export abstract class OdooRESTAbstract extends JsonRESTFeatureClientAbstract {
                     ...(this.dbName && { db: this.dbName })
                 },
                 {
-                    Authorization: `Basic ${this.base64Encode(
-                        `${login}:${password}`
-                    )}`,
-                }
+                    features: 'uri/0 feature-less/0',
+                    headers: {
+                        Authorization: `Basic ${this.base64Encode(
+                            `${login}:${password}`
+                        )}`,
+                    },
+                },
             )
         } catch (err) {
             if (err instanceof httpRequestExc.HttpError && err.code === 401) {

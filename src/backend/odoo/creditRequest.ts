@@ -20,7 +20,7 @@ export default class CreditRequest extends BridgeObject {
     }
 
     get backendId() {
-        return this.parent.internalId
+        return this.parent.uri
     }
 
     get paid() {
