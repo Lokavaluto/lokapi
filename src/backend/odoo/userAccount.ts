@@ -1,6 +1,8 @@
 import { BridgeObject } from '..'
 import { t } from '../..'
+import { singleton } from '../../cache'
 import { buildUserUri, parseUri } from '../../uri'
+import { LccApiClient } from '../../rest/lccApi'
 
 
 export default abstract class UserAccount extends BridgeObject {
@@ -25,6 +27,28 @@ export default abstract class UserAccount extends BridgeObject {
 
     get isTopUpAllowed() {
         return this.jsonData?.is_topup_allowed !== false
+    }
+
+
+    /**
+     * LCC API client pre-configured with this user account's
+     * identity header.  Use for ``wallet/*`` and ``recipient/*``
+     * endpoints.
+     *
+     * The ``features`` argument is per-call — pass the feature
+     * string that the target endpoint expects (e.g. ``"wallet/0"``).
+     *
+     * Example::
+     *
+     *     await this.lccApi.$post("/wallet/0xabc/archive", null, "wallet/0")
+     *
+     */
+    @singleton
+    get lccApi (): LccApiClient {
+        return new LccApiClient(
+            this.backends.odoo,
+            this.uri,
+        )
     }
 
 
