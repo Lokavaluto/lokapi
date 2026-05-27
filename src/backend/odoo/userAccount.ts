@@ -179,4 +179,30 @@ export default abstract class UserAccount extends BridgeObject {
         Object.assign(this.jsonData, freshData)
     }
 
+
+    /**
+     * Get contact information (issuer + user) for this user
+     * account, suitable for inclusion in PDF reports.
+     *
+     * Hits the LCC API ``GET /wallet/<ident>/contact-info``
+     * endpoint.
+     *
+     * @param caller  Optional caller account whose identity is
+     *     used for the LCC API request.  Defaults to ``this``
+     *     (self-retrieval).  Pass an admin account to fetch
+     *     another user's contact info (requires appropriate
+     *     admin permissions server-side).
+     *
+     * @returns ``{ issuer, user }`` — each contains name,
+     *     street, street2, city, zip, email, phone, mobile,
+     *     website, logo.
+     *
+     * @throws {RequestFailed, APIRequestFailed, InvalidCredentials, InvalidJson}
+     */
+    public async getContactInformation (caller?: UserAccount): Promise<any> {
+        return await (caller || this).lccApi.$get(
+            `/wallet/${this.ident}/contact-info`, null, 'wallet/0'
+        )
+    }
+
 }
