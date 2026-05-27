@@ -1,10 +1,27 @@
 import { BridgeObject } from '..'
 import { t } from '../..'
+import { buildUserUri, parseUri } from '../../uri'
 
 
 export default abstract class UserAccount extends BridgeObject {
 
     abstract internalId: string
+
+    /**
+     * Plugin-specific identifier for this user account.
+     */
+    abstract ident: string
+
+    /**
+     * Full user URI for LCC API identity headers.
+     *
+     * Built from the backend's engine and currency identifier
+     * combined with this account's ``ident``.
+     */
+    get uri (): string {
+        const { engine, currencyIdent } = parseUri(this.parent.uri)
+        return buildUserUri(engine, currencyIdent, this.ident)
+    }
 
     get isTopUpAllowed() {
         return this.jsonData?.is_topup_allowed !== false

@@ -1,6 +1,7 @@
 import { e as httpRequestExc } from '@0k/types-request'
 
 import * as t from '../../type'
+import { buildWalletUri, parseUri } from '../../uri'
 
 import { Contact } from './contact'
 import UserAccount from './userAccount'
@@ -10,6 +11,22 @@ export default abstract class Recipient extends Contact implements t.IRecipient 
 
     abstract fromUserAccount: UserAccount
     abstract userAccountInternalId: string
+
+    /**
+     * Plugin-specific identifier for this recipient's wallet.
+     */
+    abstract ident: string
+
+    /**
+     * Full wallet URI for this recipient.
+     *
+     * Built from the backend's engine and currency identifier
+     * combined with this recipient's ``ident``.
+     */
+    get walletUri (): string {
+        const { engine, currencyIdent } = parseUri(this.parent.uri)
+        return buildWalletUri(engine, currencyIdent, this.ident)
+    }
 
     abstract prepareTransfer (
         amount: string,
