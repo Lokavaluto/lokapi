@@ -35,6 +35,55 @@ export default abstract class Recipient extends Contact implements t.IRecipient 
         signal: AbortSignal,
     ): Promise<t.ITransaction[]>
 
+
+    /**
+     * Update account on both administrative and financial backends.
+     *
+     * The accountData structure is opaque at this level and
+     * defined by the financial backend implementation.
+     *
+     * @throws {RequestFailed, APIRequestFailed, InvalidCredentials, InvalidJson}
+     *
+     * @returns Promise<any>
+     */
+    public async updateAccount (accountData: any): Promise<any> {
+        const financialResult =
+            await this.updateAccountForFinancialBackend(accountData)
+        await this.updateAccountForAdministrativeBackend(accountData)
+        return financialResult
+    }
+
+
+    /**
+     * Update account on the administrative backend via the LCC API
+     * ``POST /wallet/<ident>/update`` endpoint.
+     *
+     * @throws {RequestFailed, APIRequestFailed, InvalidCredentials, InvalidJson}
+     *
+     * @returns Promise<any>
+     */
+    public async updateAccountForAdministrativeBackend (
+        accountData: any,
+    ): Promise<any> {
+        return this.fromUserAccount.lccApi.$post(
+            `/wallet/${this.ident}/update`,
+            { data: accountData },
+            'wallet/0',
+        )
+    }
+
+
+    /**
+     * Update account on the financial backend. Override in
+     * backend-specific implementations.
+     */
+    public async updateAccountForFinancialBackend (
+        accountData: any,
+    ): Promise<any> {
+        throw new Error('updateAccountForFinancialBackend not implemented for this backend')
+    }
+
+
     /**
      * Request if administrative backend allows current account to
      * transfer to given recipient account.
