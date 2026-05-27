@@ -21,7 +21,6 @@ import {
 } from '@0k/types-request'
 
 import { JsonRESTPersistentClientAbstract } from '.'
-import * as t from '../type'
 import * as e from './exception'
 
 
@@ -29,12 +28,6 @@ export type FeatureOpts = {
     features?: string
     headers?: { [k: string]: any }
     responseHeaders?: { [k: string]: any }
-    selectedFeatures?: string[]
-    supportedFeatures?: string[]
-}
-
-export type HttpFeaturedOpts = t.HttpOpts & {
-    features?: string
     selectedFeatures?: string[]
     supportedFeatures?: string[]
 }
@@ -142,8 +135,9 @@ function parseFeaturesHeader (value: string | undefined): string[] {
 
 /**
  * Abstract class adding feature negotiation to the REST client
- * chain.  Overrides ``$get``/``$post``/``$put``/``$delete`` to
- * accept an optional ``FeatureOpts`` third argument.
+ * chain.  Overrides ``$get``/``$post``/``$put``/``$delete``
+ * (and their unauthenticated counterparts) to accept an optional
+ * ``FeatureOpts`` third argument.
  *
  * When called with a ``FeatureOpts`` object:
  *
@@ -158,82 +152,14 @@ function parseFeaturesHeader (value: string | undefined): string[] {
  * When called with plain headers (or no third arg), passes
  * through to the parent class unchanged — full backward
  * compatibility.
+ *
+ * Feature handling lives entirely in the verb wrappers below;
+ * ``request()`` is intentionally NOT overridden so transport-level
+ * concerns (batching, retries) can be layered cleanly above it
+ * in subclasses.
  */
 export abstract class JsonRESTFeatureClientAbstract
     extends JsonRESTPersistentClientAbstract {
-
-    /**
-     * Override ``request()`` to handle feature negotiation.
-     *
-     * When ``opts`` is an ``HttpFeaturedOpts`` (has ``features``),
-     * injects ``X-Client-Features``, captures
-     * ``X-Selected-Features`` / ``X-Supported-Features`` from
-     * the response, and wraps HTTP 406 into
-     * ``FeatureMismatchError``.
-     *
-     * Plain ``HttpOpts`` pass through unchanged.
-     */
-    public async request (
-        path: string,
-        opts: t.HttpOpts | HttpFeaturedOpts,
-    ): Promise<any> {
-        if (!('features' in opts)) {
-            return super.request(path, opts)
-        }
-
-        const featuredOpts = opts as HttpFeaturedOpts
-        const plainOpts: t.HttpOpts = {
-            method: opts.method,
-            headers: {
-                ...(featuredOpts.features && {
-                    'X-Client-Features': featuredOpts.features,
-                }),
-                ...opts.headers,
-            },
-            data: opts.data,
-            responseHeaders: opts.responseHeaders || {},
-        }
-
-        let result: any
-        try {
-            result = await super.request(path, plainOpts)
-        } catch (err) {
-            if (
-                err instanceof httpRequestExc.HttpError &&
-                err.code === 406
-            ) {
-                let supported: string[] = []
-                try {
-                    const body = JSON.parse(err.data)
-                    supported = body.supported || []
-                } catch (_) {}
-                throw new e.FeatureMismatchError(
-                    featuredOpts.features || '',
-                    supported,
-                    err,
-                )
-            }
-            throw err
-        }
-
-        const rh = plainOpts.responseHeaders!
-        if (featuredOpts.selectedFeatures) {
-            featuredOpts.selectedFeatures.push(
-                ...parseFeaturesHeader(
-                    getResponseHeader(rh, 'X-Selected-Features'),
-                ),
-            )
-        }
-        if (featuredOpts.supportedFeatures) {
-            featuredOpts.supportedFeatures.push(
-                ...parseFeaturesHeader(
-                    getResponseHeader(rh, 'X-Supported-Features'),
-                ),
-            )
-        }
-
-        return result
-    }
 }
 
 
@@ -242,8 +168,10 @@ httpRequestType.httpMethods.forEach((method) => {
 
     /**
      * Override ``post``/``$post``/etc to detect ``FeatureOpts``
-     * as the 3rd argument and thread feature fields into
-     * ``HttpFeaturedOpts`` so ``request()`` can handle them.
+     * as the 3rd argument. Performs the full feature negotiation
+     * (header injection, response header extraction, 406 wrapping)
+     * inline, then delegates to the corresponding ancestor verb
+     * with plain ``HttpOpts``-shaped arguments.
      */
     function makeHandler (base: string) {
         return async function (
@@ -259,23 +187,59 @@ httpRequestType.httpMethods.forEach((method) => {
                     base
                 ].apply(this, [path, data, headersOrOpts, responseHeaders])
             }
-            // New-style: reshape FeatureOpts into HttpFeaturedOpts
-            // and call the parent method which routes through
-            // authRequest/request → request() override handles features
-            const featureOpts = headersOrOpts as FeatureOpts
-            const opts: HttpFeaturedOpts = {
-                method: method as t.HttpOpts['method'],
-                ...(featureOpts.headers && { headers: featureOpts.headers }),
-                ...(data && { data }),
-                responseHeaders: featureOpts.responseHeaders,
-                features: featureOpts.features,
-                selectedFeatures: featureOpts.selectedFeatures,
-                supportedFeatures: featureOpts.supportedFeatures,
+            // New-style: FeatureOpts. Inject X-Client-Features,
+            // capture response headers, wrap 406, then delegate.
+            const fo = headersOrOpts as FeatureOpts
+            const mergedHeaders = {
+                ...(fo.features && { 'X-Client-Features': fo.features }),
+                ...fo.headers,
             }
-            if (base.startsWith('$')) {
-                return this.authRequest(path, opts)
+            // Need a responseHeaders bag to read X-Selected-/X-Supported-
+            // Features from. Reuse the caller's bag if provided so any
+            // other headers they wanted also land there; otherwise
+            // allocate a private one.
+            const rh = fo.responseHeaders ?? {}
+
+            let result: any
+            try {
+                result = await JsonRESTPersistentClientAbstract.prototype[
+                    base
+                ].apply(this, [path, data, mergedHeaders, rh])
+            } catch (err) {
+                if (
+                    err instanceof httpRequestExc.HttpError &&
+                    err.code === 406
+                ) {
+                    let supported: string[] = []
+                    try {
+                        const body = JSON.parse(err.data)
+                        supported = body.supported || []
+                    } catch (_) {}
+                    throw new e.FeatureMismatchError(
+                        fo.features || '',
+                        supported,
+                        err,
+                    )
+                }
+                throw err
             }
-            return this.request(path, opts)
+
+            if (fo.selectedFeatures) {
+                fo.selectedFeatures.push(
+                    ...parseFeaturesHeader(
+                        getResponseHeader(rh, 'X-Selected-Features'),
+                    ),
+                )
+            }
+            if (fo.supportedFeatures) {
+                fo.supportedFeatures.push(
+                    ...parseFeaturesHeader(
+                        getResponseHeader(rh, 'X-Supported-Features'),
+                    ),
+                )
+            }
+
+            return result
         }
     }
 

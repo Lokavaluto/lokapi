@@ -1,4 +1,5 @@
 import { t as httpRequestType } from '@0k/types-request'
+import { legacyToUri, parseUri } from '../uri'
 
 import * as t from '../type'
 import { Record } from '../record'
@@ -41,6 +42,10 @@ export abstract class BackendAbstract {
         this.jsonData = jsonData
     }
 
+    get internalId() {
+        return this.jsonData.currency_uri.replace("://", ":")
+    }
+
     get uri () {
         return this.jsonData.currency_uri
     }
@@ -58,7 +63,7 @@ export abstract class BackendAbstract {
         if (!recipientData) {
             return null
         }
-        if (recipientData.name && !recipientData.monujo_backends[this.uri]) {
+        if (recipientData.name && !recipientData.monujo_backends[this.internalId]) {
             console.error(
                 `Existing recipient ${JSON.stringify(recipientData.name)} doesn't ` +
                     'have an account in current backend')
@@ -268,7 +273,7 @@ export abstract class BackendAbstract {
         while (true) {
             const partners = await this.backends.odoo.$get(entrypoint, {
                 value: value,
-                backend_keys: [this.uri],
+                backend_keys: [this.internalId],
                 offset,
                 limit,
                 order: 'is_favorite desc, name',
@@ -300,7 +305,7 @@ export abstract class BackendAbstract {
             '/partner/get_recipient_by_uri',
             {
                 data,
-                backend_keys: [ this.uri ],
+                backend_keys: [ this.internalId ],
             }
         )
         // XXXvlab: ``.makeRecipients()`` returns a list that

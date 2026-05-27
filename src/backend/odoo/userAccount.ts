@@ -146,7 +146,7 @@ export default abstract class UserAccount extends BridgeObject {
         while (true) {
             const partners = await this.lccApi.$get('/recipient/search_all', {
                 value,
-                backend_keys: [this.parent.uri],
+                backend_keys: [this.parent.internalId],
                 offset,
                 limit,
                 order: 'is_favorite desc, name',

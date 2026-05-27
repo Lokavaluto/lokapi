@@ -60,15 +60,7 @@ abstract class LokAPIAbstract extends OdooRESTAbstract {
      */
     @singleton
     private async getBackendCredentials (): Promise<any> {
-        const selectedFeatures: string[] = []
-        const creds = await this.$post(
-            '/partner/backend_credentials', null, {
-                features: 'uri/0 feature-less/0',
-                selectedFeatures,
-            },
-        )
-        if (selectedFeatures.includes('uri/0')) return creds
-        return creds.map(legacyToUri)
+        return (await this.$post('/partner/backend_credentials')).map(legacyToUri)
     }
 
 
@@ -136,7 +128,7 @@ abstract class LokAPIAbstract extends OdooRESTAbstract {
         backendCredentials.forEach((backendData: any) => {
             let backend = this.makeBackend(backendData)
             if (backend)
-                backends[backend.uri] = backend
+                backends[backend.internalId] = backend
         })
         return backends
     }
@@ -403,7 +395,7 @@ abstract class LokAPIAbstract extends OdooRESTAbstract {
 
         const backends = await this.getBackends()
 
-        var backend = backends[currencyUri]
+        var backend = backends[currencyUri.replace("://", ":")]
         if (!backend) {
           throw new Error(`backend ${currencyUri} not found`)
         }

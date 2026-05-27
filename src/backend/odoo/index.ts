@@ -77,7 +77,7 @@ export abstract class OdooRESTAbstract extends JsonRESTFeatureClientAbstract {
                             `${login}:${password}`
                         )}`,
                     },
-                },
+                }
             )
         } catch (err) {
             if (err instanceof httpRequestExc.HttpError && err.code === 401) {
@@ -391,15 +391,19 @@ export abstract class OdooRESTAbstract extends JsonRESTFeatureClientAbstract {
 
 httpRequestType.httpMethods.forEach((method) => {
     const methodLc = method.toLowerCase()
+    // Both authenticated and unauthenticated verbs route through
+    // JsonRESTFeatureClientAbstract so feature negotiation applies
+    // uniformly. The only Odoo-specific concern here is the API
+    // path prefix.
     OdooRESTAbstract.prototype[methodLc] = function (
         path: string,
         data?: any,
-        headers?: any,
+        headersOrOpts?: any,
         responseHeaders?: {[k: string]: any}
     ) {
-        return JsonRESTPersistentClientAbstract.prototype[methodLc].apply(
+        return JsonRESTFeatureClientAbstract.prototype[methodLc].apply(
             this,
-            [`/lokavaluto_api/public${path}`, data, headers, responseHeaders]
+            [`/lokavaluto_api/public${path}`, data, headersOrOpts, responseHeaders]
         )
     }
     OdooRESTAbstract.prototype['$' + methodLc] = function (
