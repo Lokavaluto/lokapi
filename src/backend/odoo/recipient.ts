@@ -85,6 +85,23 @@ export default abstract class Recipient extends Contact implements t.IRecipient 
 
 
     /**
+     * Archive this recipient's wallet via the LCC API
+     * ``POST /wallet/<ident>/archive`` endpoint.
+     *
+     * @throws {RequestFailed, APIRequestFailed, InvalidCredentials, InvalidJson}
+     *
+     * @returns Promise<boolean>
+     */
+    public async archive (): Promise<boolean> {
+        return this.fromUserAccount.lccApi.$post(
+            `/wallet/${this.ident}/archive`,
+            null,
+            'wallet/0',
+        )
+    }
+
+
+    /**
      * Request if administrative backend allows current account to
      * transfer to given recipient account.
      *
