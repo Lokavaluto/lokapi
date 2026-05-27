@@ -100,15 +100,29 @@ export abstract class BackendAbstract {
 
 
     /**
+     * Check if any of the current user's accounts on this backend
+     * carry the given authorized action (prefetched in
+     * ``backend_credentials``).
+     */
+    private _hasAuthorizedAction (action: string): boolean {
+        const accounts = this.jsonData?.accounts || []
+        return accounts.some(
+            (a: any) => a.authorized_actions?.includes(action)
+        )
+    }
+
+
+    /**
      * Check if the current user can activate/validate user accounts
      * on the administrative backend.
      *
-     * @throws {RequestFailed, APIRequestFailed, InvalidCredentials, InvalidJson}
+     * Uses ``authorized_actions`` prefetched in
+     * ``backend_credentials`` — no HTTP call.
      *
      * @returns Promise<boolean>
      */
     public async hasUserAccountValidationRightsForAdministrativeBackend (): Promise<boolean> {
-        return this.backends.odoo.$get('/comchain/can-activate')
+        return this._hasAuthorizedAction("activate")
     }
 
 
@@ -133,15 +147,52 @@ export abstract class BackendAbstract {
 
 
     /**
+     * Check if the current user can set permissions
+     * on the administrative backend.
+     *
+     * Uses ``authorized_actions`` prefetched in
+     * ``backend_credentials`` — no HTTP call.
+     *
+     * @returns Promise<boolean>
+     */
+    public async canSetPermissionsForAdministrativeBackend (): Promise<boolean> {
+        return this._hasAuthorizedAction("activate")
+    }
+
+
+    /**
+     * Check if the current user can set permissions
+     * on the financial backend.
+     *
+     * Aggregates the result across all user accounts: returns
+     * true as soon as any user account reports the right on its
+     * financial backend.
+     *
+     * @returns Promise<boolean>
+     */
+    public async canSetPermissionsForFinancialBackend (): Promise<boolean> {
+        const results = await Promise.all(
+            Object.values(this.userAccounts).map((a: any) =>
+                a.canSetPermissionsForFinancialBackend
+                    ? a.canSetPermissionsForFinancialBackend()
+                    : false
+            )
+        )
+        return results.reduce((a: boolean, b: boolean) => a || b, false)
+    }
+
+
+    /**
      * Check if the current user can validate credit requests
      * on the administrative backend.
      *
-     * @throws {RequestFailed, APIRequestFailed, InvalidCredentials, InvalidJson}
+     * Uses ``authorized_actions`` prefetched in
+     * ``backend_credentials`` — no HTTP call.
      *
      * @returns Promise<boolean>
      */
     public async hasCreditRequestValidationRightsForAdministrativeBackend (): Promise<boolean> {
-        return this.backends.odoo.$get('/partner/can-validate-credit-request')
+        return this._hasAuthorizedAction("validate-credit-request")
     }
 
 
@@ -180,32 +231,34 @@ export abstract class BackendAbstract {
 
 
     /**
-     * Check if the current user can search all recipients
-     * (without restriction rules) on this backend.
+     * Check if the current user can set permissions on other
+     * wallets on this backend.
      *
-     * @throws {RequestFailed, APIRequestFailed, InvalidCredentials, InvalidJson}
+     * Combines administrative and financial backend checks: both
+     * must report the right.
      *
      * @returns Promise<boolean>
      */
-    public async canSearchAllRecipients (): Promise<boolean> {
-        return this.backends.odoo.$get('/partner/can-search-all-recipients')
+    public async canSetPermissions (): Promise<boolean> {
+        const [admin, financial] = await Promise.all([
+            this.canSetPermissionsForAdministrativeBackend(),
+            this.canSetPermissionsForFinancialBackend(),
+        ])
+        return admin && financial
     }
 
 
     /**
-     * Get list of All Recipients. Similar to `searchRecipients`, but not
-     * constrained by restriction rules.
+     * Check if the current user can search all recipients
+     * (without restriction rules) on this backend.
      *
-     * @param value The given string will be searched in name, email, phone
+     * Uses ``authorized_actions`` prefetched in
+     * ``backend_credentials`` — no HTTP call.
      *
-     * @throws {RequestFailed, APIRequestFailed, InvalidCredentials, InvalidJson}
-     *
-     * @returns AsyncIterable<t.IRecipient>
+     * @returns Promise<boolean>
      */
-    public async * searchAllRecipients (value: string): AsyncIterable<t.IRecipient> {
-        for await (const elt of this.searchRecipientsWithEntrypoint('/partner/search_all',value)) {
-            yield elt
-        }
+    public async canSearchAllRecipients (): Promise<boolean> {
+        return this._hasAuthorizedAction("search-all-recipients")
     }
 
 
