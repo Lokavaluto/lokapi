@@ -160,4 +160,23 @@ export default abstract class UserAccount extends BridgeObject {
             offset += limit
         }
     }
+
+
+    /**
+     * Refresh this user account's data from the administrative
+     * backend via the LCC API ``GET /wallet/<ident>/get`` endpoint.
+     *
+     * @param caller  Optional caller account whose identity is
+     *     used for the LCC API request.  Defaults to ``this``.
+     *     Pass an admin account to refresh another user's wallet.
+     *
+     * @throws {RequestFailed, APIRequestFailed, InvalidCredentials, InvalidJson}
+     */
+    public async refresh (caller?: UserAccount): Promise<void> {
+        const freshData = await (caller || this).lccApi.$get(
+            `/wallet/${this.ident}/get`, null, 'wallet/0'
+        )
+        Object.assign(this.jsonData, freshData)
+    }
+
 }
