@@ -38,9 +38,9 @@
         "vitest": "^3.2.4"
     },
     "dependencies": {
+        "@0k/cache": "^0.2.0",
         "@0k/types-request": "^1.0.0",
         "qs": "^6.10.1",
-        "@0k/cache": "^0.1.2",
         "tslib": "^1.14.1"
     }
 }
