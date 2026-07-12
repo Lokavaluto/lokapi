@@ -6,6 +6,7 @@ export { cache }
 export const ttlcache = cache({
     cacheStore: JsonKeyTTLCacheStore,
     key: (x: any) => x.args,
+    noCacheOnReject: true,
 })
 
 export const singleton = cache({
